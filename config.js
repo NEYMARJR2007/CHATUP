@@ -1,17 +1,16 @@
-/* ChatUP – הגדרות חיבור לשרת
-   1. הדביקו כאן את פרטי ה־Firebase שלכם (Firebase Console ← Project settings ← Your apps ← SDK setup and configuration ← Config).
-   2. (מומלץ לשיחות ברשת סלולרית) הוסיפו שרת TURN ברשימה turn. ראו מדריך ההתקנה. */
+/* ChatUP – הגדרות חיבור לשרת */
 window.CHATUP_CONFIG = {
   firebase: {
-    apiKey: "PASTE_API_KEY",
-    authDomain: "PASTE.firebaseapp.com",
-    projectId: "PASTE",
-    storageBucket: "PASTE.appspot.com",
-    messagingSenderId: "PASTE",
-    appId: "PASTE"
+    apiKey: "AIzaSyAwfq6E1awZiqcyY7PF1_ZTc0BliYYxxnU",
+    authDomain: "chatup-656fd.firebaseapp.com",
+    projectId: "chatup-656fd",
+    storageBucket: "chatup-656fd.firebasestorage.app",
+    messagingSenderId: "60685364216",
+    appId: "1:60685364216:web:e7ca02d47ddcdacbf1c40d",
+    measurementId: "G-K6VH4WCTMF"
   },
   turn: [
-    /* דוגמה:
+    /* שרת TURN לשיחות ברשת סלולרית (שלב 5 במדריך). דוגמה:
     { urls: "turn:global.relay.metered.ca:80", username: "XXXX", credential: "YYYY" },
     { urls: "turn:global.relay.metered.ca:443?transport=tcp", username: "XXXX", credential: "YYYY" }
     */
