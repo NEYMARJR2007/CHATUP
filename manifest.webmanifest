@@ -1,0 +1,18 @@
+{
+  "name": "ChatUP",
+  "short_name": "ChatUP",
+  "description": "הודעות, שיחות קול ווידאו, קבוצות וסטטוסים",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F1F0F7",
+  "theme_color": "#5B3FF5",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
