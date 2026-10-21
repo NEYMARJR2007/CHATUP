@@ -1794,8 +1794,8 @@ function endCall(reason,remote){
   toast(dur?'השיחה הסתיימה · '+fmtDur(dur):(T[reason]||'השיחה הסתיימה'));
   if(TAB==='calls')drawSide();drawNav();
 }
-function logCall(e){const {id,...d}=e;qw(`data/users/${ME}/log/${id}`,()=>db.doc(`data/users/${ME}/log/${id}`).set(d))}
-function subscribeLog(){db.collection(`data/users/${ME}/log`).orderBy('t','desc').limit(80).onSnapshot(s=>{LOG=s.docs.map(d=>({id:d.id,...d.data()}));if(TAB==='calls')drawSide();drawNav()},dbErr)}
+function logCall(e){const {id,...d}=e;qw(`data/users/${ME}/state/log/${id}`,()=>db.doc(`data/users/${ME}/state/log/${id}`).set(d))}
+function subscribeLog(){db.collection(`data/users/${ME}/state/log`).orderBy('t','desc').limit(80).onSnapshot(s=>{LOG=s.docs.map(d=>({id:d.id,...d.data()}));if(TAB==='calls')drawSide();drawNav()},dbErr)}
 function renderCall(){
   const C=CALL;if(!C)return;let el=$('#call');
   if(!el){el=document.createElement('div');el.className='call';el.id='call';$('#layers').appendChild(el)}
@@ -1917,7 +1917,7 @@ const A={
   callFlip:()=>flipCamera(),
   newCall:()=>{const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));openSheet('שיחה חדשה',L.map(u=>`<div class="row">${av(pobj(u),42)}<span class="rm"><span class="rn">${esc(pname(u))}</span>${isOnline(u)?'<span class="rp">מחובר/ת</span>':''}</span><button class="ib" data-a="callC2" data-uid="${u}" aria-label="שיחה קולית">${ic('phone')}</button><button class="ib" data-a="callC2" data-uid="${u}" data-v="1" aria-label="שיחת וידאו">${ic('video')}</button></div>`).join('')||'<div class="empty"><b>עוד אין אנשים נוספים</b>הזמינו חברים ל־ChatUP.</div>')},
   callC2:el=>{closeSheet(true);startCall(el.dataset.uid,!!el.dataset.v)},
-  callsMenu:el=>openMenu(el,[{label:'ניקוי יומן השיחות',icon:'trash',danger:true,fn:()=>askConfirm('לנקות את יומן השיחות?','','ניקוי',()=>{LOG.forEach(l=>qw(`data/users/${ME}/log/${l.id}`,()=>db.doc(`data/users/${ME}/log/${l.id}`).delete()))})}]),
+  callsMenu:el=>openMenu(el,[{label:'ניקוי יומן השיחות',icon:'trash',danger:true,fn:()=>askConfirm('לנקות את יומן השיחות?','','ניקוי',()=>{LOG.forEach(l=>qw(`data/users/${ME}/state/log/${l.id}`,()=>db.doc(`data/users/${ME}/state/log/${l.id}`).delete()))})}]),
   install:()=>installApp(),
   logout:()=>askConfirm('לצאת מהחשבון?','תוכל/י להתחבר שוב בכל זמן.','יציאה',async()=>{try{await db.doc('presence/'+ME).set({t:Date.now(),on:false,typing:null})}catch(e){}await fauth.signOut();location.reload()},false),
   pwReset:()=>fauth.sendPasswordResetEmail(fauth.currentUser.email).then(()=>toast('שלחנו קישור לשינוי סיסמה לאימייל שלך'),authErr),
@@ -2088,13 +2088,29 @@ function start(){
   if(S().privacy.appLock&&S().privacy.pin)lockScreen();
   checkHashJoin();
 }
+const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r({code:'timeout'}),ms))]);
+function dbProblem(code){
+  gate('none');$('#gate')?.remove();
+  const T={
+    'permission-denied':['כללי האבטחה חוסמים את הגישה','ב־Firebase: Firestore Database ← Rules. ודאו שהדבקתם את הכללים של ChatUP במקום מה שהיה שם, ולחצו Publish. אחרי דקה רעננו את הדף.'],
+    'not-found':['בסיס הנתונים לא נמצא','ב־Firebase: Firestore Database. אם מופיע כפתור Create database, צרו אותו (מזהה (default), production mode). אם יצרתם בסיס נתונים עם שם אחר, צרו גם אחד עם המזהה (default).'],
+    'timeout':['אין תשובה מבסיס הנתונים','בדרך כלל זה אומר שבסיס הנתונים עוד לא נוצר, או שנוצר עם מזהה שאינו (default). בדקו ב־Firebase ← Firestore Database. אם הכול תקין, בדקו את החיבור לאינטרנט ורעננו.'],
+    'unavailable':['אין תשובה מבסיס הנתונים','בדקו את החיבור לאינטרנט. אם הוא תקין, ודאו ב־Firebase ← Firestore Database שבסיס הנתונים נוצר.'],
+  };
+  const [t,d]=T[code]||['לא הצלחנו להתחבר לשרת','קוד השגיאה: '+code+'. שלחו אותו למי שהקים את האפליקציה.'];
+  const el=document.createElement('div');el.className='gate';el.id='gate';
+  el.innerHTML=`<div class="onbc"><div class="logo">Chat<b>UP</b></div><h3 style="margin:8px 0">${esc(t)}</h3><p>${esc(d)}</p><p class="small" dir="ltr">${esc(String(code))}</p><div class="btns"><button class="btn" onclick="location.reload()">ניסיון חוזר</button><button class="btn ghost" id="gout">יציאה מהחשבון</button></div></div>`;
+  $('#layers').appendChild(el);$('#gout',el).onclick=()=>fauth.signOut().then(()=>location.reload());
+}
 async function afterLogin(){
   gate('loading');assets=true;
+  try{await withTimeout(FDB.doc('profiles/'+ME).get({source:'server'}),12000)}
+  catch(e){const code=(e&&e.code)||'unknown';console.warn('db check',e);if(code!=='failed-precondition'){dbProblem(code);return}}
   try{const s=await db.doc(`data/users/${ME}/state`).get();ST=s.exists?{...blankState(),...clone(s.data())}:blankState()}catch(e){ST=blankState()}
   ST.settings={...DEFAULTS(),...(ST.settings||{})};['notif','privacy','account','access'].forEach(k=>ST.settings[k]={...DEFAULTS()[k],...(ST.settings[k]||{})});
   applySettings();
   try{const p=await db.doc('profiles/'+ME).get();if(p.exists)P[ME]=p.data()}catch(e){}
-  subscribeAll();startPresence();listenIncoming();subscribeLog();registerSW();
+  for(const f of [subscribeAll,startPresence,listenIncoming,subscribeLog,registerSW]){try{f()}catch(e){console.error(f.name,e)}}
   gate('none');
   if(!P[ME]){drawNav();drawSide();$('#main').innerHTML=emptyMain();onboarding()}
   else start();
@@ -2106,7 +2122,7 @@ async function boot(){
   try{fb=firebase.initializeApp(CFG.firebase)}catch(e){gate('setup');return}
   fauth=firebase.auth();FDB=firebase.firestore();
   try{FDB.settings({ignoreUndefinedProperties:true,merge:true})}catch(e){}
-  try{await FDB.enablePersistence({synchronizeTabs:true})}catch(e){}
+  try{await withTimeout(FDB.enablePersistence({synchronizeTabs:true}),3000)}catch(e){}
   db=wrapDB(FDB);
   fauth.getRedirectResult().catch(authErr);
   fauth.onAuthStateChanged(u=>{
