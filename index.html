@@ -2076,6 +2076,48 @@ function pgSelf(){
   ${c?infoCommon(c):''}`};
 }
 
+/* ================= back button: close the top screen instead of leaving the app ================= */
+const NAV={guard:false,ignore:0,t:0};
+const mobileLayout=()=>!matchMedia('(min-width:900px)').matches;
+function topLayer(){
+  if($('#call'))return 'call';
+  if($('#lockscr')||$('#onb')||$('#auth')||$('#gate'))return null;
+  if($('#menu'))return 'menu';
+  if($('#sheet'))return 'sheet';
+  if($('#viewer'))return 'viewer';
+  if(stack.length)return 'page';
+  if(CUR&&mobileLayout())return 'chat';
+  if(chatSearch!==null&&CUR)return 'csearch';
+  if(TAB!=='chats')return 'tab';
+  return null;
+}
+function closeTopLayer(kind){
+  switch(kind){
+    case 'menu':closeMenu();break;
+    case 'sheet':closeSheet();break;
+    case 'viewer':if(SV)closeSV();else $('#viewer')?.remove();break;
+    case 'page':pop();break;
+    case 'chat':closeChat();break;
+    case 'csearch':chatSearch=null;drawCSearch();drawMsgs(true);break;
+    case 'tab':setTab('chats');break;
+  }
+}
+function syncNav(){
+  const open=!!topLayer();
+  if(open&&!NAV.guard){NAV.guard=true;try{history.pushState({chatup:1},'')}catch(e){}}
+  else if(!open&&NAV.guard){NAV.guard=false;NAV.ignore++;try{history.back()}catch(e){NAV.ignore--}}
+}
+window.addEventListener('popstate',()=>{
+  if(NAV.ignore>0){NAV.ignore--;return}
+  NAV.guard=false;
+  const k=topLayer();
+  if(k==='call'){toast('השיחה עדיין פעילה. לניתוק לחצו על הכפתור האדום.');}
+  else if(k)closeTopLayer(k);
+  setTimeout(syncNav,0);
+});
+let navQ=0;
+new MutationObserver(()=>{if(navQ)return;navQ=requestAnimationFrame(()=>{navQ=0;syncNav()})}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','hidden']});
+
 /* ================= event wiring ================= */
 const A={
   noop:()=>{},
