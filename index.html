@@ -701,14 +701,14 @@ function av(o,size=48){
   if(o.photo)return `<span class="av" style="${s}"><img src="${esc(o.photo)}" alt=""></span>`;
   if(o.kind==='group')return `<span class="av" style="${s}">${ic('users',Math.round(size*.48))}</span>`;
   if(o.kind==='broadcast')return `<span class="av" style="${s}">${ic('megaphone',Math.round(size*.48))}</span>`;
-  if(o.kind==='self')return `<span class="av" style="${s}">${ic('bookmark',Math.round(size*.46))}</span>`;
+  if(o.kind==='self')return `<span class="av" style="${s}">${esc(initials(o.init||o.name))}</span>`;
   if(o.kind==='community')return `<span class="av" style="${s};border-radius:30%">${ic('users',Math.round(size*.48))}</span>`;
   return `<span class="av" style="${s}">${esc(initials(o.name))}</span>`;
 }
 const meAv=size=>av(pobj(ME),size);
 const otherOf=c=>c.type==='direct'?(c.members.find(x=>x!==ME)||ME):null;
 function chatMeta(c){
-  if(c.type==='direct'){const o=otherOf(c);if(o===ME)return{name:selfName(),color:COLORS[0],kind:'self'};const p=pobj(o);return{...p,kind:'user',uid:o,online:isOnline(o)}}
+  if(c.type==='direct'){const o=otherOf(c);if(o===ME){const p=prof(ME);return{name:selfName(),photo:p.photo||null,color:p.color||COLORS[0],kind:'self',init:p.name||'אני'}};const p=pobj(o);return{...p,kind:'user',uid:o,online:isOnline(o)}}
   return{name:c.name||'קבוצה',photo:c.photo||null,color:c.color||colorFor(c.id),kind:'group'};
 }
 function avChat(c,size=50){const m=chatMeta(c);return `<span class="avw">${av(m,size)}${m.online?'<span class="online"></span>':''}</span>`}
@@ -2071,7 +2071,7 @@ function pgBubbleStyle(cid){
 const selfName=()=>(ST&&ST.selfName)||'הודעות לעצמי';
 function pgSelf(){
   const c=CH[dmId(ME)];
-  return{title:'פרטי הצ׳אט',body:`<div class="hero">${av({kind:'self',color:COLORS[0]},110)}<h3>${esc(selfName())}</h3><p>הצ׳אט הפרטי שלך: הודעות, קישורים ותזכורות לעצמך</p></div>
+  return{title:'פרטי הצ׳אט',body:`<div class="hero">${c?av(chatMeta(c),110):meAv(110)}<h3>${esc(selfName())}</h3><p>הצ׳אט הפרטי שלך: הודעות, קישורים ותזכורות לעצמך</p></div>
   ${R('edit','שם הצ׳אט',esc(selfName()),'selfRename')}
   ${c?infoCommon(c):''}`};
 }
