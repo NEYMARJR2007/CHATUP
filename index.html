@@ -480,6 +480,19 @@ textarea.inp{height:auto;min-height:90px;padding:10px 14px;resize:vertical}
 .call .lv.mir{transform:scaleX(-1)}
 .cctl button.ans2{background:#0B8FB3}
 
+.cbottom{margin-top:auto;position:relative;z-index:3;width:100%;display:flex;flex-direction:column;align-items:center;gap:12px}
+.cbottom .cctl{margin-top:0;gap:12px;padding:12px 14px;max-width:100%}
+.cbottom .cctl button{width:54px;height:54px;border-radius:18px}
+.fxpanel{width:100%;max-width:640px}
+.fxtabs{display:flex;gap:6px;justify-content:center;margin-bottom:8px}
+.fxtabs button{padding:6px 14px;border-radius:999px;background:rgba(0,0,0,.45);color:#fff;font-weight:700;font-size:13.5px;backdrop-filter:blur(6px)}
+.fxtabs button.on{background:#fff;color:#111}
+.fxrow{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}
+.fxb{flex:none;width:70px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;font-size:11.5px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.fxi,.fxt{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:rgba(0,0,0,.45);border:2px solid rgba(255,255,255,.25);font-size:26px;backdrop-filter:blur(6px);background-size:cover;background-position:center}
+.fxb.on .fxi,.fxb.on .fxt{border-color:#c6ff3d;box-shadow:0 0 0 2px #c6ff3d}
+.fxn{max-width:70px;text-align:center;line-height:1.2}
+.tonerow{gap:6px}.tonel{display:flex;align-items:center;gap:14px;flex:1;min-width:0;cursor:pointer}
 .pushcard{margin:6px 12px 10px;padding:14px;border-radius:18px;background:var(--accent-soft);display:flex;flex-direction:column;gap:6px}
 .pushcard b{display:flex;align-items:center;gap:6px;font-size:15.5px}
 .pushcard span{color:var(--muted);font-size:14px}
@@ -1305,6 +1318,7 @@ function goPage(p,arg){
   if(p==='community')return push(()=>pgCommunity(arg),'cm_'+arg,true);
   if(p==='media')return push(()=>pgMedia(arg),'md_'+arg,true);
   if(p==='list')return push(()=>pgList(arg),'li_'+arg,true);
+  if(p==='tone')return push(()=>pgTone(arg),'tone_'+arg,true);
   const f=PAGES[p];if(f)push(f,p,true);
 }
 
@@ -1330,7 +1344,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">ChatUP · גרסה 4.3</p>
+  <p class="small" style="padding:24px 16px">ChatUP · גרסה 4.4</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1366,13 +1380,13 @@ function pgPrivacy(){
 function pgBlocked(){const L=Object.keys(ST.blocked);return{title:'אנשי קשר חסומים',actions:`<button class="ib" data-a="blockAdd" aria-label="הוספה">${ic('userplus')}</button>`,body:L.length?L.map(u=>`<div class="row">${av(pobj(u),44)}<span class="rm"><span class="rn">${esc(pname(u))}</span></span><button class="flw" data-a="unblock" data-uid="${u}">ביטול חסימה</button></div>`).join(''):`<div class="empty"><b>אין אנשי קשר חסומים</b>הודעות מאנשים חסומים לא יוצגו ולא יגיעו אליך התראות מהם.</div>`}}
 function pgAppLock(){const p=S().privacy;return{title:'נעילת אפליקציה',body:`<div class="hero">${ic('lock',52)}<p>כשהאפשרות מופעלת, צריך להזין קוד כדי לפתוח את ChatUP במכשיר הזה.</p></div><label class="srow"><span class="stx"><b>נעילה עם קוד</b></span><input type="checkbox" class="sw" id="alk" ${p.appLock?'checked':''}></label>${p.pin?R('key','שינוי קוד הנעילה','','pinChange'):''}`,after:el=>$('#alk',el).addEventListener('change',e=>{if(e.target.checked){if(!p.pin)pinPad('יצירת קוד נעילה',null,x=>{p.pin=x;p.appLock=true;saveState();drawPages()},true,()=>drawPages());else{p.appLock=true;saveState();drawPages()}}else{p.appLock=false;saveState();drawPages()}})}}
 function pgChatsSet(){const s=S();return{title:'צ׳אטים',body:`<div class="plabel">תצוגה</div>${GO('sun','ערכת נושא',RADIOS.theme.lab[s.theme],'r:theme')}${GO('image','רקעים','ספורט, חלל, ים, טבע, נופים, סרטים או תמונה שלך','wallpaper')}${GO('palette','סגנון הודעות',esc((BSTYLES.find(b=>b[0]===(S().bstyle||'classic'))||['',''])[1]),'bstyle')}<div class="gap"></div><div class="plabel">הגדרות צ׳אט</div>${TG('מקש Enter שולח','Shift+Enter יורד שורה.','enterSend')}${GO('type','גודל גופן',RADIOS.fontSize.lab[s.fontSize],'r:fontSize')}<div class="gap"></div><div class="plabel">צ׳אטים בארכיון</div>${TG('השארת צ׳אטים בארכיון','צ׳אטים בארכיון יישארו שם גם כשתגיע הודעה חדשה','keepArchived')}<div class="gap"></div>${R('archive','העברת כל הצ׳אטים לארכיון','','archiveAll')}${R('copy','ייצוא הצ׳אט הפתוח','העתקת ההודעות כטקסט','exportCur')}${R('x','ניקוי כל הצ׳אטים','ההודעות יוסתרו אצלך בלבד','clearAll','','danger')}`}}
-function pgNotif(){return{title:'התראות',body:`${pushRow()}${TG('באנר בתוך האפליקציה','כשמגיעה הודעה בצ׳אט אחר','notif.show')}${TG('תצוגה מקדימה','הצגת תוכן ההודעה בהתראה','notif.preview')}<div class="gap"></div><div class="plabel">הודעות</div>${TG('צלילים','צליל בהודעות נכנסות ויוצאות','notif.sound')}${TG('רטט','','notif.vibrate')}${TG('התראות מקבוצות','','notif.groups')}<p class="ptext">כשההתראות מופעלות, הודעות ושיחות נכנסות יופיעו בטלפון גם כש־ChatUP סגורה. צ׳אטים מושתקים ואנשים חסומים לא ישלחו התראות.</p><div class="btns"><button class="btn ghost full" data-a="testNotif">בדיקת התראה</button></div>`}}
+function pgNotif(){return{title:'התראות',body:`${pushRow()}${TG('באנר בתוך האפליקציה','כשמגיעה הודעה בצ׳אט אחר','notif.show')}${TG('תצוגה מקדימה','הצגת תוכן ההודעה בהתראה','notif.preview')}<div class="gap"></div><div class="plabel">צלילים</div>${TG('צלילים','השמעת צלילים בהודעות ובשיחות','notif.sound')}${GO('bell','צליל הודעות',esc(toneName('msg')),'tone','data-arg="msg"')}${GO('users','צליל קבוצות',esc(toneName('group')),'tone','data-arg="group"')}${GO('phone','רינגטון לשיחות',esc(toneName('call')),'tone','data-arg="call"')}<div class="gap"></div><div class="plabel">הודעות</div>${TG('רטט','','notif.vibrate')}${TG('התראות מקבוצות','','notif.groups')}<p class="ptext">כשההתראות מופעלות, הודעות ושיחות נכנסות יופיעו בטלפון גם כש־ChatUP סגורה. צ׳אטים מושתקים ואנשים חסומים לא ישלחו התראות.</p><div class="btns"><button class="btn ghost full" data-a="testNotif">בדיקת התראה</button></div>`}}
 function pgStorage(){const L=Object.values(CH).map(c=>({c,size:JSON.stringify(c).length+(c.id===CUR?JSON.stringify(MS[c.id]?.docs||{}).length:0)})).sort((a,b)=>b.size-a.size);return{title:'אחסון ונתונים',body:`<p class="ptext">ההודעות נשמרות בשרת של ChatUP ולא תופסות מקום במכשיר. כאן אפשר לנקות צ׳אטים אצלך.</p>${L.map(({c})=>`<div class="row">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp num">${(c.sent?Object.values(c.sent).reduce((a,b)=>a+b,0):0)} הודעות</span></span><button class="flw" data-a="clearChatId" data-c="${c.id}">ניקוי</button></div>`).join('')}`}}
 function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מוגברת','הכהיית טקסט משני וקווים מפרידים','access.contrast','eye')}${TG('אנימציות','מעברים והנפשות','access.anim','refresh')}${GO('type','גודל גופן',RADIOS.fontSize.lab[S().fontSize],'r:fontSize')}`}}
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־ChatUP תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם, התמונה, שם המשתמש והסטטוסים גלויים לכל משתמשי ChatUP.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Chat<b>UP</b></div><p>גרסה 4.3 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 ChatUP</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Chat<b>UP</b></div><p>גרסה 4.4 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 ChatUP</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־ChatUP! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־ChatUP · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־ChatUP',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -1763,42 +1777,78 @@ async function videoRecorder(cid){
 
 /* ================= calls (WebRTC) ================= */
 const ICE=()=>({iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']},...(Array.isArray(CFG.turn)?CFG.turn:[])]});
-let CALL=null,ringIv=0;
-function ringStart(){ringStop();const f=()=>{beep('ring');try{navigator.vibrate&&navigator.vibrate([400,200,400])}catch(e){}};f();ringIv=setInterval(f,2200)}
-function ringStop(){clearInterval(ringIv);ringIv=0;try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}}
-function getMedia(video,facing='user'){return navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:video?{facingMode:facing,width:{ideal:960},height:{ideal:540}}:false})}
-function mediaErr(e,video){toast(e&&e.name==='NotAllowedError'?(video?'צריך לאשר גישה למצלמה ולמיקרופון כדי להתקשר':'צריך לאשר גישה למיקרופון כדי להתקשר'):'לא נמצאו מצלמה או מיקרופון זמינים')}
+let CALL=null;
+function ringStart(){ringStop();Sound.ringStart();try{navigator.vibrate&&navigator.vibrate([600,300,600,300,600,300,600,300,600])}catch(e){}}
+function ringStop(){Sound.ringStop();try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}}
+const AUDIO_C={echoCancellation:true,noiseSuppression:true,autoGainControl:true};
+function camConstraints(C){const v={width:{ideal:960},height:{ideal:540},frameRate:{ideal:24,max:30}};if(C.camDevice)v.deviceId={exact:C.camDevice};else v.facingMode=C.facing||'user';return v}
+function mediaErr(e,video){toast(e&&e.name==='NotAllowedError'?(video?'צריך לאשר גישה למצלמה ולמיקרופון כדי להתקשר':'צריך לאשר גישה למיקרופון כדי להתקשר'):e&&e.name==='NotReadableError'?'המצלמה בשימוש של אפליקציה אחרת':'לא נמצאו מצלמה או מיקרופון זמינים')}
+async function getMicStream(){return navigator.mediaDevices.getUserMedia({audio:AUDIO_C,video:false})}
+/* camera: always stop the old camera before opening another (many phones can't open two at once) */
+async function openCamera(C){
+  if(C.rawCam){try{C.rawCam.stop()}catch(e){}C.rawCam=null}
+  let s;
+  try{s=await navigator.mediaDevices.getUserMedia({video:camConstraints(C)})}
+  catch(e){if(C.camDevice){C.camDevice=null;s=await navigator.mediaDevices.getUserMedia({video:camConstraints(C)})}else throw e}
+  const t=s.getVideoTracks()[0];C.rawCam=t;
+  const st=t.getSettings?t.getSettings():{};
+  if(st.facingMode)C.facing=st.facingMode==='environment'?'environment':'user';
+  if(st.deviceId)C.curDevice=st.deviceId;
+  return t;
+}
+async function setVideoOut(C){
+  const sender=C.vSender;if(!sender)return;
+  let out=null;
+  if(C.camOn&&C.rawCam){if(FX.active(C))out=FX.output(C);else{FX.stop(C);out=C.rawCam}}
+  else FX.stop(C);
+  C.outTrack=out;
+  try{await sender.replaceTrack(out)}catch(e){console.warn('replaceTrack',e)}
+  C.preview=out?new MediaStream([out]):null;
+  bindCallMedia();
+}
+function signalCam(C){if(C.ref)C.ref.update({cam:{[ME]:!!C.camOn}}).catch(()=>{})}
 function newPC(C){
   const pc=new RTCPeerConnection(ICE());
-  pc.ontrack=e=>{if(CALL!==C)return;const tr=e.streams&&e.streams[0]?e.streams[0].getTracks():[e.track];tr.forEach(t=>{if(!C.remote.getTracks().includes(t))C.remote.addTrack(t)});bindCallMedia(true)};
+  pc.ontrack=e=>{if(CALL!==C)return;const t=e.track;if(!C.remote.getTracks().includes(t))C.remote.addTrack(t);
+    if(t.kind==='video'){t.onunmute=()=>{if(CALL===C){C.remoteFlow=true;updRemoteVid(C)}};t.onmute=()=>{if(CALL===C){C.remoteFlow=false;updRemoteVid(C)}};C.remoteFlow=!t.muted}
+    bindCallMedia();updRemoteVid(C)};
   pc.onconnectionstatechange=()=>{if(CALL!==C)return;const s=pc.connectionState;
     if(s==='connected'){C.netWarn=false;if(C.state!=='live'){C.state='live';C.start=C.start||Date.now();clearTimeout(C.to);renderCall()}}
     else if(s==='disconnected'){C.netWarn=true;renderCallStatus()}
     else if(s==='failed'){toast('החיבור לשיחה נכשל. ברשתות סלולריות צריך שרת TURN (ראו מדריך ההתקנה).');endCall('failed')}};
   return pc;
 }
+function updRemoteVid(C){const v=!!(C.peerCam&&C.remote.getVideoTracks().length);if(v!==C.remoteVid){C.remoteVid=v;if(v)C.video=true;renderCall()}}
+function onCallDoc(C,d){
+  if(!d)return;const pc=!!(d.cam&&d.cam[C.peer]);
+  if(pc!==C.peerCam){C.peerCam=pc;updRemoteVid(C)}
+}
 function addRemoteCand(C,c){if(CALL!==C)return;if(C.pc&&C.pc.remoteDescription)C.pc.addIceCandidate(new RTCIceCandidate(c)).catch(()=>{});else C.pendIn.push(c)}
 function flushIn(C){C.pendIn.splice(0).forEach(c=>C.pc.addIceCandidate(new RTCIceCandidate(c)).catch(()=>{}))}
+function newCallObj(o){return{start:0,mute:false,camOn:false,facing:'user',remote:new MediaStream(),pendIn:[],pendOut:[],ready:false,unsubs:[],fx:{filter:'none',sticker:'none',bg:'none'},fxTab:'filter',peerCam:false,remoteVid:false,...o}}
 async function startCall(uid,video){
   if(CALL){toast('כבר יש שיחה פעילה');return}
   if(!uid||uid===ME)return;
   if(isBlocked(uid)){toast('צריך לבטל את החסימה כדי להתקשר');return}
   if(!window.RTCPeerConnection||!navigator.mediaDevices){toast('הדפדפן הזה לא תומך בשיחות');return}
   const id='c'+Date.now().toString(36)+rid(6),ref=db.doc('calls/'+id);
-  const C=CALL={id,ref,peer:uid,video:!!video,out:true,state:'calling',start:0,mute:false,cam:!!video,facing:'user',remote:new MediaStream(),pendIn:[],pendOut:[],ready:false,unsubs:[]};
+  const C=CALL=newCallObj({id,ref,peer:uid,video:!!video,out:true,state:'calling',camOn:!!video});
   renderCall();
-  let stream;try{stream=await getMedia(video)}catch(e){mediaErr(e,video);killCall(C);return}
-  if(CALL!==C){stream.getTracks().forEach(t=>t.stop());return}
-  C.local=stream;C.pc=newPC(C);stream.getTracks().forEach(t=>C.pc.addTrack(t,stream));
+  let mic;try{mic=await getMicStream();if(video)await openCamera(C)}catch(e){mediaErr(e,video);if(mic)mic.getTracks().forEach(t=>t.stop());killCall(C);return}
+  if(CALL!==C){mic.getTracks().forEach(t=>t.stop());C.rawCam&&C.rawCam.stop();return}
+  C.local=mic;C.pc=newPC(C);
+  mic.getAudioTracks().forEach(t=>C.pc.addTrack(t,mic));
+  C.vSender=C.pc.addTransceiver('video',{direction:'sendrecv'}).sender;
+  await setVideoOut(C);
   C.pc.onicecandidate=e=>{if(!e.candidate||CALL!==C)return;const j=e.candidate.toJSON();if(C.ready)db.collection(`calls/${id}/a`).add(j).catch(()=>{});else C.pendOut.push(j)};
-  bindCallMedia();
   const offer=await C.pc.createOffer();await C.pc.setLocalDescription(offer);
-  try{await ref.set({from:ME,to:uid,video:!!video,state:'ringing',created:Date.now(),offer:{type:offer.type,sdp:offer.sdp}})}catch(e){dbErr(e);killCall(C);return}
+  try{await ref.set({from:ME,to:uid,video:!!video,state:'ringing',created:Date.now(),cam:{[ME]:!!video},offer:{type:offer.type,sdp:offer.sdp}})}catch(e){dbErr(e);killCall(C);return}
   if(CALL!==C){ref.update({state:'missed'}).catch(()=>{});return}
   C.ready=true;pushCall(C);C.pendOut.splice(0).forEach(j=>db.collection(`calls/${id}/a`).add(j).catch(()=>{}));
   presWrite();
   C.unsubs.push(ref.onSnapshot(async s=>{const d=s.data();if(!d||CALL!==C)return;
     if(d.answer&&!C.answered){C.answered=true;C.state='connecting';renderCall();try{await C.pc.setRemoteDescription(d.answer);flushIn(C)}catch(e){console.warn(e)}}
+    onCallDoc(C,d);
     if(['ended','declined','missed','busy'].includes(d.state))endCall(d.state,true)},()=>{}));
   C.unsubs.push(db.collection(`calls/${id}/b`).onSnapshot(s=>s.docChanges().forEach(ch=>{if(ch.type==='added')addRemoteCand(C,ch.doc.data())}),()=>{}));
   C.to=setTimeout(()=>{if(CALL===C&&!C.answered)endCall('missed')},45000);
@@ -1814,35 +1864,41 @@ function listenIncoming(){
 }
 function incoming(id,d){
   const ref=db.doc('calls/'+id);
-  const C=CALL={id,ref,peer:d.from,video:!!d.video,out:false,state:'ringing-in',offer:d.offer,start:0,mute:false,cam:!!d.video,facing:'user',remote:new MediaStream(),pendIn:[],unsubs:[]};
+  const C=CALL=newCallObj({id,ref,peer:d.from,video:!!d.video,out:false,state:'ringing-in',offer:d.offer,peerCam:!!(d.cam&&d.cam[d.from])});
   renderCall();ringStart();
   if(document.hidden)sysNotify(pname(d.from),d.video?'שיחת וידאו נכנסת':'שיחה קולית נכנסת',{call:id},{requireInteraction:true});
-  C.unsubs.push(ref.onSnapshot(s=>{const x=s.data();if(!x||CALL!==C)return;if(['ended','missed','declined'].includes(x.state))endCall(C.answered?'ended':'missed',true)},()=>{}));
+  C.unsubs.push(ref.onSnapshot(s=>{const x=s.data();if(!x||CALL!==C)return;onCallDoc(C,x);if(['ended','missed','declined'].includes(x.state))endCall(C.answered?'ended':'missed',true)},()=>{}));
   C.to=setTimeout(()=>{if(CALL===C&&!C.answered)endCall('missed',true)},45000);
 }
 async function answerCall(withVideo){
   const C=CALL;if(!C||C.out||C.answered)return;
-  ringStop();C.answered=true;C.state='connecting';C.cam=C.video&&withVideo!==false;clearTimeout(C.to);renderCall();
-  let stream;try{stream=await getMedia(C.cam)}catch(e){mediaErr(e,C.cam);endCall('declined');return}
-  if(CALL!==C){stream.getTracks().forEach(t=>t.stop());return}
-  C.local=stream;C.pc=newPC(C);stream.getTracks().forEach(t=>C.pc.addTrack(t,stream));
+  ringStop();C.answered=true;C.state='connecting';C.camOn=C.video&&withVideo!==false;clearTimeout(C.to);renderCall();
+  let mic;try{mic=await getMicStream();if(C.camOn)await openCamera(C)}catch(e){mediaErr(e,C.camOn);if(mic)mic.getTracks().forEach(t=>t.stop());endCall('declined');return}
+  if(CALL!==C){mic.getTracks().forEach(t=>t.stop());C.rawCam&&C.rawCam.stop();return}
+  C.local=mic;C.pc=newPC(C);
   C.pc.onicecandidate=e=>{if(e.candidate&&CALL===C)db.collection(`calls/${C.id}/b`).add(e.candidate.toJSON()).catch(()=>{})};
-  bindCallMedia();
   try{
     await C.pc.setRemoteDescription(C.offer);flushIn(C);
+    const ta=C.pc.getTransceivers().find(t=>t.receiver.track&&t.receiver.track.kind==='audio');
+    if(ta){ta.direction='sendrecv';await ta.sender.replaceTrack(mic.getAudioTracks()[0])}else mic.getAudioTracks().forEach(t=>C.pc.addTrack(t,mic));
+    let tv=C.pc.getTransceivers().find(t=>t.receiver.track&&t.receiver.track.kind==='video');
+    if(tv)tv.direction='sendrecv';else tv=C.pc.addTransceiver('video',{direction:'sendrecv'});
+    C.vSender=tv.sender;await setVideoOut(C);
     const ans=await C.pc.createAnswer();await C.pc.setLocalDescription(ans);
-    await C.ref.update({answer:{type:ans.type,sdp:ans.sdp},state:'accepted',startedAt:Date.now()});
+    await C.ref.update({answer:{type:ans.type,sdp:ans.sdp},state:'accepted',startedAt:Date.now(),cam:{[ME]:!!C.camOn}});
   }catch(e){console.warn(e);toast('לא הצלחנו לענות לשיחה');endCall('ended');return}
   C.unsubs.push(db.collection(`calls/${C.id}/a`).onSnapshot(s=>s.docChanges().forEach(ch=>{if(ch.type==='added')addRemoteCand(C,ch.doc.data())}),()=>{}));
   C.to=setTimeout(()=>{if(CALL===C&&C.state!=='live'){toast('לא הצלחנו לחבר את השיחה. ייתכן שצריך שרת TURN.');endCall('failed')}},30000);
   presWrite();
 }
-function killCall(C){if(CALL===C)CALL=null;ringStop();$('#call')?.remove()}
+function killCall(C){if(CALL===C)CALL=null;ringStop();FX.stop(C);$('#call')?.remove()}
 function endCall(reason,remote){
   const C=CALL;if(!C||C.ending)return;C.ending=true;ringStop();clearTimeout(C.to);clearInterval(C.iv);
   const dur=C.start?Math.round((Date.now()-C.start)/1000):0;
   if(!remote&&C.ref){const st=C.answered?'ended':(C.out?'missed':'declined');C.ref.update({state:st,ended:Date.now()}).catch(()=>{})}
+  FX.stop(C);
   try{C.local&&C.local.getTracks().forEach(t=>t.stop())}catch(e){}
+  try{C.rawCam&&C.rawCam.stop()}catch(e){}
   try{C.pc&&C.pc.close()}catch(e){}
   C.unsubs.forEach(u=>{try{u()}catch(e){}});
   CALL=null;$('#call')?.remove();presWrite();
@@ -1855,43 +1911,60 @@ function endCall(reason,remote){
 }
 function logCall(e){const {id,...d}=e;qw(`data/users/${ME}/state/log/${id}`,()=>db.doc(`data/users/${ME}/state/log/${id}`).set(d))}
 function subscribeLog(){db.collection(`data/users/${ME}/state/log`).orderBy('t','desc').limit(80).onSnapshot(s=>{LOG=s.docs.map(d=>({id:d.id,...d.data()}));if(TAB==='calls')drawSide();drawNav()},dbErr)}
+/* ---------- controls ---------- */
+function callToggleMute(){const C=CALL;if(!C)return;C.mute=!C.mute;C.local&&C.local.getAudioTracks().forEach(t=>t.enabled=!C.mute);renderCall()}
+async function callToggleCam(){
+  const C=CALL;if(!C||!C.pc)return;
+  if(C.camOn){C.camOn=false;try{C.rawCam&&C.rawCam.stop()}catch(e){}C.rawCam=null;C.fxOpen=false;await setVideoOut(C);signalCam(C);renderCall();return}
+  try{await openCamera(C)}catch(e){mediaErr(e,true);return}
+  C.camOn=true;C.video=true;await setVideoOut(C);signalCam(C);renderCall();
+}
+async function flipCamera(){
+  const C=CALL;if(!C||!C.camOn||!C.pc)return;
+  const prevFacing=C.facing,prevDev=C.curDevice;
+  try{
+    let devs=[];try{devs=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput')}catch(e){}
+    if(devs.length>2&&prevDev){
+      const want=prevFacing==='user'?/back|rear|environment|אחור/i:/front|user|face|קדמ/i;
+      const cand=devs.filter(d=>d.deviceId!==prevDev);
+      const pick=cand.find(d=>want.test(d.label))||cand[0];
+      C.camDevice=pick.deviceId;C.facing=prevFacing==='user'?'environment':'user';
+    } else if(devs.length===2&&prevDev&&devs.every(d=>d.deviceId)){
+      C.camDevice=(devs.find(d=>d.deviceId!==prevDev)||devs[0]).deviceId;C.facing=prevFacing==='user'?'environment':'user';
+    } else {C.camDevice=null;C.facing=prevFacing==='user'?'environment':'user'}
+    await openCamera(C);
+    if(C.curDevice&&prevDev&&C.curDevice===prevDev&&!C.camDevice){C.facing=prevFacing==='user'?'environment':'user'}
+    await setVideoOut(C);renderCall();
+  }catch(e){console.warn(e);toast('לא הצלחנו להחליף מצלמה');C.camDevice=null;C.facing=prevFacing;try{await openCamera(C);await setVideoOut(C)}catch(x){}renderCall()}
+}
+/* ---------- screen ---------- */
 function renderCall(){
   const C=CALL;if(!C)return;let el=$('#call');
   if(!el){el=document.createElement('div');el.className='call';el.id='call';$('#layers').appendChild(el)}
-  const p=pobj(C.peer),vid=C.video,liveVid=vid&&C.state==='live'&&C.remote.getVideoTracks().length;
-  el.style.setProperty('--cc',p.color);el.classList.toggle('isvid',!!liveVid);
-  el.innerHTML=`${vid?`<video id="rv" class="rv" autoplay playsinline ${liveVid?'':'hidden'}></video>`:''}<audio id="ra" autoplay></audio>
-  <div class="ctop"><span class="clabel">${ic('lock',13)} ${vid?'שיחת וידאו':'שיחה קולית'} · ChatUP</span><h2>${esc(p.name)}</h2><span class="cstat" id="cstat"></span></div>
-  <div class="cav ${C.state==='live'?'':'ring'}" ${liveVid?'hidden':''}>${av(p,128)}</div>
-  ${vid&&C.state!=='ringing-in'?`<video id="lv" class="lv ${C.facing==='user'?'mir':''}" autoplay playsinline muted ${C.cam?'':'hidden'}></video>`:''}
-  <div class="cctl">${C.state==='ringing-in'?`<button class="end" data-a="callDecline" aria-label="דחייה">${ic('phoneoff')}</button>${vid?`<button class="ans2" data-a="callAnswerAudio" aria-label="מענה בקול בלבד">${ic('phone')}</button>`:''}<button class="ans" data-a="callAnswer" aria-label="מענה">${ic(vid?'video':'phone')}</button>`:`
+  const p=pobj(C.peer),live=C.state==='live',rv=live&&C.remoteVid,vidCall=C.camOn||C.remoteVid||(C.video&&!live);
+  el.style.setProperty('--cc',p.color);el.classList.toggle('isvid',!!rv);
+  el.innerHTML=`<video id="rv" class="rv" autoplay playsinline ${rv?'':'hidden'}></video><audio id="ra" autoplay></audio>
+  <div class="ctop"><span class="clabel">${ic('lock',13)} ${vidCall?'שיחת וידאו':'שיחה קולית'} · ChatUP</span><h2>${esc(p.name)}</h2><span class="cstat" id="cstat"></span></div>
+  <div class="cav ${live?'':'ring'}" ${rv?'hidden':''}>${av(p,128)}</div>
+  ${C.state!=='ringing-in'&&C.camOn?`<video id="lv" class="lv ${C.facing==='user'?'mir':''}" autoplay playsinline muted></video>`:''}
+  <div class="cbottom">${C.fxOpen&&C.camOn?FX.panel(C):''}
+  <div class="cctl">${C.state==='ringing-in'?`<button class="end" data-a="callDecline" aria-label="דחייה">${ic('phoneoff')}</button>${C.video?`<button class="ans2" data-a="callAnswerAudio" aria-label="מענה בקול בלבד">${ic('phone')}</button>`:''}<button class="ans" data-a="callAnswer" aria-label="מענה">${ic(C.video?'video':'phone')}</button>`:`
     <button class="${C.mute?'on':''}" data-a="callT" data-k="mute" aria-label="${C.mute?'ביטול השתקה':'השתקה'}">${ic(C.mute?'micoff':'mic')}</button>
-    ${vid?`<button class="${C.cam?'':'on'}" data-a="callT" data-k="cam" aria-label="${C.cam?'כיבוי מצלמה':'הפעלת מצלמה'}">${ic(C.cam?'video':'videooff')}</button><button data-a="callFlip" aria-label="החלפת מצלמה">${ic('refresh')}</button>`:''}
-    <button class="end" data-a="callEnd" aria-label="ניתוק">${ic('phoneoff')}</button>`}</div>`;
+    <button class="${C.camOn?'on':''}" data-a="callT" data-k="cam" aria-label="${C.camOn?'כיבוי מצלמה':'הפעלת מצלמה'}">${ic(C.camOn?'video':'videooff')}</button>
+    ${C.camOn?`<button data-a="callFlip" aria-label="החלפת מצלמה">${ic('refresh')}</button><button class="${C.fxOpen?'on':''}" data-a="callFx" aria-label="אפקטים ורקעים">${ic('sparkle')}</button>`:''}
+    <button class="end" data-a="callEnd" aria-label="ניתוק">${ic('phoneoff')}</button>`}</div></div>`;
   bindCallMedia();renderCallStatus();
   clearInterval(C.iv);C.iv=setInterval(renderCallStatus,500);
 }
 function renderCallStatus(){const C=CALL,s=$('#cstat');if(!C||!s)return;s.textContent=({calling:'מחייג/ת…','ringing-in':C.video?'שיחת וידאו נכנסת…':'שיחה קולית נכנסת…',connecting:'מתחבר…',live:fmtDur((Date.now()-C.start)/1000)+(C.netWarn?' · חיבור חלש':'')})[C.state]||''}
-function bindCallMedia(trackAdded){
+function bindCallMedia(){
   const C=CALL;if(!C)return;
-  if(trackAdded&&C.video&&C.state==='live'&&!$('#call.isvid')&&C.remote.getVideoTracks().length){renderCall();return}
   const rv=$('#rv'),ra=$('#ra'),lv=$('#lv');
   if(rv&&rv.srcObject!==C.remote)rv.srcObject=C.remote;
-  if(ra&&ra.srcObject!==C.remote){ra.srcObject=C.remote}
+  if(ra&&ra.srcObject!==C.remote)ra.srcObject=C.remote;
   if(rv)rv.muted=true;
-  if(lv&&C.local&&lv.srcObject!==C.local)lv.srcObject=C.local;
-  [rv,ra].forEach(x=>x&&x.play&&x.play().catch(()=>{}));
-}
-async function flipCamera(){
-  const C=CALL;if(!C||!C.local||!C.pc)return;
-  C.facing=C.facing==='user'?'environment':'user';
-  try{
-    const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:C.facing,width:{ideal:960},height:{ideal:540}}});
-    const nt=s.getVideoTracks()[0];const sender=C.pc.getSenders().find(x=>x.track&&x.track.kind==='video');
-    if(sender)await sender.replaceTrack(nt);
-    C.local.getVideoTracks().forEach(t=>{t.stop();C.local.removeTrack(t)});C.local.addTrack(nt);nt.enabled=C.cam;
-    const lv=$('#lv');if(lv){lv.srcObject=null;lv.srcObject=C.local;lv.classList.toggle('mir',C.facing==='user')}
-  }catch(e){toast('לא הצלחנו להחליף מצלמה')}
+  if(lv&&C.preview&&lv.srcObject!==C.preview)lv.srcObject=C.preview;
+  [rv,ra,lv].forEach(x=>x&&x.play&&x.play().catch(()=>{}));
 }
 window.addEventListener('pagehide',()=>{if(CALL)endCall('ended')});
 
@@ -2086,20 +2159,23 @@ function pgSelf(){
   ${c?infoCommon(c):''}`};
 }
 
-/* ================= back button: close the top screen instead of leaving the app ================= */
-const NAV={guard:false,ignore:0,t:0};
+/* ================= back button: one history entry per open screen ================= */
+/* Chrome skips history entries that were added without a tap, so we push an entry
+   while the user's tap is still active (when a screen opens) and never re-push after "back". */
+const NAV={depth:0,ignore:0};
 const mobileLayout=()=>!matchMedia('(min-width:900px)').matches;
-function topLayer(){
-  if($('#call'))return 'call';
-  if($('#lockscr')||$('#onb')||$('#auth')||$('#gate'))return null;
-  if($('#menu'))return 'menu';
-  if($('#sheet'))return 'sheet';
-  if($('#viewer'))return 'viewer';
-  if(stack.length)return 'page';
-  if(CUR&&mobileLayout())return 'chat';
-  if(chatSearch!==null&&CUR)return 'csearch';
-  if(TAB!=='chats')return 'tab';
-  return null;
+function navLayers(){
+  if($('#lockscr')||$('#onb')||$('#auth')||$('#gate'))return [];
+  const L=[];
+  if(TAB!=='chats')L.push('tab');
+  if(CUR&&mobileLayout())L.push('chat');
+  if(chatSearch!==null&&CUR)L.push('csearch');
+  for(let i=0;i<stack.length;i++)L.push('page');
+  if($('#viewer'))L.push('viewer');
+  if($('#call'))L.push('call');
+  if($('#sheet'))L.push('sheet');
+  if($('#menu'))L.push('menu');
+  return L;
 }
 function closeTopLayer(kind){
   switch(kind){
@@ -2110,20 +2186,28 @@ function closeTopLayer(kind){
     case 'chat':closeChat();break;
     case 'csearch':chatSearch=null;drawCSearch();drawMsgs(true);break;
     case 'tab':setTab('chats');break;
+    case 'call':if(CALL&&CALL.fxOpen){CALL.fxOpen=false;renderCall()}else toast('השיחה עדיין פעילה. לניתוק לחצו על הכפתור האדום.');break;
   }
 }
 function syncNav(){
-  const open=!!topLayer();
-  if(open&&!NAV.guard){NAV.guard=true;try{history.pushState({chatup:1},'')}catch(e){}}
-  else if(!open&&NAV.guard){NAV.guard=false;NAV.ignore++;try{history.back()}catch(e){NAV.ignore--}}
+  const want=navLayers().length;
+  if(want>NAV.depth){
+    for(let i=NAV.depth;i<want;i++){try{history.pushState({chatup:i+1},'')}catch(e){}}
+    NAV.depth=want;
+  } else if(want<NAV.depth){
+    const n=NAV.depth-want;NAV.depth=want;NAV.ignore++;try{history.go(-n)}catch(e){NAV.ignore--}
+  }
 }
 window.addEventListener('popstate',()=>{
   if(NAV.ignore>0){NAV.ignore--;return}
-  NAV.guard=false;
-  const k=topLayer();
-  if(k==='call'){toast('השיחה עדיין פעילה. לניתוק לחצו על הכפתור האדום.');}
-  else if(k)closeTopLayer(k);
-  setTimeout(syncNav,0);
+  NAV.depth=Math.max(0,NAV.depth-1);
+  const L=navLayers();const top=L[L.length-1];
+  if(top)closeTopLayer(top);
+  requestAnimationFrame(()=>{
+    const want=navLayers().length;
+    if(want<NAV.depth){const n=NAV.depth-want;NAV.depth=want;NAV.ignore++;try{history.go(-n)}catch(e){NAV.ignore--}}
+    else if(want>NAV.depth){for(let i=NAV.depth;i<want;i++){try{history.pushState({chatup:i+1},'')}catch(e){}}NAV.depth=want}
+  });
 });
 let navQ=0;
 new MutationObserver(()=>{if(navQ)return;navQ=requestAnimationFrame(()=>{navQ=0;syncNav()})}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','hidden']});
@@ -2258,6 +2342,262 @@ function pushRow(){
   const [a,b]=T[st];
   return `<button class="srow" data-a="pushToggle"><span class="sic">${ic('bell')}</span><span class="stx"><b>התראות כשהאפליקציה סגורה</b><small>${a} · ${b}</small></span>${st==='on'?'<span class="who-tag">פעיל</span>':''}</button>`;
 }
+/* ================= video call effects & backgrounds ================= */
+IC.sparkle='<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>';
+const FX_FILTERS=[['none','ללא','—'],['bw','שחור לבן','◐','grayscale(1) contrast(1.1)'],['vintage','וינטג׳','📜','sepia(.75) contrast(1.05) brightness(1.05)'],['vivid','צבעוני','🌈','saturate(1.9) contrast(1.15)'],['warm','חמים','🌅','sepia(.3) saturate(1.4) brightness(1.06)'],['cold','קריר','❄️','saturate(1.1) hue-rotate(-18deg) brightness(1.05) contrast(1.05)'],['drama','דרמטי','🎭','contrast(1.55) saturate(.65) brightness(.95)'],['comic','קומיקס','💥','contrast(2.1) saturate(2.4)'],['neon','ניאון','🟣','HUE'],['dream','חלומי','☁️','blur(1.5px) brightness(1.15) saturate(1.3)'],['negative','נגטיב','🔄','invert(1)'],['night','ראיית לילה','🟢','grayscale(1) sepia(1) hue-rotate(70deg) saturate(4) contrast(1.3)']];
+const FX_STICKERS=[['none','ללא','—'],['hearts','לבבות','❤️'],['confetti','קונפטי','🎉'],['snow','שלג','❄️'],['stars','כוכבים','✨'],['balls','כדורגל','⚽'],['fire','אש','🔥'],['money','כסף','💸'],['party','מסיבה','🎈'],['stadium','שידור משחק','🏟️'],['news','מבזק חדשות','📺'],['cinema','סרט קולנוע','🎬'],['tv','טלוויזיה ישנה','📼'],['neonframe','מסגרת ניאון','💜'],['goldframe','מסגרת זהב','🏆']];
+const FX_BG_EXTRA=[['none','ללא'],['blur','טשטוש'],['blurx','טשטוש חזק']];
+const FX_BG_SCENES=['pitch','stadium','court','tennis','galaxy','saturn','earthrise','milkyway','underwater','beach','seasunset','forest','fireflies','flowers','mountains','dunes','aurora','city','snow','cinema','synthwave','candy','limeblack','sportdoodle','rocketbg','gaming','love','food'];
+const FX={
+  active(C){const f=C.fx;return f.filter!=='none'||f.sticker!=='none'||f.bg!=='none'},
+  output(C){
+    if(C.fxRun&&C.fxRun.raw===C.rawCam)return C.fxRun.track;
+    FX.stop(C);
+    const raw=C.rawCam,st=raw.getSettings?raw.getSettings():{};
+    let W=st.width||640,H=st.height||480;const k=Math.min(1,720/Math.max(W,H));W=Math.round(W*k);H=Math.round(H*k);
+    const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;vid.autoplay=true;vid.srcObject=new MediaStream([raw]);vid.play().catch(()=>{});
+    const cv=document.createElement('canvas');cv.width=W;cv.height=H;const ctx=cv.getContext('2d');
+    const pc=document.createElement('canvas');pc.width=W;pc.height=H;const pctx=pc.getContext('2d');
+    const mc=document.createElement('canvas');const mctx=mc.getContext('2d');
+    const stream=cv.captureStream(24);const track=stream.getVideoTracks()[0];
+    const R={raw,track,vid,cv,ctx,pc,pctx,mc,mctx,W,H,parts:[],t0:performance.now(),stopped:false};
+    C.fxRun=R;
+    const loop=()=>{if(R.stopped)return;try{FX.draw(C,R)}catch(e){console.warn('fx',e)}R.timer=setTimeout(loop,1000/24)};loop();
+    return track;
+  },
+  stop(C){const R=C&&C.fxRun;if(!R)return;R.stopped=true;clearTimeout(R.timer);try{R.track.stop()}catch(e){}try{R.vid.srcObject=null}catch(e){}C.fxRun=null},
+  filterOf(C,t){const f=FX_FILTERS.find(x=>x[0]===C.fx.filter);if(!f||f[0]==='none')return 'none';return f[3]==='HUE'?`hue-rotate(${Math.round(t*90)%360}deg) saturate(2.6) contrast(1.2)`:f[3]},
+  draw(C,R){
+    const {ctx,W,H,vid}=R;if(vid.readyState<2)return;
+    const t=(performance.now()-R.t0)/1000;const filt=FX.filterOf(C,t);const bg=C.fx.bg;
+    let personDrawn=false;
+    if(bg!=='none'){
+      const mask=bg==='blur'||bg==='blurx'?FX.mask(R,true):FX.mask(R,false);
+      if(mask){
+        ctx.save();ctx.filter='none';
+        if(bg==='blur'||bg==='blurx'){ctx.filter=`blur(${bg==='blurx'?18:9}px)`;ctx.drawImage(vid,-20,-20,W+40,H+40);ctx.filter='none'}
+        else FX.drawBg(ctx,W,H,bg);
+        ctx.restore();
+        const {pctx,pc}=R;pctx.globalCompositeOperation='source-over';pctx.clearRect(0,0,W,H);pctx.filter=filt;pctx.drawImage(vid,0,0,W,H);pctx.filter='none';
+        pctx.globalCompositeOperation='destination-in';pctx.drawImage(R.mc,0,0,W,H);pctx.globalCompositeOperation='source-over';
+        ctx.drawImage(pc,0,0);personDrawn=true;
+      }
+    }
+    if(!personDrawn){ctx.filter=filt;ctx.drawImage(vid,0,0,W,H);ctx.filter='none'}
+    FX.sticker(C,R,t);
+  },
+  /* segmentation (MediaPipe, loaded on first use) */
+  seg:null,segLoading:null,segFailed:false,
+  loadSeg(){
+    if(FX.seg||FX.segFailed)return Promise.resolve(FX.seg);
+    if(FX.segLoading)return FX.segLoading;
+    if(window.__fakeSeg){FX.seg=window.__fakeSeg;return Promise.resolve(FX.seg)}
+    toast('טוען רקעים… זה לוקח כמה שניות בפעם הראשונה');
+    FX.segLoading=(async()=>{
+      const V='0.10.14';
+      const m=await import(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${V}/vision_bundle.mjs`);
+      const files=await m.FilesetResolver.forVisionTasks(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${V}/wasm`);
+      const mk=d=>m.ImageSegmenter.createFromOptions(files,{baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite',delegate:d},runningMode:'VIDEO',outputCategoryMask:false,outputConfidenceMasks:true});
+      let s;try{s=await mk('GPU')}catch(e){s=await mk('CPU')}
+      FX.seg=s;return s;
+    })().catch(e=>{console.warn('seg',e);FX.segFailed=true;toast('רקעים לא זמינים במכשיר הזה. אפשר להשתמש באפקטים ובמדבקות.');return null});
+    return FX.segLoading;
+  },
+  mask(R){
+    const s=FX.seg;if(!s){FX.loadSeg();return false}
+    let ok=false;const ts=performance.now();if(ts<=(R.lastTs||0))return R.hasMask;R.lastTs=ts;
+    try{
+      s.segmentForVideo(R.vid,ts,res=>{
+        const m=res&&res.confidenceMasks&&res.confidenceMasks[0];if(!m)return;
+        const w=m.width,h=m.height,data=m.getAsFloat32Array();
+        if(R.mc.width!==w||R.mc.height!==h){R.mc.width=w;R.mc.height=h;R.img=R.mctx.createImageData(w,h)}
+        const px=R.img.data;for(let i=0;i<data.length;i++){let a=data[i];a=a<.35?0:a>.65?1:(a-.35)/.3;px[i*4+3]=a*255}
+        R.mctx.putImageData(R.img,0,0);ok=true;
+      });
+    }catch(e){console.warn('seg run',e)}
+    if(ok)R.hasMask=true;return R.hasMask||false;
+  },
+  bgImgs:{},
+  bgImage(id){
+    if(FX.bgImgs[id])return FX.bgImgs[id];
+    const im=new Image();let src='';
+    if(id.startsWith('photo:'))src=FX.photos[id.slice(6)];
+    else{const w=wpImage(id);if(w)src=w.img.slice(5,-2)}
+    const o={im,ready:false,tile:id.startsWith('photo:')?false:!!(WPMAP[id]&&wpImage(id).tile)};
+    im.onload=()=>{o.ready=true};im.src=src;FX.bgImgs[id]=o;return o;
+  },
+  drawBg(ctx,W,H,id){
+    const o=FX.bgImage(id);ctx.fillStyle='#111';ctx.fillRect(0,0,W,H);if(!o.ready)return;
+    if(o.tile){const p=ctx.createPattern(o.im,'repeat');ctx.fillStyle=p;ctx.fillRect(0,0,W,H);return}
+    const iw=o.im.naturalWidth||o.im.width||360,ih=o.im.naturalHeight||o.im.height||780;const k=Math.max(W/iw,H/ih);
+    ctx.drawImage(o.im,(W-iw*k)/2,(H-ih*k)/2,iw*k,ih*k);
+  },
+  photos:{},
+  /* stickers, particles and frames */
+  sticker(C,R,t){
+    const s=C.fx.sticker;if(s==='none')return;const {ctx,W,H}=R;
+    const P={hearts:['❤️','💖','💕','💗'],stars:['⭐','✨','🌟'],balls:['⚽'],fire:['🔥'],money:['💸','💰','💵'],party:['🎈','🎉','🎊']};
+    if(P[s]||s==='confetti'||s==='snow'){
+      const up=s==='fire'||s==='party'||s==='hearts';
+      if(R.parts.length<(s==='snow'||s==='confetti'?70:22)&&Math.random()<.6)R.parts.push({x:Math.random()*W,y:up?H+30:-30,v:(up?-1:1)*(1+Math.random()*2.2)*(H/360),dx:(Math.random()-.5)*1.2,r:Math.random()*6.28,dr:(Math.random()-.5)*.1,size:(s==='snow'?2+Math.random()*4:s==='confetti'?6+Math.random()*6:H*(.05+Math.random()*.05)),e:P[s]?P[s][Math.floor(Math.random()*P[s].length)]:null,c:`hsl(${Math.random()*360|0},90%,60%)`});
+      R.parts=R.parts.filter(p=>p.y>-60&&p.y<H+60);
+      for(const p of R.parts){p.y+=p.v;p.x+=p.dx+Math.sin(t*2+p.r)*.6;p.r+=p.dr;
+        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);
+        if(s==='snow'){ctx.fillStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.arc(0,0,p.size,0,6.28);ctx.fill()}
+        else if(s==='confetti'){ctx.fillStyle=p.c;ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2)}
+        else{ctx.font=`${p.size|0}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.e,0,0)}
+        ctx.restore()}
+      return;
+    }
+    const u=Math.min(W,H)/360;ctx.save();
+    if(s==='stadium'){
+      ctx.fillStyle='rgba(10,40,20,.85)';ctx.fillRect(12*u,12*u,190*u,34*u);ctx.fillStyle='#e11d48';ctx.fillRect(12*u,12*u,40*u,34*u);
+      ctx.fillStyle='#fff';ctx.font=`700 ${15*u}px sans-serif`;ctx.textBaseline='middle';ctx.fillText('LIVE',17*u,29*u);ctx.fillText('ChatUP  1 : 0  ⚽',60*u,29*u);
+      const g=ctx.createLinearGradient(0,H-50*u,0,H);g.addColorStop(0,'rgba(22,107,44,0)');g.addColorStop(1,'rgba(22,107,44,.9)');ctx.fillStyle=g;ctx.fillRect(0,H-50*u,W,50*u);
+      ctx.fillStyle='#fff';ctx.font=`700 ${13*u}px sans-serif`;ctx.fillText(`⏱ ${String(Math.floor(t/60)+1).padStart(2,'0')}'`,W-60*u,29*u);
+    } else if(s==='news'){
+      ctx.fillStyle='#b91c1c';ctx.fillRect(0,H-62*u,W,30*u);ctx.fillStyle='#111';ctx.fillRect(0,H-32*u,W,32*u);
+      ctx.fillStyle='#fff';ctx.font=`800 ${16*u}px sans-serif`;ctx.textBaseline='middle';ctx.textAlign='right';ctx.fillText('מבזק · BREAKING NEWS',W-14*u,H-47*u);
+      ctx.font=`600 ${13*u}px sans-serif`;ctx.textAlign='left';const msg='ChatUP News · שידור חי מהשיחה · ';const x=W-((t*60*u)%(W*2));ctx.fillText(msg+msg,x,H-16*u);
+    } else if(s==='cinema'){
+      const bh=H*.12;ctx.fillStyle='#000';ctx.fillRect(0,0,W,bh);ctx.fillRect(0,H-bh,W,bh);
+      ctx.fillStyle='#2a2a2a';for(let x=8;x<W;x+=26*u){ctx.fillRect(x,bh*.3,12*u,bh*.4);ctx.fillRect(x,H-bh*.7,12*u,bh*.4)}
+    } else if(s==='tv'){
+      ctx.fillStyle='rgba(0,0,0,.18)';for(let y=0;y<H;y+=3)ctx.fillRect(0,y,W,1);
+      const g=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.3,W/2,H/2,Math.max(W,H)*.75);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.65)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+      if(Math.floor(t*2)%2===0){ctx.fillStyle='#ef4444';ctx.beginPath();ctx.arc(24*u,24*u,7*u,0,6.28);ctx.fill()}
+      ctx.fillStyle='#fff';ctx.font=`700 ${14*u}px monospace`;ctx.textBaseline='middle';ctx.fillText('REC',36*u,25*u);
+    } else if(s==='neonframe'){
+      const h=Math.round(t*80)%360;ctx.strokeStyle=`hsl(${h},100%,60%)`;ctx.lineWidth=8*u;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=22*u;ctx.strokeRect(10*u,10*u,W-20*u,H-20*u);
+    } else if(s==='goldframe'){
+      const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#fde68a');g.addColorStop(.5,'#b8860b');g.addColorStop(1,'#fde68a');ctx.strokeStyle=g;ctx.lineWidth=16*u;ctx.strokeRect(8*u,8*u,W-16*u,H-16*u);
+      ctx.font=`${28*u}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🏆',W/2,24*u);
+    }
+    ctx.restore();
+  },
+  /* the picker shown over the call */
+  panel(C){
+    const tab=C.fxTab||'filter';
+    const btn=(kind,id,label,icon,thumb='')=>`<button class="fxb ${C.fx[kind]===id?'on':''}" data-a="fxPick" data-k="${kind}" data-id="${esc(id)}">${thumb||`<span class="fxi">${icon}</span>`}<span class="fxn">${esc(label)}</span></button>`;
+    let items='';
+    if(tab==='filter')items=FX_FILTERS.map(f=>btn('filter',f[0],f[1],f[2])).join('');
+    else if(tab==='sticker')items=FX_STICKERS.map(f=>btn('sticker',f[0],f[1],f[2])).join('');
+    else items=`<button class="fxb" data-a="fxBgPhoto"><span class="fxi">${ic('image',22)}</span><span class="fxn">תמונה שלי</span></button>`+
+      Object.keys(FX.photos).map(k=>btn('bg','photo:'+k,'התמונה שלי','',`<span class="fxt" style="background-image:url('${FX.photos[k]}')"></span>`)).join('')+
+      FX_BG_EXTRA.map(f=>btn('bg',f[0],f[1],f[0]==='none'?'—':'💧')).join('')+
+      FX_BG_SCENES.filter(id=>WPMAP[id]).map(id=>btn('bg',id,WPMAP[id].name,'',`<span class="fxt" data-wp="${id}"></span>`)).join('');
+    return `<div class="fxpanel"><div class="fxtabs"><button class="${tab==='filter'?'on':''}" data-a="fxTab" data-k="filter">אפקטים</button><button class="${tab==='sticker'?'on':''}" data-a="fxTab" data-k="sticker">מדבקות ומסגרות</button><button class="${tab==='bg'?'on':''}" data-a="fxTab" data-k="bg">רקעים</button></div><div class="fxrow">${items}</div></div>`;
+  },
+};
+async function fxPick(kind,id){
+  const C=CALL;if(!C||!C.camOn)return;
+  C.fx[kind]=id;
+  if(kind==='bg'&&id!=='none')FX.loadSeg();
+  const row=$('#call .fxrow');const sl=row?row.scrollLeft:0;
+  await setVideoOut(C);renderCall();const r2=$('#call .fxrow');if(r2)r2.scrollLeft=sl;
+}
+function fxBgPhoto(){pickFile('image/*',f=>readImage(f,1280,.85,u=>{const k=rid(6);FX.photos[k]=u;fxPick('bg','photo:'+k)}))}
+/* ================= sounds: message tones and ringtones ================= */
+const N=n=>440*Math.pow(2,(n-69)/12); /* midi note -> Hz */
+/* each tone: list of [midi or Hz(if >200 treat as Hz), start(s), dur(s), wave, vol] */
+const TONES_MSG=[
+  ['chatup','ChatUP (ברירת מחדל)',[[78,0,.18,'sine',.5],[83,.12,.22,'sine',.5]]],
+  ['pop','פופ',[[84,0,.07,'sine',.6],[96,.05,.06,'sine',.4]]],
+  ['bubble','בועה',[[72,0,.12,'sine',.5,'up'],[79,.1,.12,'sine',.4,'up']]],
+  ['chime','פעמונים',[[88,0,.5,'triangle',.4],[93,.12,.6,'triangle',.35],[100,.24,.7,'triangle',.3]]],
+  ['crystal','קריסטל',[[96,0,.6,'sine',.35],[103,.08,.7,'sine',.25]]],
+  ['ding','דינג',[[81,0,.9,'sine',.55]]],
+  ['harp','נבל',[[72,0,.5,'triangle',.4],[76,.07,.5,'triangle',.4],[79,.14,.5,'triangle',.4],[84,.21,.7,'triangle',.4]]],
+  ['coin','מטבע',[[83,0,.08,'square',.25],[88,.08,.35,'square',.25]]],
+  ['whistle','שריקת שופט',[[2900,0,.18,'sine',.4,'vib'],[2900,.25,.45,'sine',.4,'vib']]],
+  ['goal','גול! (חצוצרה)',[[67,0,.12,'sawtooth',.25],[72,.13,.12,'sawtooth',.25],[76,.26,.12,'sawtooth',.25],[79,.39,.45,'sawtooth',.28]]],
+  ['tweet','ציוץ',[[96,0,.06,'sine',.4,'up'],[98,.09,.06,'sine',.4,'up'],[100,.18,.08,'sine',.4,'up']]],
+  ['drop','טיפה',[[90,0,.15,'sine',.5,'down']]],
+  ['xylo','קסילופון',[[84,0,.25,'triangle',.45],[88,.1,.25,'triangle',.45],[91,.2,.35,'triangle',.45]]],
+  ['laser','לייזר',[[1600,0,.25,'square',.18,'down']]],
+  ['retro','רטרו גיימינג',[[76,0,.06,'square',.22],[79,.07,.06,'square',.22],[88,.14,.06,'square',.22],[84,.21,.06,'square',.22],[86,.28,.06,'square',.22],[91,.35,.12,'square',.22]]],
+  ['beepbeep','ביפ ביפ',[[88,0,.09,'square',.2],[88,.16,.09,'square',.2]]],
+  ['soft','עדין',[[69,0,.4,'sine',.35],[76,.15,.5,'sine',.3]]],
+  ['magic','קסם',[[84,0,.3,'sine',.3],[88,.06,.3,'sine',.3],[91,.12,.3,'sine',.3],[95,.18,.3,'sine',.3],[100,.24,.5,'sine',.3]]],
+];
+const TONES_RING=[
+  ['classic','צלצול קלאסי',[[440,0,.4,'sine',.3],[480,0,.4,'sine',.3],[440,.6,.4,'sine',.3],[480,.6,.4,'sine',.3]],2.6],
+  ['marimba','מרימבה',[[72,0,.25,'triangle',.45],[76,.2,.25,'triangle',.45],[79,.4,.25,'triangle',.45],[84,.6,.4,'triangle',.45],[79,.9,.25,'triangle',.45],[84,1.1,.5,'triangle',.45]],2.4],
+  ['stadium','אצטדיון (פאנפרה)',[[60,0,.18,'sawtooth',.22],[64,.2,.18,'sawtooth',.22],[67,.4,.18,'sawtooth',.22],[72,.6,.5,'sawtooth',.24],[67,1.15,.18,'sawtooth',.22],[72,1.35,.6,'sawtooth',.24]],2.6],
+  ['arcade','ארקייד',[[72,0,.1,'square',.18],[76,.12,.1,'square',.18],[79,.24,.1,'square',.18],[84,.36,.1,'square',.18],[79,.48,.1,'square',.18],[84,.6,.25,'square',.18]],1.6],
+  ['bells','פעמוני כנסייה',[[76,0,1.2,'sine',.35],[72,.6,1.2,'sine',.35],[74,1.2,1.2,'sine',.35],[67,1.8,1.4,'sine',.35]],3.4],
+  ['digital','דיגיטלי',[[1000,0,.08,'square',.15],[1000,.15,.08,'square',.15],[1000,.3,.08,'square',.15],[1000,.45,.08,'square',.15]],1.4],
+  ['synth','סינת׳ 80׳',[[57,0,.3,'sawtooth',.18],[64,.3,.3,'sawtooth',.18],[69,.6,.3,'sawtooth',.18],[72,.9,.6,'sawtooth',.2]],2],
+  ['calm','רגוע',[[67,0,.8,'sine',.3],[71,.4,.8,'sine',.3],[74,.8,1.2,'sine',.3]],3],
+  ['phone','טלפון ישן',Array.from({length:16},(_,i)=>[1250,i*.06,.04,'square',.12]).concat(Array.from({length:16},(_,i)=>[1250,1.2+i*.06,.04,'square',.12])),3],
+  ['whistlering','שריקות שופט',[[2900,0,.25,'sine',.35,'vib'],[2900,.4,.25,'sine',.35,'vib'],[2900,.8,.6,'sine',.35,'vib']],2.2],
+];
+const Sound={
+  ctx(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}catch(e){return null}},
+  playNotes(notes,at){
+    const ac=Sound.ctx();if(!ac)return;const t0=at||ac.currentTime+.02;
+    for(const n of notes){
+      const [p,st,du,wave,vol,mod]=n;const f=p>200?p:N(p);
+      const o=ac.createOscillator(),g=ac.createGain();o.type=wave||'sine';o.frequency.setValueAtTime(f,t0+st);
+      if(mod==='up')o.frequency.exponentialRampToValueAtTime(f*1.6,t0+st+du);
+      if(mod==='down')o.frequency.exponentialRampToValueAtTime(f*.4,t0+st+du);
+      if(mod==='vib'){const l=ac.createOscillator(),lg=ac.createGain();l.frequency.value=38;lg.gain.value=f*.06;l.connect(lg).connect(o.frequency);l.start(t0+st);l.stop(t0+st+du+.05)}
+      g.gain.setValueAtTime(0,t0+st);g.gain.linearRampToValueAtTime(vol||.4,t0+st+.012);g.gain.exponentialRampToValueAtTime(.0001,t0+st+du);
+      o.connect(g).connect(ac.destination);o.start(t0+st);o.stop(t0+st+du+.05);
+    }
+  },
+  /* custom sound files live in this browser (IndexedDB) */
+  db(){return new Promise((res,rej)=>{const r=indexedDB.open('chatup-sounds',1);r.onupgradeneeded=()=>r.result.createObjectStore('s');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})},
+  async saveCustom(kind,blob,name){const d=await Sound.db();await new Promise((res,rej)=>{const tx=d.transaction('s','readwrite');tx.objectStore('s').put({blob,name},kind);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});Sound.urls[kind]=null},
+  async getCustom(kind){try{const d=await Sound.db();return await new Promise(res=>{const tx=d.transaction('s','readonly');const r=tx.objectStore('s').get(kind);r.onsuccess=()=>res(r.result||null);r.onerror=()=>res(null)})}catch(e){return null}},
+  urls:{},
+  async customUrl(kind){if(Sound.urls[kind])return Sound.urls[kind];const c=await Sound.getCustom(kind);if(!c)return null;Sound.urls[kind]=URL.createObjectURL(c.blob);Sound.names[kind]=c.name;return Sound.urls[kind]},
+  names:{},
+  audio:null,
+  async playCustom(kind,loop){const u=await Sound.customUrl(kind);if(!u)return false;Sound.stopAudio();const a=new Audio(u);a.loop=!!loop;a.volume=1;Sound.audio=a;a.play().catch(()=>{});if(!loop)setTimeout(()=>{if(Sound.audio===a&&!a.loop){a.pause()}},8000);return true},
+  stopAudio(){if(Sound.audio){try{Sound.audio.pause()}catch(e){}Sound.audio=null}},
+  cfg(){const s=S().sounds||(S().sounds={});return{msg:s.msg||'chatup',group:s.group||'chatup',call:s.call||'classic'}},
+  play(kind,id){
+    const c=Sound.cfg();id=id||c[kind];if(id==='none')return;
+    if(id==='custom'){Sound.playCustom(kind,false).then(ok=>{if(!ok)Sound.playNotes(TONES_MSG[0][2])});return}
+    const t=TONES_MSG.find(x=>x[0]===id)||TONES_RING.find(x=>x[0]===id)||TONES_MSG[0];Sound.playNotes(t[2]);
+  },
+  ringIv:0,ringing:false,
+  ringStart(id){
+    Sound.ringStop();Sound.ringing=true;const c=Sound.cfg();id=id||c.call;
+    if(id==='none')return;
+    if(id==='custom'){Sound.playCustom('call',true).then(ok=>{if(!ok&&Sound.ringing)Sound.ringLoop('classic')});return}
+    Sound.ringLoop(id);
+  },
+  ringLoop(id){const t=TONES_RING.find(x=>x[0]===id)||TONES_RING[0];const f=()=>{if(Sound.ringing)Sound.playNotes(t[2])};f();Sound.ringIv=setInterval(f,(t[3]||2.4)*1000)},
+  ringStop(){Sound.ringing=false;clearInterval(Sound.ringIv);Sound.ringIv=0;Sound.stopAudio()},
+};
+/* replace the old beep: 'sent' stays a short click, the rest follow the settings */
+beep=function(kind='msg'){
+  if(kind==='ring'){Sound.ringStart();return}
+  if(!S().notif.sound&&kind!=='preview')return;
+  if(kind==='sent'){Sound.playNotes([[81,0,.07,'sine',.08]]);return}
+  Sound.play(kind==='group'?'group':'msg');
+};
+function toneName(kind){const id=Sound.cfg()[kind];if(id==='none')return 'ללא צליל';if(id==='custom')return Sound.names[kind]||'צליל מהקבצים שלי';const t=(kind==='call'?TONES_RING:TONES_MSG).find(x=>x[0]===id);return t?t[1]:'ברירת מחדל'}
+function pgTone(kind){
+  const list=kind==='call'?TONES_RING:TONES_MSG,cur=Sound.cfg()[kind];
+  const T={msg:'צליל הודעות',group:'צליל קבוצות',call:'רינגטון לשיחות'};
+  Sound.customUrl(kind).then(()=>{const el=$('#custName');if(el&&Sound.names[kind])el.textContent=Sound.names[kind]});
+  const row=(id,label)=>`<div class="srow tonerow"><label class="tonel"><input type="radio" class="radio" name="tone" data-tone="${kind}" value="${id}" ${cur===id?'checked':''}><span class="stx"><b>${label}</b></span></label>${id!=='none'?`<button class="ib" data-a="tonePrev" data-k="${kind}" data-id="${id}" aria-label="השמעה">${ic('play',18)}</button>`:''}</div>`;
+  return{title:T[kind],body:`<p class="ptext">לחצו על ▶ כדי לשמוע. הבחירה נשמרת מיד.</p>
+  ${row('none','ללא צליל')}
+  <div class="srow tonerow"><label class="tonel"><input type="radio" class="radio" name="tone" data-tone="${kind}" value="custom" ${cur==='custom'?'checked':''}><span class="stx"><b>צליל מהקבצים שלי</b><small id="custName">${esc(Sound.names[kind]||'שיר או צליל מהטלפון')}</small></span></label><button class="ib" data-a="toneFile" data-k="${kind}" aria-label="בחירת קובץ">${ic('file',18)}</button>${cur==='custom'?`<button class="ib" data-a="tonePrev" data-k="${kind}" data-id="custom" aria-label="השמעה">${ic('play',18)}</button>`:''}</div>
+  <div class="plabel">צלילים של ChatUP</div>
+  ${list.map(t=>row(t[0],t[1])).join('')}
+  <p class="ptext">${ic('info',13)} הצליל שבוחרים כאן מושמע כשהאפליקציה פתוחה או ברקע. כשהאפליקציה סגורה לגמרי, הטלפון משמיע את צליל ההתראות הרגיל שלו.</p>`};
+}
+document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset||!t.dataset.tone)return;const kind=t.dataset.tone,v=t.value;
+  if(v==='custom'){Sound.getCustom(kind).then(c=>{if(!c){toneFile(kind);return}S().sounds=S().sounds||{};S().sounds[kind]='custom';saveState();if(kind==='call'){Sound.ringStart('custom');setTimeout(()=>Sound.ringStop(),4000)}else Sound.play(kind,'custom')});return}
+  S().sounds=S().sounds||{};S().sounds[kind]=v;saveState();
+  if(v!=='none'){if(kind==='call'){Sound.ringStart(v);setTimeout(()=>Sound.ringStop(),3500)}else Sound.play(kind,v)}
+});
+function toneFile(kind){pickFile('audio/*',async f=>{if(f.size>10*1048576){toast('הקובץ גדול מ־10MB. בחרו קטע קצר יותר.');return}try{await Sound.saveCustom(kind,f,f.name);Sound.names[kind]=f.name;S().sounds=S().sounds||{};S().sounds[kind]='custom';saveState();drawPages();toast('הצליל עודכן: '+f.name)}catch(e){toast('לא הצלחנו לשמור את הצליל')}})}
 
 /* ================= event wiring ================= */
 const A={
@@ -2320,7 +2660,13 @@ const A={
   callChat:el=>{const c=CH[CUR];if(c&&c.type==='direct'){const o=otherOf(c);if(o!==ME)startCall(o,!!el.dataset.v)}},
   callU:el=>startCall(el.dataset.uid,!!el.dataset.v),
   callAnswer:()=>answerCall(true),callAnswerAudio:()=>answerCall(false),callDecline:()=>endCall('declined'),callEnd:()=>endCall('ended'),
-  callT:el=>{const C=CALL;if(!C)return;const k=el.dataset.k;if(k==='mute'){C.mute=!C.mute;C.local&&C.local.getAudioTracks().forEach(t=>t.enabled=!C.mute)}else if(k==='cam'){C.cam=!C.cam;C.local&&C.local.getVideoTracks().forEach(t=>t.enabled=C.cam)}renderCall()},
+  callT:el=>{if(el.dataset.k==='mute')callToggleMute();else callToggleCam()},
+  callFx:()=>{const C=CALL;if(!C)return;C.fxOpen=!C.fxOpen;renderCall()},
+  fxTab:el=>{const C=CALL;if(!C)return;C.fxTab=el.dataset.k;renderCall()},
+  fxPick:el=>fxPick(el.dataset.k,el.dataset.id),
+  fxBgPhoto:()=>fxBgPhoto(),
+  tonePrev:el=>{const k=el.dataset.k,id=el.dataset.id;if(k==='call'){Sound.ringStart(id);setTimeout(()=>Sound.ringStop(),3500)}else Sound.play(k,id)},
+  toneFile:el=>toneFile(el.dataset.k),
   callFlip:()=>flipCamera(),
   newCall:()=>{const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));openSheet('שיחה חדשה',L.map(u=>`<div class="row">${av(pobj(u),42)}<span class="rm"><span class="rn">${esc(pname(u))}</span>${isOnline(u)?'<span class="rp">מחובר/ת</span>':''}</span><button class="ib" data-a="callC2" data-uid="${u}" aria-label="שיחה קולית">${ic('phone')}</button><button class="ib" data-a="callC2" data-uid="${u}" data-v="1" aria-label="שיחת וידאו">${ic('video')}</button></div>`).join('')||'<div class="empty"><b>עוד אין אנשים נוספים</b>הזמינו חברים ל־ChatUP.</div>')},
   callC2:el=>{closeSheet(true);startCall(el.dataset.uid,!!el.dataset.v)},
@@ -2458,7 +2804,7 @@ function onChats(s){
   if(!firstChats){
     for(const id in next){const c=next[id],o=CH[id];
       if(c.last&&c.last.by!==ME&&(!o||!o.last||o.last.t<c.last.t)&&!isBlocked(c.last.by)){
-        if(CUR!==id||document.hidden){banner(c);if(!isMuted(id)){beep();vibrate();if(document.hidden&&!(c.type==='group'&&!S().notif.groups))sysNotify(chatMeta(c).name,S().notif.preview?((c.type==='group'?pshort(c.last.by)+': ':'')+(c.last.text||'')):'הודעה חדשה',{cid:id})}}
+        if(CUR!==id||document.hidden){banner(c);if(!isMuted(id)){beep(c.type==='group'?'group':'msg');vibrate();if(document.hidden&&!(c.type==='group'&&!S().notif.groups))sysNotify(chatMeta(c).name,S().notif.preview?((c.type==='group'?pshort(c.last.by)+': ':'')+(c.last.text||'')):'הודעה חדשה',{cid:id})}}
         if(pref(id).archived&&!S().keepArchived){pref(id).archived=false;saveState()}
         if(pref(id).hiddenChat){delete pref(id).hiddenChat;saveState()}
       }
