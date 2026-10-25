@@ -480,6 +480,7 @@ textarea.inp{height:auto;min-height:90px;padding:10px 14px;resize:vertical}
 .call .lv.mir{transform:scaleX(-1)}
 .cctl button.ans2{background:#0B8FB3}
 
+#side,#sideView,.chips{min-width:0}
 /* wallpaper picker */
 .wpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;padding:8px 16px 14px}
 .wpt{display:flex;flex-direction:column;gap:6px;align-items:center;font-size:12.5px;font-weight:700;min-width:0;width:100%}
@@ -833,7 +834,7 @@ const FILTERS=[['all','הכל'],['unread','לא נקראו'],['fav','מועדפ�
 function viewChats(){
   return `<div class="shead"><div class="logo">Chat<b>UP</b></div><button class="ib" data-a="statusCam" aria-label="סטטוס עם תמונה">${ic('camera')}</button><button class="ib" data-a="mainMenu" aria-label="תפריט">${ic('more')}</button></div>
   <label class="search">${ic('search',18)}<input id="q" type="search" placeholder="חיפוש צ׳אטים ואנשים" value="${esc(Q)}" autocomplete="off" aria-label="חיפוש"></label>
-  <div class="chips">${FILTERS.map(([k,l])=>`<button class="chip ${F===k?'on':''}" data-a="filter" data-f="${k}">${l}</button>`).join('')}</div>
+  <div class="chips">${allFilters().map(([k,l])=>`<button class="chip ${F===k?'on':''}" data-a="filter" data-f="${esc(k)}">${esc(l)}</button>`).join('')}<button class="chip" data-a="newList" aria-label="רשימה חדשה">+</button></div>
   <div class="list" id="chatList"></div>
   <button class="fab" data-a="newChat" aria-label="צ׳אט חדש">${ic('chatplus',24)}</button>`;
 }
@@ -857,6 +858,7 @@ function sortChats(L){return L.sort((a,b)=>((pref(b.id).pinned?1:0)-(pref(a.id).
 function personRow(uid,act='dm'){const p=pobj(uid);return `<button class="row" data-a="${act}" data-uid="${uid}">${av(p,46)}<span class="rm"><span class="rn">${esc(p.name)}</span><span class="rp">${esc(prof(uid).about||'')}</span></span>${isOnline(uid)?'<span class="who-tag">מחובר/ת</span>':''}</button>`}
 function drawChatList(){
   const el=$('#chatList');if(!el)return;
+  if(F.startsWith('l:')&&!listById(F.slice(2))){F='all';$$('.chip').forEach(c=>c.classList.toggle('on',c.dataset.f==='all'))}
   let h='';
   const all=Object.values(CH).filter(c=>c.type!=='broadcast');
   if(Q){
@@ -875,12 +877,14 @@ function drawChatList(){
   if(F==='unread')L=L.filter(c=>unreadOf(c)||pref(c.id).markUnread);
   if(F==='fav')L=L.filter(c=>pref(c.id).fav);
   if(F==='groups')L=L.filter(c=>c.type==='group');
+  if(F.startsWith('l:')){const li=listById(F.slice(2));L=li?L.filter(c=>li.chats.includes(c.id)):[]}
   sortChats(L);
   h+=L.map(chatRow).join('');
   if(!L.length){
     if(F==='all'){const others=Object.keys(P).filter(u=>u!==ME);
       h+=`<div class="empty"><b>ברוכים הבאים ל־ChatUP 👋</b>${others.length?'אלה האנשים שכבר נמצאים כאן. בחרו מישהו כדי להתחיל לדבר.':'עוד אין כאן אנשים נוספים. הזמינו חברים כדי להתחיל לדבר.'}</div>${others.map(u=>personRow(u)).join('')}<div class="btns"><button class="btn ghost full" data-a="go" data-p="invite">הזמנת חברים</button></div>`;
-    } else h+=`<div class="empty"><b>${F==='unread'?'אין הודעות שלא נקראו':F==='fav'?'עוד אין מועדפים':'עוד אין קבוצות'}</b>${F==='fav'?'לחיצה ארוכה על צ׳אט ← "הוספה למועדפים".':''}</div>`;
+    } else if(F.startsWith('l:'))h+=`<div class="empty"><b>הרשימה ריקה</b>הוסיפו לה צ׳אטים.</div><div class="btns"><button class="btn ghost full" data-a="listEdit" data-id="${esc(F.slice(2))}">הוספת צ׳אטים לרשימה</button></div>`;
+    else h+=`<div class="empty"><b>${F==='unread'?'אין הודעות שלא נקראו':F==='fav'?'עוד אין מועדפים':'עוד אין קבוצות'}</b>${F==='fav'?'לחיצה ארוכה על צ׳אט ← "הוספה למועדפים".':''}</div>`;
   }
   el.innerHTML=h;
 }
@@ -892,6 +896,7 @@ function chatRowMenu(cid){
     {label:pr.archived?'הוצאה מהארכיון':'העברה לארכיון',icon:'archive',fn:()=>{pr.archived=!pr.archived;pr.pinned=false;toast(pr.archived?'הצ׳אט הועבר לארכיון':'הצ׳אט הוצא מהארכיון');done()}},
     {label:(unreadOf(c)||pr.markUnread)?'סימון כנקרא':'סימון כלא נקרא',icon:'unread',fn:()=>{if(unreadOf(c)||pr.markUnread){pr.markUnread=false;ST.reads[cid]={...(c.sent||{})}}else pr.markUnread=true;done()}},
     {label:pr.fav?'הסרה מהמועדפים':'הוספה למועדפים',icon:'heart',fn:()=>{pr.fav=!pr.fav;done()}},
+    {label:'הוספה לרשימה',icon:'bookmark',fn:()=>addToListSheet(cid)},
     {label:pr.locked?'ביטול נעילת הצ׳אט':'נעילת הצ׳אט',icon:'lock',fn:()=>toggleLock(cid)},
   ];
   if(c.type==='direct'&&otherOf(c)!==ME)it.push({label:isBlocked(otherOf(c))?'ביטול חסימה':'חסימה',icon:'block',danger:!isBlocked(otherOf(c)),fn:()=>blockToggle(otherOf(c))});
@@ -1294,6 +1299,7 @@ function goPage(p,arg){
   if(p==='channel')return push(()=>pgChannel(arg),'ch_'+arg,true);
   if(p==='community')return push(()=>pgCommunity(arg),'cm_'+arg,true);
   if(p==='media')return push(()=>pgMedia(arg),'md_'+arg,true);
+  if(p==='list')return push(()=>pgList(arg),'li_'+arg,true);
   const f=PAGES[p];if(f)push(f,p,true);
 }
 
@@ -1319,7 +1325,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">ChatUP · גרסה 4.1</p>
+  <p class="small" style="padding:24px 16px">ChatUP · גרסה 4.2</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1361,14 +1367,13 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','התראות מגיעות כש־ChatUP פתוחה (גם ברקע). כשהאפליקציה סגורה לגמרי ההודעות מחכות לך.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־ChatUP תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם, התמונה, שם המשתמש והסטטוסים גלויים לכל משתמשי ChatUP.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Chat<b>UP</b></div><p>גרסה 4.1 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 ChatUP</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Chat<b>UP</b></div><p>גרסה 4.2 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 ChatUP</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־ChatUP! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־ChatUP · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־ChatUP',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
 function pgLinked(){return{title:'מכשירים מקושרים',body:`<div class="hero">${ic('laptop',60)}<p>ChatUP עובדת בכל מכשיר שבו נכנסים לאותו חשבון: טלפון, מחשב וטאבלט. ההודעות מסונכרנות אוטומטית.</p></div><div class="srow"><span class="sic">${ic('laptop')}</span><span class="stx"><b>המכשיר הזה</b><small>פעיל עכשיו</small></span></div>`}}
 function qrSVG(seed){let h=0;for(const c of seed)h=(h*131+c.charCodeAt(0))>>>0;const rand=()=>(h=(h*1103515245+12345)>>>0)/4294967296;const N=25;let r='';const finder=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#17152B"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#5B3FF5"/>`;for(let y=0;y<N;y++)for(let x=0;x<N;x++){const inF=(x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9);if(!inF&&rand()>.52)r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#17152B"/>`}return `<svg viewBox="0 0 ${N} ${N}" shape-rendering="crispEdges">${r}${finder(0,0)}${finder(N-7,0)}${finder(0,N-7)}</svg>`}
 function pgQR(){const me=prof(ME);return{title:'הכרטיס שלי',body:`<div class="hero">${meAv(72)}<h3>${esc(me.name||'')}</h3><p dir="ltr">@${esc(me.username||'')}</p></div><div class="qr">${qrSVG(ME)}</div><p class="ptext" style="text-align:center">חברים ב־ChatUP יכולים למצוא אותך בחיפוש לפי @${esc(me.username||'')}.</p>`}}
-function pgLists(){const L=[['unread','לא נקראו'],['fav','מועדפים'],['groups','קבוצות']];return{title:'רשימות',body:`<p class="ptext">רשימות מופיעות כמסננים מעל רשימת הצ׳אטים.</p>${L.map(([k,l])=>`<button class="srow" data-a="useFilter" data-f="${k}"><span class="sic">${ic(k==='fav'?'heart':k==='groups'?'users':'unread')}</span><span class="stx"><b>${l}</b></span>${ic('chev')}</button>`).join('')}`}}
 function pgArchived(){const L=sortChats(Object.values(CH).filter(c=>pref(c.id).archived&&!pref(c.id).locked));return{title:'בארכיון',body:`<p class="ptext">${S().keepArchived?'הצ׳אטים יישארו בארכיון גם כשתגיע הודעה חדשה.':'צ׳אטים יוצאו מהארכיון כשתגיע הודעה חדשה.'}</p>`+(L.length?L.map(chatRow).join(''):`<div class="empty"><b>אין צ׳אטים בארכיון</b></div>`)}}
 
 /* ----- new chat / contacts / groups ----- */
@@ -2118,6 +2123,56 @@ window.addEventListener('popstate',()=>{
 let navQ=0;
 new MutationObserver(()=>{if(navQ)return;navQ=requestAnimationFrame(()=>{navQ=0;syncNav()})}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','hidden']});
 
+/* ================= custom chat lists ================= */
+const myLists=()=>(ST.lists=ST.lists||[]);
+const listById=id=>myLists().find(l=>l.id===id);
+function allFilters(){return[...FILTERS,...myLists().map(l=>['l:'+l.id,l.name])]}
+function chatsForPicker(){return sortChats(Object.values(CH).filter(c=>c.type!=='broadcast'))}
+function listChatPicker(title,selected,cb,okLabel='שמירה'){
+  const L=chatsForPicker();
+  openSheet(title,`<div id="lcp">${L.map(c=>`<label class="row">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${c.type==='group'?'קבוצה':''}</span></span><input type="checkbox" class="chk" value="${c.id}" ${selected.includes(c.id)?'checked':''}></label>`).join('')||'<div class="empty"><b>עוד אין צ׳אטים</b>התחילו צ׳אט כדי להוסיף אותו לרשימה.</div>'}</div><div class="btns"><button class="btn full" id="lcpgo">${okLabel}</button></div>`,d=>{
+    $('#lcpgo',d).addEventListener('click',()=>{const ids=$$('#lcp input:checked',d).map(i=>i.value);closeSheet(true);cb(ids)});
+  });
+}
+function createList(preselect=[]){
+  askText('רשימה חדשה','',name=>{
+    if(myLists().some(l=>l.name===name)){toast('כבר יש רשימה בשם הזה');return}
+    const li={id:rid(8),name,chats:[...preselect],t:Date.now()};
+    const finish=()=>{myLists().push(li);saveState();refresh();if(stack.length)drawPages();toast(`הרשימה "${name}" נוצרה`)};
+    if(preselect.length)finish();
+    else listChatPicker(`הוספת צ׳אטים ל"${esc(name)}"`,[],ids=>{li.chats=ids;finish()},'יצירת הרשימה');
+  },{max:30,ok:'המשך',label:'שם הרשימה',ph:'למשל: עבודה, משפחה, כדורגל'});
+}
+function pgLists(){
+  const B=[['unread','לא נקראו','unread',Object.values(CH).filter(c=>unreadOf(c)).length],['fav','מועדפים','heart',Object.keys(CH).filter(k=>pref(k).fav).length],['groups','קבוצות','users',Object.values(CH).filter(c=>c.type==='group').length]];
+  const mine=myLists();
+  return{title:'רשימות',body:`<p class="ptext">רשימות מופיעות כמסננים מעל רשימת הצ׳אטים, כדי למצוא מהר את מי שחשוב לך.</p>
+  ${R('plus','רשימה חדשה','בחרו שם וצ׳אטים','newList','','accent')}
+  <div class="plabel">הרשימות שלי</div>
+  ${mine.length?mine.map(l=>`<button class="srow" data-a="go" data-p="list" data-arg="${l.id}"><span class="sic">${ic('bookmark')}</span><span class="stx"><b>${esc(l.name)}</b><small>${l.chats.filter(id=>CH[id]).length} צ׳אטים</small></span>${ic('chev')}</button>`).join(''):'<p class="ptext">עוד לא יצרת רשימות.</p>'}
+  <div class="gap"></div><div class="plabel">רשימות קבועות</div>
+  ${B.map(([k,l,i,n])=>`<button class="srow" data-a="useFilter" data-f="${k}"><span class="sic">${ic(i)}</span><span class="stx"><b>${l}</b><small>${n} צ׳אטים</small></span>${ic('chev')}</button>`).join('')}`};
+}
+function pgList(id){
+  const li=listById(id);if(!li)return null;
+  const L=li.chats.map(c=>CH[c]).filter(Boolean);
+  return{title:esc(li.name),body:`
+  ${R('edit','שינוי שם הרשימה',esc(li.name),'listRename','data-id="'+id+'"')}
+  ${R('plus','הוספה או הסרה של צ׳אטים','','listEdit','data-id="'+id+'"','accent')}
+  ${R('chat','הצגת הרשימה בצ׳אטים','','useFilter','data-f="l:'+id+'"')}
+  <div class="plabel">${L.length} צ׳אטים ברשימה</div>
+  ${L.map(c=>`<div class="row">${avChat(c,44)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span></span><button class="ib" data-a="listRemove" data-id="${id}" data-c="${c.id}" aria-label="הסרה מהרשימה">${ic('x',18)}</button></div>`).join('')||'<p class="ptext">הרשימה ריקה. הוסיפו צ׳אטים בכפתור למעלה.</p>'}
+  <div class="gap"></div>
+  ${R('trash','מחיקת הרשימה','הצ׳אטים עצמם לא יימחקו','listDelete','data-id="'+id+'"','danger')}`};
+}
+function addToListSheet(cid){
+  const mine=myLists();
+  SF=[...mine.map(l=>()=>{const i=l.chats.indexOf(cid);if(i>=0)l.chats.splice(i,1);else l.chats.push(cid);saveState();refresh();addToListSheet(cid)}),()=>{closeSheet(true);createList([cid])}];
+  openSheet('רשימות',`${mine.map((l,i)=>`<button class="srow" data-a="sf" data-i="${i}"><span class="sic">${ic('bookmark')}</span><span class="stx"><b>${esc(l.name)}</b></span><input type="checkbox" class="chk" tabindex="-1" ${l.chats.includes(cid)?'checked':''} style="pointer-events:none"></button>`).join('')}<button class="srow accent" data-a="sf" data-i="${mine.length}"><span class="sic">${ic('plus')}</span><span class="stx"><b>רשימה חדשה</b></span></button>`);
+}
+const __setTab=setTab;
+setTab=function(t){__setTab(t);if(t==='chats')requestAnimationFrame(()=>{const c=$('#sideView .chip.on');if(c)c.parentElement.scrollLeft+=c.getBoundingClientRect().left-c.parentElement.getBoundingClientRect().left-16})};
+
 /* ================= event wiring ================= */
 const A={
   noop:()=>{},
@@ -2126,6 +2181,11 @@ const A={
   go:el=>goPage(el.dataset.p,el.dataset.arg),
   filter:el=>{F=el.dataset.f;$$('.chip').forEach(c=>c.classList.toggle('on',c.dataset.f===F));drawChatList()},
   useFilter:el=>{F=el.dataset.f;setTab('chats')},
+  newList:()=>createList(),
+  listRename:el=>{const li=listById(el.dataset.id);if(!li)return;askText('שם הרשימה',li.name,v=>{if(myLists().some(l=>l!==li&&l.name===v)){toast('כבר יש רשימה בשם הזה');return}li.name=v;saveState();refresh();drawPages();toast('השם עודכן')},{max:30})},
+  listEdit:el=>{const li=listById(el.dataset.id);if(!li)return;listChatPicker('צ׳אטים ב"'+esc(li.name)+'"',li.chats,ids=>{li.chats=ids;saveState();refresh();if(stack.length)drawPages();toast('הרשימה עודכנה')})},
+  listRemove:el=>{const li=listById(el.dataset.id);if(!li)return;li.chats=li.chats.filter(x=>x!==el.dataset.c);saveState();refresh();drawPages()},
+  listDelete:el=>{const li=listById(el.dataset.id);if(!li)return;askConfirm('למחוק את הרשימה "'+esc(li.name)+'"?','הצ׳אטים עצמם לא יימחקו.','מחיקה',()=>{ST.lists=myLists().filter(l=>l!==li);if(F==='l:'+li.id)F='all';saveState();pop();refresh();toast('הרשימה נמחקה')})},
   openChat:el=>openChat(el.dataset.id,el.dataset.mid),closeChat:()=>closeChat(),
   dm:el=>dm(el.dataset.uid),
   personInfo:el=>{if(el.dataset.uid===ME)goPage('profile');else goPage('contactinfo',el.dataset.uid)},
@@ -2150,6 +2210,7 @@ const A={
     {label:'סגנון הודעות',icon:'palette',fn:()=>push(()=>pgBubbleStyle(c.id),'bsc',true)},
     ...(chatMeta(c).kind==='self'?[{label:'שינוי שם',icon:'edit',fn:()=>A.selfRename()}]:[]),
     {label:pr.fav?'הסרה מהמועדפים':'הוספה למועדפים',icon:'heart',fn:()=>{pr.fav=!pr.fav;saveState();refresh();toast(pr.fav?'נוסף למועדפים':'הוסר מהמועדפים')}},
+    {label:'הוספה לרשימה',icon:'bookmark',fn:()=>addToListSheet(c.id)},
     {label:'נעילת הצ׳אט',icon:'lock',fn:()=>toggleLock(CUR)},
     {label:'ייצוא הצ׳אט',icon:'copy',fn:()=>copy(exportChat(CUR))},
     {label:'ניקוי הצ׳אט',icon:'x',danger:true,fn:()=>askConfirm('לנקות את הצ׳אט?','ההודעות יוסתרו אצלך בלבד. חברי הצ׳אט האחרים ימשיכו לראות אותן.','ניקוי',()=>clearChat(CUR,false))}];
