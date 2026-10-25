@@ -9,10 +9,12 @@ window.CHATUP_CONFIG = {
     appId: "1:60685364216:web:e7ca02d47ddcdacbf1c40d",
     measurementId: "G-K6VH4WCTMF"
   },
+  /* שרת ההתראות (Cloudflare Worker). מדביקים כאן את הכתובת של ה־Worker */
+  push: {
+    url: "https://chatup-notify.hrypwtr89.workers.dev",
+    publicKey: "BK8dFCiW93CJ4Nfnv5WyCN37VnSss3-SDy7YdSKuyxCLUcp-0GIWW13AA_V3mQjvx3c_1EgktjJM0PntHeyKKZo"
+  },
   turn: [
-    /* שרת TURN לשיחות ברשת סלולרית (שלב 5 במדריך). דוגמה:
-    { urls: "turn:global.relay.metered.ca:80", username: "XXXX", credential: "YYYY" },
-    { urls: "turn:global.relay.metered.ca:443?transport=tcp", username: "XXXX", credential: "YYYY" }
-    */
+    /* שרת TURN לשיחות ברשת סלולרית (שלב 5 במדריך) */
   ]
 };
