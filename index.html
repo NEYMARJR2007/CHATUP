@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}img{max-width:100%}[hidden]{display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Secular+One&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Secular+One&family=Bangers&display=swap">
 <style>
 /* Layout: rail + chat list + conversation on desktop; one screen with bottom tabs on phones. Squircle avatars, violet ink bubbles, sun-yellow read ticks. */
 :root{
@@ -31,18 +31,18 @@
   --msg-fs:15.5px; --sidew:clamp(340px,34vw,420px);
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0D0C17; --panel:#161427; --panel2:#1D1A33; --hover:#211E3A; --ink:#ECEAF8; --muted:#9C99B8; --line:#2A2746;
-  --accent:#8571FF; --accent-ink:#FFFFFF; --accent-soft:#272150;
-  --out:#5B3FF5; --out-ink:#FFFFFF; --out-muted:rgba(255,255,255,.72); --in:#221F3B; --in-ink:#ECEAF8;
-  --wall:#100E1D; --wall-dot:rgba(133,113,255,.10); --read:#FFD34D; --read-list:#FFD34D;
+  --bg:#121212; --panel:#1C1C1E; --panel2:#242426; --hover:#2C2C2F; --ink:#EDEDEF; --muted:#A1A1A6; --line:#333336;
+  --accent:#8571FF; --accent-ink:#FFFFFF; --accent-soft:#2D2A3E;
+  --out:#5B3FF5; --out-ink:#FFFFFF; --out-muted:rgba(255,255,255,.72); --in:#2A2A2D; --in-ink:#EDEDEF;
+  --wall:#161618; --wall-dot:rgba(255,255,255,.06); --read:#FFD34D; --read-list:#FFD34D;
   --ok:#3CC48A; --danger:#F06A70; --warn:#F0A93A; --scrim:rgba(0,0,0,.6);
   --shadow:0 1px 1px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.45); --bshadow:0 1px 1px rgba(0,0,0,.35);
   color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0D0C17; --panel:#161427; --panel2:#1D1A33; --hover:#211E3A; --ink:#ECEAF8; --muted:#9C99B8; --line:#2A2746;
-  --accent:#8571FF; --accent-ink:#FFFFFF; --accent-soft:#272150;
-  --out:#5B3FF5; --out-ink:#FFFFFF; --out-muted:rgba(255,255,255,.72); --in:#221F3B; --in-ink:#ECEAF8;
-  --wall:#100E1D; --wall-dot:rgba(133,113,255,.10); --read:#FFD34D; --read-list:#FFD34D;
+  --bg:#121212; --panel:#1C1C1E; --panel2:#242426; --hover:#2C2C2F; --ink:#EDEDEF; --muted:#A1A1A6; --line:#333336;
+  --accent:#8571FF; --accent-ink:#FFFFFF; --accent-soft:#2D2A3E;
+  --out:#5B3FF5; --out-ink:#FFFFFF; --out-muted:rgba(255,255,255,.72); --in:#2A2A2D; --in-ink:#EDEDEF;
+  --wall:#161618; --wall-dot:rgba(255,255,255,.06); --read:#FFD34D; --read-list:#FFD34D;
   --ok:#3CC48A; --danger:#F06A70; --warn:#F0A93A; --scrim:rgba(0,0,0,.6);
   --shadow:0 1px 1px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.45); --bshadow:0 1px 1px rgba(0,0,0,.35);
   color-scheme:dark}
@@ -180,7 +180,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stro
 .sp{display:inline-block;width:56px;height:10px}
 .out .sp{width:74px}
 .sp.wide{width:96px}
-.meta{position:absolute;bottom:4px;left:10px;display:inline-flex;align-items:center;gap:3px;font-size:11.5px;font-variant-numeric:tabular-nums;color:var(--muted);direction:ltr;white-space:nowrap}
+.meta{position:absolute;bottom:4px;left:10px;display:inline-flex;align-items:center;gap:3px;font-size:11.5px;font-variant-numeric:tabular-nums;color:var(--in-meta,var(--muted));direction:ltr;white-space:nowrap}
 .out .meta{color:var(--out-muted)}
 .meta svg.i{width:13px;height:13px}
 .meta em{font-style:normal}
@@ -479,6 +479,56 @@ textarea.inp{height:auto;min-height:90px;padding:10px 14px;resize:vertical}
 .call .lv{position:absolute;top:calc(100px + env(safe-area-inset-top,0px));inset-inline-end:16px;width:108px;height:150px;object-fit:cover;border-radius:18px;border:2px solid rgba(255,255,255,.45);z-index:3;background:#1b1930}
 .call .lv.mir{transform:scaleX(-1)}
 .cctl button.ans2{background:#0B8FB3}
+
+/* wallpaper picker */
+.wpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;padding:8px 16px 14px}
+.wpt{display:flex;flex-direction:column;gap:6px;align-items:center;font-size:12.5px;font-weight:700;min-width:0;width:100%}
+.wpi{display:block;width:100%;aspect-ratio:9/16;border-radius:14px;border:3px solid var(--line);max-width:100%;background-color:var(--wall)}
+.wpt.on .wpi{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.wpn{text-align:center;line-height:1.25}
+.wpc{position:relative}
+.wpdel{position:absolute;top:6px;left:6px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;display:grid;place-items:center;z-index:1}
+input[type=range]{width:100%;accent-color:var(--accent)}
+/* bubble style picker */
+.bsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;padding:8px 16px 20px}
+.bscard{display:flex;flex-direction:column;gap:6px;align-items:center;font-weight:700;font-size:13.5px;min-width:0;width:100%}
+.bsprev{width:100%;height:150px;flex:none;border-radius:16px;border:3px solid var(--line);padding:14px 10px;gap:10px;overflow:hidden;pointer-events:none;justify-content:center}
+.bscard.on .bsprev{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.bsprev .msg{max-width:90%;margin:0}.bsprev .bub{font-size:13.5px}
+/* ---- message styles ---- */
+.bs-football{--out:repeating-linear-gradient(90deg,#166b2c 0 18px,#115a24 18px 36px);--out-ink:#fff;--out-muted:rgba(255,255,255,.85);--in:#fff;--in-ink:#111;--in-meta:#555}
+.bs-football .out .bub{border:2px solid rgba(255,255,255,.95);text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.bs-football .in .bub{border:2px solid #111}
+.bs-football .msg:not(.g) .bub::after,.bs-basketball .msg:not(.g) .bub::after{content:"⚽";position:absolute;top:-11px;font-size:17px;line-height:1;pointer-events:none}
+.bs-basketball .msg:not(.g) .bub::after{content:"🏀"}
+.bs-football .out:not(.g) .bub::after,.bs-basketball .out:not(.g) .bub::after{left:-8px}
+.bs-football .in:not(.g) .bub::after,.bs-basketball .in:not(.g) .bub::after{right:-8px}
+.bs-basketball{--out:radial-gradient(circle at 0 50%,transparent 46px,rgba(70,25,0,.5) 47px 49px,transparent 50px),radial-gradient(circle at 100% 50%,transparent 46px,rgba(70,25,0,.5) 47px 49px,transparent 50px),linear-gradient(90deg,transparent calc(50% - 1px),rgba(70,25,0,.5) calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px)),#f26b1d;--out-ink:#fff;--out-muted:rgba(255,255,255,.85);--in:#fdf0e1;--in-ink:#3b1d0a;--in-meta:#8a5a3a}
+.bs-basketball .in .bub{border:2px solid #f26b1d}
+.bs-basketball .out .bub{text-shadow:0 1px 1px rgba(0,0,0,.35)}
+.bs-neon{--out:rgba(8,8,20,.85);--out-ink:#e0fbff;--out-muted:#7ee8fa;--in:rgba(8,8,20,.85);--in-ink:#ffe4f6;--in-meta:#f9a8d4}
+.bs-neon .out .bub{border:1.5px solid #22d3ee;box-shadow:0 0 10px #22d3ee,inset 0 0 8px rgba(34,211,238,.35);text-shadow:0 0 6px rgba(34,211,238,.7)}
+.bs-neon .in .bub{border:1.5px solid #f472b6;box-shadow:0 0 10px #f472b6,inset 0 0 8px rgba(244,114,182,.35);text-shadow:0 0 6px rgba(244,114,182,.6)}
+.bs-neon .tk.read{color:#a3e635}
+.bs-comic{--out:#ffe14d;--out-ink:#111;--out-muted:#333;--in:#fff;--in-ink:#111;--in-meta:#444}
+.bs-comic .bub{border:3px solid #111;box-shadow:4px 4px 0 #111;border-radius:16px!important;font-family:"Bangers","Secular One",cursive;letter-spacing:.5px;font-size:calc(var(--msg-fs) + 1.5px)}
+.bs-comic .out .bub{transform:rotate(-.8deg)}.bs-comic .in .bub{transform:rotate(.8deg)}
+.bs-comic .tk.read{color:#e11d48}
+.bs-retro{--out:#9bbc0f;--out-ink:#0f380f;--out-muted:#306230;--in:#c4cfa1;--in-ink:#0f380f;--in-meta:#306230}
+.bs-retro .bub{border-radius:0!important;box-shadow:0 -4px 0 #0f380f,0 4px 0 #0f380f,-4px 0 0 #0f380f,4px 0 0 #0f380f;margin:4px;font-family:ui-monospace,"Courier New",monospace;font-weight:700}
+.bs-retro .tk.read{color:#0f380f}
+.bs-glass{--out:rgba(91,63,245,.42);--out-ink:#fff;--out-muted:rgba(255,255,255,.85);--in:rgba(0,0,0,.30);--in-ink:#fff;--in-meta:rgba(255,255,255,.8)}
+.bs-glass .bub{backdrop-filter:blur(14px) saturate(1.5);-webkit-backdrop-filter:blur(14px) saturate(1.5);border:1px solid rgba(255,255,255,.35);text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.bs-gold{--out:linear-gradient(135deg,#f9e29c,#d4a017 55%,#b8860b);--out-ink:#2b1d00;--out-muted:#5c4300;--in:#141414;--in-ink:#f5e6b8;--in-meta:#c9a24a}
+.bs-gold .in .bub{border:1px solid #d4a017}.bs-gold .tk.read{color:#7c2d12}
+.bs-candy{--out:linear-gradient(135deg,#ff7eb3,#ff758c);--out-ink:#fff;--out-muted:rgba(255,255,255,.85);--in:#f3e8ff;--in-ink:#4c1d95;--in-meta:#7c3aed}
+.bs-candy .bub{border-radius:22px!important}
+.bs-terminal{--out:#000;--out-ink:#39ff14;--out-muted:#1fa30d;--in:#0b0b0b;--in-ink:#e5e5e5;--in-meta:#8a8a8a}
+.bs-terminal .bub{font-family:ui-monospace,Menlo,Consolas,"Courier New",monospace;border:1px solid #1f3d1a;border-radius:4px!important}
+.bs-terminal .out .txt::before{content:"> ";color:#39ff14}
+.bs-ocean{--out:linear-gradient(135deg,#06b6d4,#2563eb);--out-ink:#fff;--out-muted:rgba(255,255,255,.85);--in:#e0f7ff;--in-ink:#083344;--in-meta:#0e7490}
+.bs-minimal{--out:#111;--out-ink:#fff;--out-muted:#aaa;--in:#f2f2f2;--in-ink:#111;--in-meta:#777}
+.bs-minimal .bub{box-shadow:none;border-radius:20px!important;border:1px solid rgba(127,127,127,.35)}
 .who-tag{font-size:11px;font-weight:800;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 6px}
 </style>
 </head>
@@ -658,7 +708,7 @@ function av(o,size=48){
 const meAv=size=>av(pobj(ME),size);
 const otherOf=c=>c.type==='direct'?(c.members.find(x=>x!==ME)||ME):null;
 function chatMeta(c){
-  if(c.type==='direct'){const o=otherOf(c);if(o===ME)return{name:'הודעות לעצמי',color:COLORS[0],kind:'self'};const p=pobj(o);return{...p,kind:'user',uid:o,online:isOnline(o)}}
+  if(c.type==='direct'){const o=otherOf(c);if(o===ME)return{name:selfName(),color:COLORS[0],kind:'self'};const p=pobj(o);return{...p,kind:'user',uid:o,online:isOnline(o)}}
   return{name:c.name||'קבוצה',photo:c.photo||null,color:c.color||colorFor(c.id),kind:'group'};
 }
 function avChat(c,size=50){const m=chatMeta(c);return `<span class="avw">${av(m,size)}${m.online?'<span class="online"></span>':''}</span>`}
@@ -901,7 +951,7 @@ function markRead(){
 }
 function buildChat(){
   const c=CH[CUR];const wp=pref(CUR).wallpaper||S().wallpaper;
-  $('#main').innerHTML=`<header class="chead" id="chead"></header><div id="pinbar"></div><div id="csearch"></div><div class="msgs wall-${wp}" id="msgs" aria-live="polite"></div><div class="composer" id="composer"></div>`;
+  $('#main').innerHTML=`<header class="chead" id="chead"></header><div id="pinbar"></div><div id="csearch"></div><div ${wallAttr(wp,CUR)} id="msgs" aria-live="polite"></div><div class="composer" id="composer"></div>`;
   drawHead();drawPinbar();drawCSearch();drawMsgs(true);lastCS=canSendIn(c);drawComposer();
 }
 function typingIn(cid){return [...(typing[cid]||[])].filter(u=>u!==ME&&!isBlocked(u))}
@@ -1236,7 +1286,7 @@ function applySettings(){
   r.style.setProperty('--msg-fs',{s:'14px',m:'15.5px',l:'17.5px'}[S().fontSize]||'15.5px');
   document.body.classList.toggle('hc',!!S().access.contrast);document.body.classList.toggle('noanim',!S().access.anim);
 }
-const PAGES={profile:pgProfile,account:pgAccount,privacy:pgPrivacy,chats:pgChatsSet,notif:pgNotif,storage:pgStorage,access:pgAccess,help:pgHelp,invite:pgInvite,starred:pgStarred,linked:pgLinked,blocked:pgBlocked,twostep:pgTwoStep,wallpaper:()=>pgWallpaper(),applock:pgAppLock,archived:pgArchived,newchat:pgNewChat,newgroup:pgNewGroup,addcontact:pgAddContact,broadcasts:pgBroadcasts,newcomm:pgNewComm,qr:pgQR,faq:pgFaq,terms:pgTerms,appinfo:pgAppInfo,lists:pgLists,discover:pgDiscover,newchannel:pgNewChannel,delacc:pgDeleteAcc,people:pgPeople};
+const PAGES={profile:pgProfile,account:pgAccount,privacy:pgPrivacy,chats:pgChatsSet,notif:pgNotif,storage:pgStorage,access:pgAccess,help:pgHelp,invite:pgInvite,starred:pgStarred,linked:pgLinked,blocked:pgBlocked,twostep:pgTwoStep,wallpaper:()=>pgWallpaper(),bstyle:()=>pgBubbleStyle(),applock:pgAppLock,archived:pgArchived,newchat:pgNewChat,newgroup:pgNewGroup,addcontact:pgAddContact,broadcasts:pgBroadcasts,newcomm:pgNewComm,qr:pgQR,faq:pgFaq,terms:pgTerms,appinfo:pgAppInfo,lists:pgLists,discover:pgDiscover,newchannel:pgNewChannel,delacc:pgDeleteAcc,people:pgPeople};
 function goPage(p,arg){
   if(p.startsWith('r:'))return push(()=>pgRadio(p.slice(2)),p,true);
   if(p==='contactinfo')return push(()=>pgContactInfo(arg),'ci_'+arg,true);
@@ -1304,9 +1354,7 @@ function pgPrivacy(){
 }
 function pgBlocked(){const L=Object.keys(ST.blocked);return{title:'אנשי קשר חסומים',actions:`<button class="ib" data-a="blockAdd" aria-label="הוספה">${ic('userplus')}</button>`,body:L.length?L.map(u=>`<div class="row">${av(pobj(u),44)}<span class="rm"><span class="rn">${esc(pname(u))}</span></span><button class="flw" data-a="unblock" data-uid="${u}">ביטול חסימה</button></div>`).join(''):`<div class="empty"><b>אין אנשי קשר חסומים</b>הודעות מאנשים חסומים לא יוצגו ולא יגיעו אליך התראות מהם.</div>`}}
 function pgAppLock(){const p=S().privacy;return{title:'נעילת אפליקציה',body:`<div class="hero">${ic('lock',52)}<p>כשהאפשרות מופעלת, צריך להזין קוד כדי לפתוח את ChatUP במכשיר הזה.</p></div><label class="srow"><span class="stx"><b>נעילה עם קוד</b></span><input type="checkbox" class="sw" id="alk" ${p.appLock?'checked':''}></label>${p.pin?R('key','שינוי קוד הנעילה','','pinChange'):''}`,after:el=>$('#alk',el).addEventListener('change',e=>{if(e.target.checked){if(!p.pin)pinPad('יצירת קוד נעילה',null,x=>{p.pin=x;p.appLock=true;saveState();drawPages()},true,()=>drawPages());else{p.appLock=true;saveState();drawPages()}}else{p.appLock=false;saveState();drawPages()}})}}
-function pgChatsSet(){const s=S();return{title:'צ׳אטים',body:`<div class="plabel">תצוגה</div>${GO('sun','ערכת נושא',RADIOS.theme.lab[s.theme],'r:theme')}${GO('palette','טפט','','wallpaper')}<div class="gap"></div><div class="plabel">הגדרות צ׳אט</div>${TG('מקש Enter שולח','Shift+Enter יורד שורה.','enterSend')}${GO('type','גודל גופן',RADIOS.fontSize.lab[s.fontSize],'r:fontSize')}<div class="gap"></div><div class="plabel">צ׳אטים בארכיון</div>${TG('השארת צ׳אטים בארכיון','צ׳אטים בארכיון יישארו שם גם כשתגיע הודעה חדשה','keepArchived')}<div class="gap"></div>${R('archive','העברת כל הצ׳אטים לארכיון','','archiveAll')}${R('copy','ייצוא הצ׳אט הפתוח','העתקת ההודעות כטקסט','exportCur')}${R('x','ניקוי כל הצ׳אטים','ההודעות יוסתרו אצלך בלבד','clearAll','','danger')}`}}
-const WALLS=[['dots','נקודות'],['grid','משבצות'],['waves','גלים'],['plain','חלק'],['dusk','שקיעה'],['mint','מנטה'],['night','לילה']];
-function pgWallpaper(cid){const cur=cid?(pref(cid).wallpaper||''):S().wallpaper;return{title:cid?'טפט לצ׳אט':'טפט',body:`<p class="ptext">${cid?'הטפט יחול רק על הצ׳אט הזה ורק אצלך.':'הטפט יחול על כל הצ׳אטים, חוץ מאלה שקיבלו טפט משלהם.'}</p><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;padding:8px 16px">${(cid?[['','ברירת מחדל'],...WALLS]:WALLS).map(([k,l])=>`<button data-a="setWall" data-w="${k}" ${cid?`data-c="${cid}"`:''} style="display:flex;flex-direction:column;gap:6px;align-items:center;font-size:13px;font-weight:700"><span class="wall-${k||S().wallpaper}" style="display:block;width:100%;aspect-ratio:3/4;border-radius:16px;border:3px solid ${cur===k?'var(--accent)':'var(--line)'}"></span>${l}</button>`).join('')}</div>`}}
+function pgChatsSet(){const s=S();return{title:'צ׳אטים',body:`<div class="plabel">תצוגה</div>${GO('sun','ערכת נושא',RADIOS.theme.lab[s.theme],'r:theme')}${GO('image','רקעים','ספורט, חלל, ים, טבע, נופים, סרטים או תמונה שלך','wallpaper')}${GO('palette','סגנון הודעות',esc((BSTYLES.find(b=>b[0]===(S().bstyle||'classic'))||['',''])[1]),'bstyle')}<div class="gap"></div><div class="plabel">הגדרות צ׳אט</div>${TG('מקש Enter שולח','Shift+Enter יורד שורה.','enterSend')}${GO('type','גודל גופן',RADIOS.fontSize.lab[s.fontSize],'r:fontSize')}<div class="gap"></div><div class="plabel">צ׳אטים בארכיון</div>${TG('השארת צ׳אטים בארכיון','צ׳אטים בארכיון יישארו שם גם כשתגיע הודעה חדשה','keepArchived')}<div class="gap"></div>${R('archive','העברת כל הצ׳אטים לארכיון','','archiveAll')}${R('copy','ייצוא הצ׳אט הפתוח','העתקת ההודעות כטקסט','exportCur')}${R('x','ניקוי כל הצ׳אטים','ההודעות יוסתרו אצלך בלבד','clearAll','','danger')}`}}
 function pgNotif(){return{title:'התראות',body:`${TG('התראות מערכת','התראה בטלפון כש־ChatUP פתוחה ברקע','notif.system','bell')}${TG('באנר בתוך האפליקציה','כשמגיעה הודעה בצ׳אט אחר','notif.show')}${TG('תצוגה מקדימה','הצגת תוכן ההודעה בהתראה','notif.preview')}<div class="gap"></div><div class="plabel">הודעות</div>${TG('צלילים','צליל בהודעות נכנסות ויוצאות','notif.sound')}${TG('רטט','','notif.vibrate')}${TG('התראות מקבוצות','','notif.groups')}<p class="ptext">ההתראות והשיחות הנכנסות מגיעות כש־ChatUP פתוחה, גם ברקע. אם האפליקציה סגורה לגמרי, ההודעות יחכו לך בפעם הבאה שתפתח/י אותה.</p><div class="btns"><button class="btn ghost full" data-a="testNotif">בדיקת התראה</button></div>`}}
 function pgStorage(){const L=Object.values(CH).map(c=>({c,size:JSON.stringify(c).length+(c.id===CUR?JSON.stringify(MS[c.id]?.docs||{}).length:0)})).sort((a,b)=>b.size-a.size);return{title:'אחסון ונתונים',body:`<p class="ptext">ההודעות נשמרות בשרת של ChatUP ולא תופסות מקום במכשיר. כאן אפשר לנקות צ׳אטים אצלך.</p>${L.map(({c})=>`<div class="row">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp num">${(c.sent?Object.values(c.sent).reduce((a,b)=>a+b,0):0)} הודעות</span></span><button class="flw" data-a="clearChatId" data-c="${c.id}">ניקוי</button></div>`).join('')}`}}
 function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מוגברת','הכהיית טקסט משני וקווים מפרידים','access.contrast','eye')}${TG('אנימציות','מעברים והנפשות','access.anim','refresh')}${GO('type','גודל גופן',RADIOS.fontSize.lab[S().fontSize],'r:fontSize')}`}}
@@ -1327,7 +1375,7 @@ function pgArchived(){const L=sortChats(Object.values(CH).filter(c=>pref(c.id).a
 function pgNewChat(){
   const contacts=Object.keys(ST.contacts).filter(u=>P[u]&&u!==ME);
   const others=Object.keys(P).filter(u=>u!==ME&&!ST.contacts[u]);
-  return{title:'צ׳אט חדש',body:`${R('users','קבוצה חדשה','','go','data-p="newgroup"','accent')}${R('userplus','איש קשר חדש','לפי שם משתמש או מספר טלפון','go','data-p="addcontact"','accent')}${R('users','קהילה חדשה','','go','data-p="newcomm"','accent')}${R('megaphone','רשימת תפוצה חדשה','','newBroadcast','','accent')}${R('bookmark','הודעות לעצמי','','dm','data-uid="'+ME+'"','accent')}
+  return{title:'צ׳אט חדש',body:`${R('users','קבוצה חדשה','','go','data-p="newgroup"','accent')}${R('userplus','איש קשר חדש','לפי שם משתמש או מספר טלפון','go','data-p="addcontact"','accent')}${R('users','קהילה חדשה','','go','data-p="newcomm"','accent')}${R('megaphone','רשימת תפוצה חדשה','','newBroadcast','','accent')}${R('bookmark',esc(selfName()),'','dm','data-uid="'+ME+'"','accent')}
   ${contacts.length?`<div class="plabel">אנשי הקשר שלי · ${contacts.length}</div>`+contacts.map(u=>personRow(u)).join(''):''}
   <div class="plabel">אנשים ב־ChatUP · ${others.length}</div>${others.map(u=>personRow(u)).join('')||'<p class="ptext">עוד אין אנשים נוספים. הזמינו חברים מהגדרות ← הזמנת חברים.</p>'}`};
 }
@@ -1372,7 +1420,8 @@ function infoCommon(c){
   ${R('star','הודעות מסומנות בכוכב',(ST.starred[c.id]||[]).length||'אין','go','data-p="starred"')}
   <div class="gap"></div>
   <label class="srow"><span class="sic">${ic('belloff')}</span><span class="stx"><b>השתקת התראות</b></span><input type="checkbox" class="sw" data-chatset="muted" data-c="${c.id}" ${isMuted(c.id)?'checked':''}></label>
-  ${R('palette','טפט','','chatWall','data-c="'+c.id+'"')}
+  ${R('image','רקע','','chatWall','data-c="'+c.id+'"')}
+  ${R('palette','סגנון הודעות',esc(((BSTYLES.find(b=>b[0]===pref(c.id).bstyle)||[])[1])||'כמו בכל הצ׳אטים'),'chatBStyle','data-c="'+c.id+'"')}
   ${c.type!=='broadcast'?R('timer','הודעות נעלמות',c.disappear?timerLabel(c.disappear):'כבוי','disappear','data-c="'+c.id+'"'):''}
   <label class="srow"><span class="sic">${ic('lock')}</span><span class="stx"><b>נעילת הצ׳אט</b><small>נעילה והסתרה של הצ׳אט אצלך</small></span><input type="checkbox" class="sw" data-chatset="locked" data-c="${c.id}" ${pr.locked?'checked':''}></label>
   <label class="srow"><span class="sic">${ic('heart')}</span><span class="stx"><b>מועדפים</b></span><input type="checkbox" class="sw" data-chatset="fav" data-c="${c.id}" ${pr.fav?'checked':''}></label>`;
@@ -1414,7 +1463,7 @@ function pgMsgInfo(cid,mid){
   const others=c.members.filter(x=>x!==ME),rr=S().privacy.readReceipts;
   const read=others.filter(u=>(c.seen?.[u]||0)>=m.t),del=others.filter(u=>!read.includes(u)&&(c.dlv?.[u]||0)>=m.t);
   const row=(u,t)=>`<div class="row">${av(pobj(u),40)}<span class="rm"><span class="rn">${esc(pname(u))}</span><span class="rp">${t?dayLabel(t)+' ב־'+fmtTime(t):''}</span></span></div>`;
-  return{title:'פרטי ההודעה',body:`<div class="msgs wall-${pref(cid).wallpaper||S().wallpaper}" style="max-height:260px;flex:none">${msgHTML(c,m,null,[m])}</div>
+  return{title:'פרטי ההודעה',body:`<div ${wallAttr(pref(cid).wallpaper||S().wallpaper,cid)} style="max-height:260px;flex:none">${msgHTML(c,m,null,[m])}</div>
   <div class="plabel">נקראה</div>${rr?(read.map(u=>row(u,c.seen[u])).join('')||'<p class="ptext">עדיין לא</p>'):'<p class="ptext">אישורי הקריאה כבויים אצלך</p>'}
   <div class="plabel">נמסרה</div>${del.map(u=>row(u,c.dlv[u])).join('')||'<p class="ptext">—</p>'}
   <div class="plabel">נשלחה</div><p class="ptext">${dayLabel(m.t)} ב־${fmtTime(m.t)}</p>`};
@@ -1450,7 +1499,7 @@ function pgChannel(id){
   const ch=CHN[id];if(!ch)return null;const mine=ch.owner===ME,f=!!ST.follows[id];
   const cnt=pid=>{const r={};const m=ch.reacts?.[pid]||{};Object.values(m).forEach(e=>{if(e)r[e]=(r[e]||0)+1});return r};
   return{title:esc(ch.name),actions:mine?'':`<button class="flw ${f?'on':''}" data-a="follow" data-ch="${id}" style="margin-inline-end:8px">${f?'במעקב':'מעקב'}</button>`,body:`<div class="hero">${av({name:ch.name,color:ch.color},96)}<h3>${esc(ch.name)}</h3><p>ערוץ מאת ${esc(mine?'את/ה':pname(ch.owner))}</p>${ch.desc?`<p style="color:var(--ink)">${esc(ch.desc)}</p>`:''}</div>
-  <div class="msgs wall-${S().wallpaper}" style="min-height:240px">${(ch.posts||[]).map(p=>{const r=cnt(p.id);const keys=Object.keys(r);return `<div class="daysep">${dayLabel(p.t)}</div><div class="msg in ${keys.length?'hasr':''}" style="max-width:92%"><div class="bub">${p.img?`<span class="imgw"><img src="${esc(p.img)}" alt=""></span>`:''}<span class="txt">${linkify(esc(p.text||''))}</span><span class="sp"></span><span class="meta"><time>${fmtTime(p.t)}</time></span></div><button class="reacts" data-a="chReact" data-ch="${id}" data-p="${p.id}">${keys.length?keys.map(e=>e+`<small>${r[e]}</small>`).join(' '):ic('smile',16)}</button></div>`}).join('')||'<div class="sys">עוד אין עדכונים בערוץ</div>'}</div>
+  <div ${wallAttr(S().wallpaper)} style="min-height:240px">${(ch.posts||[]).map(p=>{const r=cnt(p.id);const keys=Object.keys(r);return `<div class="daysep">${dayLabel(p.t)}</div><div class="msg in ${keys.length?'hasr':''}" style="max-width:92%"><div class="bub">${p.img?`<span class="imgw"><img src="${esc(p.img)}" alt=""></span>`:''}<span class="txt">${linkify(esc(p.text||''))}</span><span class="sp"></span><span class="meta"><time>${fmtTime(p.t)}</time></span></div><button class="reacts" data-a="chReact" data-ch="${id}" data-p="${p.id}">${keys.length?keys.map(e=>e+`<small>${r[e]}</small>`).join(' '):ic('smile',16)}</button></div>`}).join('')||'<div class="sys">עוד אין עדכונים בערוץ</div>'}</div>
   ${mine?`<form id="cpf" class="crow" style="padding:10px 12px"><div class="cfield"><button type="button" class="ib" id="cpimg" aria-label="תמונה">${ic('image')}</button><input class="inp" id="cpt" placeholder="עדכון לערוץ" style="border:0;background:none"></div><button class="sendbtn" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></form>`:`<p class="ptext" style="text-align:center">${ic('megaphone',13)} רק מנהל/ת הערוץ מפרסם/ת. אפשר להגיב באימוג׳י.</p>`}`,
   after:el=>{const f=$('#cpf',el);if(!f)return;let img=null;$('#cpimg',el).addEventListener('click',()=>pickFile('image/*',file=>{storeImage(file,u=>{img=u;toast('התמונה מוכנה. כתבו טקסט ופרסמו.')})}));
     f.addEventListener('submit',e=>{e.preventDefault();const t=$('#cpt',el).value.trim();if(!t&&!img)return;const posts=[...(ch.posts||[]),{id:rid(10),t:Date.now(),text:t,img:img||undefined}].slice(-80);while(posts.length>1&&JSON.stringify(posts).length>800000)posts.shift();ch.posts=posts;qw('channels/'+id,()=>db.doc('channels/'+id).update({posts:clone(posts)}));drawPages()})}};
@@ -1869,6 +1918,164 @@ function authScreen(){
   draw();$('#layers').appendChild(el);
 }
 
+
+/* ================= wallpapers catalog ================= */
+function rng(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const svgu=s=>`url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(s)}")`;
+const SC=(inner,defs='')=>`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 780' preserveAspectRatio='xMidYMid slice'><defs>${defs}</defs>${inner}</svg>`;
+function stars(n,seed,w=360,h=780,maxR=1.6,col='#fff'){const r=rng(seed);let s='';for(let i=0;i<n;i++){const x=(r()*w).toFixed(1),y=(r()*h).toFixed(1),rr=(r()*maxR+.3).toFixed(2),o=(r()*.7+.3).toFixed(2);s+=`<circle cx='${x}' cy='${y}' r='${rr}' fill='${col}' opacity='${o}'/>`}return s}
+function emojiTile(list,bg,size=150,op=.22,seed=7){
+  const r=rng(seed);let s='';const g=3,step=size/g;let k=0;
+  for(let y=0;y<g;y++)for(let x=0;x<g;x++){const e=list[k++%list.length];const cx=(x+.5)*step+(y%2?step*.25:0),cy=(y+.5)*step;const rot=Math.round(r()*50-25);const fs=(step*(.45+r()*.15)).toFixed(0);s+=`<text x='${cx.toFixed(0)}' y='${cy.toFixed(0)}' font-size='${fs}' text-anchor='middle' dominant-baseline='central' opacity='${op}' transform='rotate(${rot} ${cx.toFixed(0)} ${cy.toFixed(0)})'>${e}</text>`}
+  return{img:svgu(`<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}' viewBox='0 0 ${size} ${size}'><rect width='100%' height='100%' fill='${bg}'/>${s}</svg>`),size:size+'px',tile:true};
+}
+const scene=(inner,defs)=>({img:svgu(SC(inner,defs)),tile:false});
+const WP_CATS=[['sport','ספורט'],['space','חלל'],['sea','ים'],['nature','טבע'],['land','נופים'],['movies','סרטים'],['fun','עוד'],['basic','פשוטים']];
+const WP=[];
+const wp=(id,cat,name,make,dark=true)=>WP.push({id,cat,name,make,dark});
+/* ---- sport ---- */
+wp('pitch','sport','מגרש כדורגל',()=>{let st='';for(let i=0;i<13;i++)st+=`<rect y='${i*60}' width='360' height='30' fill='#2f9a45'/>`;return scene(`<rect width='360' height='780' fill='#37a84f'/>${st}<g fill='none' stroke='#fff' stroke-width='3' opacity='.85'><rect x='20' y='20' width='320' height='740'/><line x1='20' y1='390' x2='340' y2='390'/><circle cx='180' cy='390' r='55'/><rect x='80' y='20' width='200' height='110'/><rect x='130' y='20' width='100' height='40'/><rect x='80' y='650' width='200' height='110'/><rect x='130' y='720' width='100' height='40'/><path d='M140 130 A45 45 0 0 0 220 130'/><path d='M140 650 A45 45 0 0 1 220 650'/></g><circle cx='180' cy='390' r='4' fill='#fff'/>`)});
+wp('stadium','sport','אצטדיון בלילה',()=>{let l='';[[60,90],[300,90],[30,180],[330,180]].forEach(([x,y])=>{l+=`<circle cx='${x}' cy='${y}' r='70' fill='url(#lg)'/><g fill='#fffbe0'>${[0,1,2].map(i=>[0,1].map(j=>`<rect x='${x-14+i*10}' y='${y-8+j*10}' width='8' height='8' rx='2'/>`).join('')).join('')}</g><line x1='${x}' y1='${y+14}' x2='${x}' y2='420' stroke='#1b2340' stroke-width='4'/>`});
+  const r=rng(3);let crowd='';for(let i=0;i<70;i++){const x=r()*360,y=430+r()*90;crowd+=`<circle cx='${x.toFixed(0)}' cy='${y.toFixed(0)}' r='${(5+r()*4).toFixed(1)}' fill='hsl(${(r()*360)|0},45%,${(30+r()*25)|0}%)'/>`}
+  let st='';for(let i=0;i<6;i++)st+=`<rect y='${560+i*40}' width='360' height='20' fill='#2a8a3d'/>`;
+  return scene(`<rect width='360' height='780' fill='url(#sky)'/>${stars(40,5,360,300,1.1)}${l}<rect y='420' width='360' height='140' fill='#141a33'/>${crowd}<rect y='560' width='360' height='220' fill='#32a049'/>${st}<path d='M0 640 Q180 600 360 640' stroke='#fff' stroke-width='3' fill='none' opacity='.7'/>`,`<linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#050914'/><stop offset='1' stop-color='#1c2a5a'/></linearGradient><radialGradient id='lg'><stop offset='0' stop-color='#fffbe0' stop-opacity='.55'/><stop offset='1' stop-color='#fffbe0' stop-opacity='0'/></radialGradient>`)});
+wp('court','sport','מגרש כדורסל',()=>{let p='';for(let i=0;i<12;i++)p+=`<rect x='${i*30}' width='30' height='780' fill='hsl(30,${55+(i%3)*6}%,${58+(i%4)*3}%)'/><line x1='${i*30}' y1='0' x2='${i*30}' y2='780' stroke='#9a6332' stroke-width='1' opacity='.4'/>`;return scene(`${p}<g fill='none' stroke='#fff' stroke-width='4'><rect x='14' y='14' width='332' height='752'/><line x1='14' y1='390' x2='346' y2='390'/><circle cx='180' cy='390' r='50'/><rect x='120' y='14' width='120' height='170' fill='#c0392b' fill-opacity='.55'/><circle cx='180' cy='184' r='50'/><path d='M40 14 V110 A145 145 0 0 0 320 110 V14'/><rect x='120' y='596' width='120' height='170' fill='#c0392b' fill-opacity='.55'/><circle cx='180' cy='596' r='50'/><path d='M40 766 V670 A145 145 0 0 1 320 670 V766'/></g><circle cx='180' cy='390' r='20' fill='#c0392b'/>`)});
+wp('track','sport','מסלול ריצה',()=>{let l='';for(let i=1;i<8;i++)l+=`<line x1='${i*45}' y1='0' x2='${i*45}' y2='780' stroke='#fff' stroke-width='3'/>`;return scene(`<rect width='360' height='780' fill='#c8452f'/>${l}<g fill='#fff' font-family='Arial' font-weight='700' font-size='26' text-anchor='middle'>${[1,2,3,4,5,6,7,8].map(n=>`<text x='${n*45-22}' y='720'>${n}</text>`).join('')}</g><line x1='0' y1='660' x2='360' y2='660' stroke='#fff' stroke-width='8'/>`)});
+wp('tennis','sport','טניס',()=>scene(`<rect width='360' height='780' fill='#2b6cb0'/><rect x='40' y='60' width='280' height='660' fill='#3d8bd9'/><g fill='none' stroke='#fff' stroke-width='4'><rect x='40' y='60' width='280' height='660'/><line x1='75' y1='60' x2='75' y2='720'/><line x1='285' y1='60' x2='285' y2='720'/><line x1='75' y1='230' x2='285' y2='230'/><line x1='75' y1='550' x2='285' y2='550'/><line x1='180' y1='230' x2='180' y2='550'/></g><line x1='20' y1='390' x2='340' y2='390' stroke='#eee' stroke-width='6' stroke-dasharray='4 3'/><circle cx='250' cy='300' r='16' fill='#d7f542'/><path d='M236 292 Q250 300 238 312 M262 288 Q250 300 264 308' stroke='#fff' stroke-width='2' fill='none'/>`));
+wp('sportdoodle','sport','איורי ספורט',()=>emojiTile(['⚽','🏀','🏆','🎾','🥇','⚾','🏈','👟','🏐'],'#0f3d22',180,.28,11));
+wp('footdoodle','sport','כדורגל',()=>emojiTile(['⚽','🥅','🏆','👟','⚽','🧤','⭐','⚽','🏟️'],'#14532d',170,.3,4));
+/* ---- space ---- */
+wp('galaxy','space','גלקסיה',()=>scene(`<rect width='360' height='780' fill='#05030f'/><g filter='url(#b)'><ellipse cx='120' cy='260' rx='170' ry='110' fill='#7c3aed' opacity='.55'/><ellipse cx='250' cy='420' rx='160' ry='120' fill='#db2777' opacity='.45'/><ellipse cx='160' cy='560' rx='150' ry='90' fill='#2563eb' opacity='.5'/><ellipse cx='220' cy='330' rx='70' ry='50' fill='#fbcfe8' opacity='.35'/></g>${stars(220,9)}${stars(14,2,360,780,2.6,'#fff')}`,`<filter id='b' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='40'/></filter>`));
+wp('saturn','space','כוכבי לכת',()=>scene(`<rect width='360' height='780' fill='url(#g)'/>${stars(160,4)}<circle cx='190' cy='330' r='90' fill='url(#p)'/><ellipse cx='190' cy='330' rx='165' ry='34' fill='none' stroke='#f6d6a8' stroke-width='10' opacity='.8' transform='rotate(-18 190 330)'/><path d='M100 360 A90 90 0 0 0 280 300' fill='none'/><circle cx='70' cy='620' r='26' fill='#94a3b8'/><circle cx='62' cy='612' r='6' fill='#64748b'/><circle cx='80' cy='630' r='4' fill='#64748b'/><circle cx='300' cy='120' r='12' fill='#f87171'/>`,`<linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#020617'/><stop offset='1' stop-color='#1e1b4b'/></linearGradient><radialGradient id='p' cx='.35' cy='.35'><stop offset='0' stop-color='#fde68a'/><stop offset='.6' stop-color='#f59e0b'/><stop offset='1' stop-color='#92400e'/></radialGradient>`));
+wp('earthrise','space','זריחת כדור הארץ',()=>scene(`<rect width='360' height='780' fill='#000'/>${stars(150,12)}<circle cx='180' cy='300' r='110' fill='url(#e)'/><path d='M120 250 q30 -20 60 0 t50 10 q-20 30 -60 20 z M150 340 q40 -10 70 15 q-30 25 -70 0z' fill='#22c55e' opacity='.8'/><circle cx='180' cy='300' r='110' fill='url(#sh)'/><ellipse cx='180' cy='900' rx='420' ry='300' fill='#9ca3af'/><circle cx='100' cy='660' r='18' fill='#6b7280'/><circle cx='260' cy='700' r='26' fill='#6b7280'/><circle cx='190' cy='640' r='9' fill='#6b7280'/>`,`<radialGradient id='e' cx='.4' cy='.35'><stop offset='0' stop-color='#60a5fa'/><stop offset='1' stop-color='#1e3a8a'/></radialGradient><linearGradient id='sh' x1='0' y1='0' x2='1' y2='0'><stop offset='.5' stop-color='#000' stop-opacity='0'/><stop offset='1' stop-color='#000' stop-opacity='.75'/></linearGradient>`));
+wp('milkyway','space','שביל החלב',()=>scene(`<rect width='360' height='780' fill='#030712'/><g filter='url(#b)' transform='rotate(-35 180 390)'><rect x='-100' y='340' width='560' height='110' fill='#a78bfa' opacity='.35'/><rect x='-100' y='370' width='560' height='50' fill='#fde68a' opacity='.25'/></g>${stars(300,21,360,780,1.2)}<path d='M0 700 L60 640 L110 690 L170 620 L240 690 L300 650 L360 700 V780 H0Z' fill='#020205'/>`,`<filter id='b' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='30'/></filter>`));
+wp('rocketbg','space','רקטות וחלל',()=>emojiTile(['🚀','🪐','⭐','🛸','🌙','☄️','👨‍🚀','🌍','✨'],'#0b0b2b',170,.32,6));
+/* ---- sea ---- */
+wp('underwater','sea','מתחת למים',()=>{const r=rng(8);let b='';for(let i=0;i<30;i++){b+=`<circle cx='${(r()*360)|0}' cy='${(r()*700)|0}' r='${(2+r()*7).toFixed(1)}' fill='none' stroke='#e0f7ff' stroke-opacity='.5' stroke-width='1.5'/>`}
+  let sw='';for(let i=0;i<9;i++){const x=10+i*42;sw+=`<path d='M${x} 780 C${x-20} 720 ${x+20} 680 ${x} ${600-(i%3)*40}' stroke='hsl(${140+i*5},55%,${25+(i%3)*6}%)' stroke-width='10' fill='none' stroke-linecap='round'/>`}
+  return scene(`<rect width='360' height='780' fill='url(#w)'/><g fill='#fff' opacity='.08'><polygon points='60,0 110,0 30,780 -40,780'/><polygon points='190,0 230,0 210,780 140,780'/><polygon points='300,0 330,0 400,780 330,780'/></g>${b}${sw}<text x='250' y='420' font-size='40'>🐠</text><text x='70' y='300' font-size='30'>🐟</text>`,`<linearGradient id='w' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#22d3ee'/><stop offset='.5' stop-color='#0e7490'/><stop offset='1' stop-color='#082f49'/></linearGradient>`)});
+wp('seawaves','sea','גלים',()=>{let w='';const cols=['#99f6e4','#5eead4','#2dd4bf','#14b8a6','#0d9488','#0f766e','#115e59'];cols.forEach((c,i)=>{const y=120+i*95;w+=`<path d='M0 ${y} Q45 ${y-30} 90 ${y} T180 ${y} T270 ${y} T360 ${y} V780 H0Z' fill='${c}'/>`});return scene(`<rect width='360' height='780' fill='#ccfbf1'/>${w}`)});
+wp('beach','sea','חוף',()=>scene(`<rect width='360' height='780' fill='url(#s)'/><circle cx='270' cy='150' r='45' fill='#fde047'/><rect y='330' width='360' height='230' fill='url(#sea)'/><path d='M0 520 Q90 500 180 525 T360 515 V780 H0Z' fill='#fde7b0'/><path d='M0 520 Q90 500 180 525 T360 515' stroke='#fff' stroke-width='6' fill='none' opacity='.9'/><g transform='translate(70 600)'><path d='M0 120 Q10 40 40 0' stroke='#8b5a2b' stroke-width='9' fill='none'/><path d='M40 0 q-50 -10 -70 20 M40 0 q50 -15 70 15 M40 0 q-20 -40 -60 -40 M40 0 q20 -45 60 -40' stroke='#16a34a' stroke-width='12' fill='none' stroke-linecap='round'/></g><text x='250' y='700' font-size='34'>🐚</text>`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#38bdf8'/><stop offset='1' stop-color='#bae6fd'/></linearGradient><linearGradient id='sea' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#0284c7'/><stop offset='1' stop-color='#2dd4bf'/></linearGradient>`));
+wp('seasunset','sea','שקיעה בים',()=>{let refl='';for(let i=0;i<14;i++){const w=110-i*6;refl+=`<rect x='${180-w/2}' y='${430+i*18}' width='${w}' height='5' rx='2.5' fill='#fde68a' opacity='${(.8-i*.05).toFixed(2)}'/>`}return scene(`<rect width='360' height='420' fill='url(#s)'/><circle cx='180' cy='400' r='70' fill='#fde68a'/><rect y='420' width='360' height='360' fill='url(#sea)'/>${refl}`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#312e81'/><stop offset='.55' stop-color='#db2777'/><stop offset='1' stop-color='#fb923c'/></linearGradient><linearGradient id='sea' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#7c2d5a'/><stop offset='1' stop-color='#1e1b4b'/></linearGradient>`)});
+wp('seadoodle','sea','חיות ים',()=>emojiTile(['🐠','🐙','🐬','🐚','🦀','🐳','🐡','🌊','🐢'],'#075985',170,.3,9));
+/* ---- nature ---- */
+wp('forest','nature','יער',()=>{let t='';const rows=[[520,'#14532d',70],[590,'#166534',60],[660,'#15803d',55],[730,'#16a34a',50]];rows.forEach(([y,c,h],ri)=>{for(let x=-20;x<400;x+=38){const hh=h+((x*7+ri*13)%30);t+=`<polygon points='${x},${y} ${x+22},${y-hh*2} ${x+44},${y}' fill='${c}'/>`}t+=`<rect y='${y}' width='360' height='80' fill='${c}'/>`});return scene(`<rect width='360' height='780' fill='url(#s)'/><circle cx='260' cy='180' r='40' fill='#fef3c7' opacity='.9'/><rect y='300' width='360' height='200' fill='#fff' opacity='.12'/>${t}`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#bae6fd'/><stop offset='1' stop-color='#d9f99d'/></linearGradient>`)});
+wp('leaves','nature','עלים',()=>emojiTile(['🌿','🍃','🌱','🌸','🍀','🌼','🍃','🌿','🦋'],'#ecfccb',170,.45,3),false);
+wp('autumn','nature','סתיו',()=>emojiTile(['🍁','🍂','🍄','🌰','🍁','🍂','🦔','🍁','🍂'],'#7c2d12',170,.35,5));
+wp('fireflies','nature','גחליליות',()=>{const r=rng(14);let f='';for(let i=0;i<45;i++){const x=r()*360,y=200+r()*520,rr=2+r()*3;f+=`<circle cx='${x.toFixed(0)}' cy='${y.toFixed(0)}' r='${(rr*4).toFixed(1)}' fill='url(#gl)'/><circle cx='${x.toFixed(0)}' cy='${y.toFixed(0)}' r='${rr.toFixed(1)}' fill='#fef08a'/>`}
+  let t='';for(let x=-20;x<400;x+=46){const h=200+((x*13)%120);t+=`<polygon points='${x},780 ${x+25},${780-h} ${x+50},780' fill='#04140c'/>`}
+  return scene(`<rect width='360' height='780' fill='url(#s)'/>${stars(70,31,360,300,1)}<circle cx='80' cy='120' r='28' fill='#f1f5f9' opacity='.9'/>${t}${f}`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#0b1026'/><stop offset='1' stop-color='#123524'/></linearGradient><radialGradient id='gl'><stop offset='0' stop-color='#fde047' stop-opacity='.6'/><stop offset='1' stop-color='#fde047' stop-opacity='0'/></radialGradient>`)});
+wp('flowers','nature','שדה פרחים',()=>{const r=rng(17);let fl='';for(let i=0;i<120;i++){const y=480+r()*300,x=r()*360;fl+=`<circle cx='${x.toFixed(0)}' cy='${y.toFixed(0)}' r='${(2+r()*4*(y-450)/300).toFixed(1)}' fill='${['#f472b6','#facc15','#f87171','#ffffff','#c084fc'][(r()*5)|0]}'/>`}return scene(`<rect width='360' height='780' fill='url(#s)'/><path d='M0 430 Q120 380 220 420 T360 400 V780 H0Z' fill='#65a30d'/><path d='M0 500 Q140 450 360 490 V780 H0Z' fill='#4d7c0f'/>${fl}<circle cx='90' cy='130' r='38' fill='#fde047'/>`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#7dd3fc'/><stop offset='1' stop-color='#e0f2fe'/></linearGradient>`)},false);
+/* ---- landscapes ---- */
+wp('mountains','land','הרים בשקיעה',()=>scene(`<rect width='360' height='780' fill='url(#s)'/><circle cx='180' cy='330' r='60' fill='#fed7aa'/><path d='M0 420 L70 330 L130 390 L200 300 L270 380 L360 320 V780 H0Z' fill='#9d4edd' opacity='.75'/><path d='M0 500 L90 400 L160 470 L240 380 L360 470 V780 H0Z' fill='#7b2cbf'/><path d='M0 590 L80 520 L170 580 L260 500 L360 570 V780 H0Z' fill='#5a189a'/><path d='M0 680 L120 610 L220 670 L360 620 V780 H0Z' fill='#3c096c'/>`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#ff6d00'/><stop offset='.5' stop-color='#ff9e00'/><stop offset='1' stop-color='#ffd6a5'/></linearGradient>`));
+wp('dunes','land','מדבר',()=>scene(`<rect width='360' height='780' fill='url(#s)'/><circle cx='260' cy='220' r='50' fill='#fff7ed'/><path d='M0 470 Q120 400 240 460 T360 440 V780 H0Z' fill='#f4a261'/><path d='M0 560 Q100 500 200 550 T360 520 V780 H0Z' fill='#e76f51'/><path d='M0 660 Q150 590 360 650 V780 H0Z' fill='#c4553a'/><text x='60' y='520' font-size='34'>🐪</text><text x='290' y='600' font-size='30'>🌵</text>`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#fcd5ce'/><stop offset='1' stop-color='#ffb4a2'/></linearGradient>`),false);
+wp('aurora','land','זוהר צפוני',()=>scene(`<rect width='360' height='780' fill='#020617'/>${stars(130,41,360,500,1.1)}<g filter='url(#b)'><path d='M-40 260 C60 160 160 360 260 230 S380 200 420 260 L420 330 C300 290 200 420 80 330 S-40 330 -40 330Z' fill='#22c55e' opacity='.6'/><path d='M-40 200 C80 120 200 280 420 160 L420 210 C250 330 100 200 -40 260Z' fill='#a855f7' opacity='.45'/></g><path d='M0 620 L70 520 L120 570 L190 470 L260 560 L310 520 L360 580 V780 H0Z' fill='#e2e8f0'/><path d='M0 660 L90 590 L170 640 L250 580 L360 650 V780 H0Z' fill='#94a3b8'/>`,`<filter id='b' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='22'/></filter>`));
+wp('city','land','עיר בלילה',()=>{const r=rng(23);let b='';let x=0;while(x<360){const w=30+r()*40,h=150+r()*300;b+=`<rect x='${x.toFixed(0)}' y='${(780-h).toFixed(0)}' width='${w.toFixed(0)}' height='${h.toFixed(0)}' fill='#0f172a'/>`;for(let yy=780-h+12;yy<770;yy+=18)for(let xx=x+6;xx<x+w-8;xx+=12)if(r()>.55)b+=`<rect x='${xx.toFixed(0)}' y='${yy.toFixed(0)}' width='6' height='9' fill='#fde68a' opacity='${(.5+r()*.5).toFixed(2)}'/>`;x+=w+2}return scene(`<rect width='360' height='780' fill='url(#s)'/>${stars(60,2,360,350,1)}<circle cx='280' cy='110' r='30' fill='#f8fafc'/><circle cx='292' cy='102' r='28' fill='#1e1b4b'/>${b}`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#1e1b4b'/><stop offset='1' stop-color='#7e22ce'/></linearGradient>`)});
+wp('snow','land','שלג',()=>{const r=rng(29);let f='';for(let i=0;i<90;i++)f+=`<circle cx='${(r()*360)|0}' cy='${(r()*780)|0}' r='${(1+r()*3).toFixed(1)}' fill='#fff' opacity='${(.5+r()*.5).toFixed(2)}'/>`;return scene(`<rect width='360' height='780' fill='url(#s)'/><path d='M0 520 L90 380 L150 450 L230 330 L360 500 V780 H0Z' fill='#e0f2fe'/><path d='M60 440 L90 380 L118 418 Z M200 372 L230 330 L262 378Z' fill='#fff'/><path d='M0 620 Q180 560 360 610 V780 H0Z' fill='#f8fafc'/>${f}<text x='60' y='600' font-size='40'>🌲</text><text x='270' y='640' font-size='46'>⛄</text>`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#60a5fa'/><stop offset='1' stop-color='#bfdbfe'/></linearGradient>`)},false);
+/* ---- movies ---- */
+wp('cinema','movies','קולנוע',()=>{let c='';for(let i=0;i<9;i++){c+=`<rect x='${i*20}' y='0' width='20' height='780' fill='url(#f)'/><rect x='${200+i*20}' y='0' width='20' height='780' fill='url(#f)'/>`}return scene(`<rect width='360' height='780' fill='#0a0505'/><ellipse cx='180' cy='620' rx='160' ry='40' fill='#fff7cc' opacity='.18'/><polygon points='150,0 210,0 300,620 60,620' fill='#fff7cc' opacity='.07'/><g clip-path='url(#cl)'>${c}</g><rect width='360' height='60' fill='#7f1d1d'/><g fill='#facc15'>${[...Array(12)].map((_,i)=>`<circle cx='${15+i*30}' cy='60' r='6'/>`).join('')}</g>`,`<linearGradient id='f' x1='0' y1='0' x2='1' y2='0'><stop offset='0' stop-color='#7f1d1d'/><stop offset='.5' stop-color='#dc2626'/><stop offset='1' stop-color='#7f1d1d'/></linearGradient><clipPath id='cl'><path d='M0 0 H160 Q130 400 40 780 H0Z M200 0 H360 V780 H320 Q230 400 200 0Z'/></clipPath>`)});
+wp('filmstrip','movies','סרט צילום',()=>{let s='';[-30,150].forEach((x0,k)=>{s+=`<g transform='rotate(-12 180 390) translate(${x0} 0)'><rect x='60' y='-100' width='110' height='980' fill='#111'/>${[...Array(26)].map((_,i)=>`<rect x='66' y='${-95+i*38}' width='12' height='18' rx='2' fill='#2d2d2d'/><rect x='152' y='${-95+i*38}' width='12' height='18' rx='2' fill='#2d2d2d'/>`).join('')}${[...Array(9)].map((_,i)=>`<rect x='84' y='${-80+i*110}' width='62' height='90' rx='4' fill='hsl(${(i*47+k*90)%360},55%,45%)' opacity='.85'/>`).join('')}</g>`});return scene(`<rect width='360' height='780' fill='#27272a'/>${s}`)});
+wp('popcorn','movies','פופקורן',()=>emojiTile(['🍿','🎬','🎥','⭐','🎞️','🎟️','🍿','🎭','📽️'],'#450a0a',170,.35,8));
+wp('synthwave','movies','רטרו 80׳',()=>{let g='';for(let i=0;i<10;i++){const y=480+i*i*3.4;g+=`<line x1='0' y1='${y.toFixed(0)}' x2='360' y2='${y.toFixed(0)}' stroke='#f0abfc' stroke-width='1.5' opacity='.8'/>`}for(let i=-8;i<=8;i++)g+=`<line x1='${180+i*14}' y1='480' x2='${180+i*80}' y2='780' stroke='#f0abfc' stroke-width='1.5' opacity='.8'/>`;let sun='';for(let i=0;i<6;i++)sun+=`<rect x='60' y='${400+i*14-i*i}' width='240' height='${4+i}' fill='#1a0b2e'/>`;return scene(`<rect width='360' height='480' fill='url(#s)'/>${stars(50,51,360,300,1)}<circle cx='180' cy='390' r='110' fill='url(#sun)'/>${sun}<rect y='480' width='360' height='300' fill='#1a0b2e'/>${g}<path d='M0 480 L60 440 L110 470 L170 430 L240 470 L300 445 L360 480Z' fill='#2e1065'/>`,`<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#0f0221'/><stop offset='1' stop-color='#6d28d9'/></linearGradient><linearGradient id='sun' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#fde047'/><stop offset='1' stop-color='#ec4899'/></linearGradient>`)});
+wp('arcade','movies','ארקייד',()=>{const inv='0010000100 0001001000 0011111100 0110110110 1111111111 1011111101 1010000101 0001101100'.split(' ');const one=(x,y,c)=>inv.map((row,j)=>[...row].map((v,i)=>v==='1'?`<rect x='${x+i*5}' y='${y+j*5}' width='5' height='5' fill='${c}'/>`:'').join('')).join('');return{img:svgu(`<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><rect width='160' height='160' fill='#0b0b14'/>${one(14,20,'#22d3ee')}${one(94,100,'#f472b6')}<rect x='110' y='30' width='4' height='4' fill='#facc15'/><rect x='40' y='120' width='4' height='4' fill='#a3e635'/></svg>`),size:'160px',tile:true}});
+/* ---- fun ---- */
+wp('gaming','fun','גיימינג',()=>emojiTile(['🎮','👾','🕹️','🏆','💎','⚡','🎯','👑','🔥'],'#1e1b4b',170,.32,12));
+wp('music','fun','מוזיקה',()=>emojiTile(['🎵','🎧','🎸','🎤','🎹','🥁','🎶','📻','🎷'],'#18181b',170,.3,13));
+wp('love','fun','לבבות',()=>emojiTile(['❤️','💜','💖','💕','✨','💘','🌹','💗','💞'],'#fdf2f8',170,.4,14),false);
+wp('food','fun','אוכל',()=>emojiTile(['🍕','🍔','🍩','🍟','🌮','🍦','🍣','🥤','🧁'],'#fff7ed',170,.4,15),false);
+wp('cats','fun','חתולים וכלבים',()=>emojiTile(['🐱','🐶','🐾','🐈','🐕','🦴','🐟','🐾','😺'],'#fefce8',170,.4,16),false);
+wp('candy','fun','סוכריה',()=>scene(`<rect width='360' height='780' fill='url(#g)'/>`,`<linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#f9a8d4'/><stop offset='.5' stop-color='#c4b5fd'/><stop offset='1' stop-color='#93c5fd'/></linearGradient>`),false);
+wp('limeblack','fun','ליים ושחור',()=>scene(`<rect width='360' height='780' fill='#0e0e10'/><circle cx='300' cy='120' r='220' fill='#c6ff3d' opacity='.12'/><circle cx='40' cy='700' r='180' fill='#c6ff3d' opacity='.08'/>`));
+/* ---- basic (old CSS ones) ---- */
+[['dots','נקודות'],['grid','משבצות'],['waves','גלים עדינים'],['plain','חלק'],['dusk','שקיעה סגולה'],['mint','מנטה'],['night','לילה']].forEach(([id,n])=>WP.push({id,cat:'basic',name:n,css:true,dark:['dusk','night'].includes(id)}));
+const WPMAP={};WP.forEach(w=>WPMAP[w.id]=w);
+const WPCACHE={};
+function wpImage(id){const w=WPMAP[id];if(!w||w.css)return null;return WPCACHE[id]||(WPCACHE[id]=w.make())}
+
+/* custom photo wallpapers */
+const CW={};const CWload={};
+function loadCustomWall(id){
+  if(CW[id]||CWload[id])return;
+  try{const c=localStorage.getItem('cw_'+id);if(c){CW[id]=c;return}}catch(e){}
+  CWload[id]=db.doc(`data/users/${ME}/state/walls/${id}`).get().then(s=>{const d=s.data();if(d&&d.img){CW[id]=d.img;try{localStorage.setItem('cw_'+id,d.img)}catch(e){}paintAll()}}).catch(()=>{});
+}
+function addCustomWall(file,cid){
+  readImage(file,1280,.74,async url=>{
+    const id='p'+rid(10);
+    try{await db.doc(`data/users/${ME}/state/walls/${id}`).set({img:url,t:Date.now()})}catch(e){dbErr(e);return}
+    CW[id]=url;try{localStorage.setItem('cw_'+id,url)}catch(e){}
+    ST.customWalls=[{id,t:Date.now()},...(ST.customWalls||[])].slice(0,8);
+    setWallpaper('custom:'+id,cid);toast('הרקע עודכן');
+  });
+}
+function removeCustomWall(id){
+  ST.customWalls=(ST.customWalls||[]).filter(x=>x.id!==id);
+  if(S().wallpaper==='custom:'+id)S().wallpaper='dots';
+  Object.keys(ST.prefs).forEach(k=>{if(ST.prefs[k].wallpaper==='custom:'+id)ST.prefs[k].wallpaper=null});
+  saveState();qw(`data/users/${ME}/state/walls/${id}`,()=>db.doc(`data/users/${ME}/state/walls/${id}`).delete());
+  try{localStorage.removeItem('cw_'+id)}catch(e){}
+  drawPages();if(CUR)buildChat();
+}
+function setWallpaper(w,cid){if(cid)pref(cid).wallpaper=w||null;else S().wallpaper=w;saveState();drawPages();if(CUR)buildChat()}
+
+/* paint any element marked data-wp */
+function paintWall(el){
+  const id=el.dataset.wp||'dots';const dim=+(el.dataset.dim||0);
+  [...el.classList].forEach(c=>{if(c.startsWith('wall-'))el.classList.remove(c)});
+  const st=el.style;st.backgroundImage='';st.backgroundSize='';st.backgroundRepeat='';st.backgroundPosition='';st.backgroundColor='';
+  st.boxShadow=dim?`inset 0 0 0 4000px rgba(0,0,0,${dim})`:'';
+  if(id.startsWith('custom:')){const k=id.slice(7);const u=CW[k];if(!u){loadCustomWall(k);el.classList.add('wall-plain');return}
+    st.backgroundColor='#000';st.backgroundImage=`url("${u}")`;st.backgroundSize='cover';st.backgroundPosition='center';st.backgroundRepeat='no-repeat';return}
+  const w=WPMAP[id];
+  if(!w||w.css){el.classList.add('wall-'+(w?id:'dots'));return}
+  const im=wpImage(id);st.backgroundColor='#111';st.backgroundImage=im.img;
+  st.backgroundSize=im.tile?im.size:'cover';st.backgroundRepeat=im.tile?'repeat':'no-repeat';st.backgroundPosition='center';
+}
+function paintAll(root=document){$$('[data-wp]',root).forEach(paintWall)}
+new MutationObserver(ms=>{for(const m of ms)for(const n of m.addedNodes){if(n.nodeType!==1)continue;if(n.dataset&&n.dataset.wp)paintWall(n);if(n.querySelectorAll)n.querySelectorAll('[data-wp]').forEach(paintWall)}}).observe(document.documentElement,{childList:true,subtree:true});
+function wallAttr(wp,cid){
+  const isCustom=String(wp).startsWith('custom:');
+  const dim=S().wallDim!=null?S().wallDim:(isCustom?.25:0);
+  const bs=(cid&&pref(cid).bstyle)||S().bstyle||'classic';
+  return `class="msgs bs-${esc(bs)}" data-wp="${esc(wp||'dots')}" data-dim="${dim}"`;
+}
+
+/* wallpaper picker page */
+let WPCAT='sport';
+function pgWallpaper(cid){
+  const cur=cid?(pref(cid).wallpaper||''):S().wallpaper;
+  const tile=(id,label,attr='')=>`<button class="wpt ${cur===id?'on':''}" data-a="setWall" data-w="${esc(id)}" ${cid?`data-c="${cid}"`:''} ${attr} aria-label="${esc(label)}"><span class="wpi" data-wp="${esc(id||S().wallpaper)}"></span><span class="wpn">${esc(label)}</span></button>`;
+  const customs=(ST.customWalls||[]);
+  const dim=S().wallDim!=null?S().wallDim:0;
+  return{title:cid?'רקע לצ׳אט':'רקעים',body:`
+  <p class="ptext">${cid?'הרקע יחול רק על הצ׳אט הזה ורק אצלך.':'הרקע יחול על כל הצ׳אטים, חוץ מאלה שקיבלו רקע משלהם.'}</p>
+  <div class="btns"><button class="btn full" data-a="wallPhoto" ${cid?`data-c="${cid}"`:''}>${ic('image',20)}&nbsp; תמונה מהגלריה או מ־Google Photos</button></div>
+  ${customs.length?`<div class="plabel">התמונות שלי</div><div class="wpgrid">${customs.map(c=>`<div class="wpc">${tile('custom:'+c.id,'תמונה שלי')}<button class="wpdel" data-a="wallDel" data-id="${c.id}" aria-label="מחיקת התמונה">${ic('x',14)}</button></div>`).join('')}</div>`:''}
+  <div class="chips" style="padding-top:8px">${cid?`<button class="chip ${WPCAT==='def'?'on':''}" data-a="wpCat" data-k="def">ברירת מחדל</button>`:''}${WP_CATS.map(([k,l])=>`<button class="chip ${WPCAT===k?'on':''}" data-a="wpCat" data-k="${k}">${l}</button>`).join('')}</div>
+  <div class="wpgrid">${WPCAT==='def'&&cid?tile('','כמו בכל הצ׳אטים'):WP.filter(w=>w.cat===WPCAT).map(w=>tile(w.id,w.name)).join('')}</div>
+  <div class="plabel">עמעום הרקע</div>
+  <div class="field" style="padding-top:0"><input type="range" id="wdim" min="0" max="0.6" step="0.05" value="${dim}" aria-label="עמעום הרקע"><small style="color:var(--muted)">מכהה את הרקע כדי שההודעות יהיו קלות לקריאה. חל על כל הצ׳אטים.</small></div>`,
+  after:el=>{const r=$('#wdim',el);if(r)r.addEventListener('change',()=>{S().wallDim=+r.value;saveState();if(CUR)buildChat();toast('העמעום עודכן')})}};
+}
+
+/* ================= message styles ================= */
+const BSTYLES=[['classic','קלאסי'],['football','כדורגל'],['basketball','כדורסל'],['neon','ניאון'],['comic','קומיקס'],['retro','רטרו גיימינג'],['glass','זכוכית'],['gold','זהב'],['candy','ממתקים'],['terminal','האקר'],['ocean','אוקיינוס'],['minimal','מינימלי']];
+function pgBubbleStyle(cid){
+  const cur=cid?(pref(cid).bstyle||''):(S().bstyle||'classic');
+  const wpv=(cid&&pref(cid).wallpaper)||S().wallpaper;
+  const card=(k,l)=>`<button class="bscard ${cur===k?'on':''}" data-a="setBStyle" data-k="${k}" ${cid?`data-c="${cid}"`:''}><div class="msgs bs-${k||S().bstyle||'classic'} bsprev" data-wp="${esc(wpv)}" data-dim="${S().wallDim||0}"><div class="msg in"><div class="bub"><span class="txt">מה קורה? 👋</span><span class="sp"></span><span class="meta"><time>20:15</time></span></div></div><div class="msg out"><div class="bub"><span class="txt">הכל מעולה!</span><span class="sp"></span><span class="meta"><time>20:16</time>${ticks(3)}</span></div></div></div><span class="wpn">${esc(l)}</span></button>`;
+  return{title:cid?'סגנון הודעות לצ׳אט':'סגנון הודעות',body:`<p class="ptext">${cid?'הסגנון יחול רק על הצ׳אט הזה ורק אצלך.':'בחרו איך ייראו ההודעות בכל הצ׳אטים. רק את/ה רואה את הסגנון שבחרת.'}</p><div class="bsgrid">${cid?card('','כמו בכל הצ׳אטים'):''}${BSTYLES.map(([k,l])=>card(k,l)).join('')}</div>`};
+}
+
+/* ================= self chat ================= */
+const selfName=()=>(ST&&ST.selfName)||'הודעות לעצמי';
+function pgSelf(){
+  const c=CH[dmId(ME)];
+  return{title:'פרטי הצ׳אט',body:`<div class="hero">${av({kind:'self',color:COLORS[0]},110)}<h3>${esc(selfName())}</h3><p>הצ׳אט הפרטי שלך: הודעות, קישורים ותזכורות לעצמך</p></div>
+  ${R('edit','שם הצ׳אט',esc(selfName()),'selfRename')}
+  ${c?infoCommon(c):''}`};
+}
+
 /* ================= event wiring ================= */
 const A={
   noop:()=>{},
@@ -1897,7 +2104,9 @@ const A={
     {label:'מדיה, קישורים ומסמכים',icon:'image',fn:()=>goPage('media',c.id)},
     {label:isMuted(CUR)?'ביטול השתקה':'השתקת התראות',icon:'belloff',fn:()=>{if(isMuted(CUR)){pr.muted=false;saveState();drawHead();refresh()}else muteSheet(CUR)}},
     ...(c.type!=='broadcast'?[{label:'הודעות נעלמות',icon:'timer',fn:()=>disappearSheet(c)}]:[]),
-    {label:'טפט',icon:'palette',fn:()=>push(()=>pgWallpaper(c.id),'wpc',true)},
+    {label:'רקע',icon:'image',fn:()=>{WPCAT='sport';push(()=>pgWallpaper(c.id),'wpc',true)}},
+    {label:'סגנון הודעות',icon:'palette',fn:()=>push(()=>pgBubbleStyle(c.id),'bsc',true)},
+    ...(chatMeta(c).kind==='self'?[{label:'שינוי שם',icon:'edit',fn:()=>A.selfRename()}]:[]),
     {label:pr.fav?'הסרה מהמועדפים':'הוספה למועדפים',icon:'heart',fn:()=>{pr.fav=!pr.fav;saveState();refresh();toast(pr.fav?'נוסף למועדפים':'הוסר מהמועדפים')}},
     {label:'נעילת הצ׳אט',icon:'lock',fn:()=>toggleLock(CUR)},
     {label:'ייצוא הצ׳אט',icon:'copy',fn:()=>copy(exportChat(CUR))},
@@ -1905,7 +2114,7 @@ const A={
     if(c.type==='direct'&&otherOf(c)!==ME)it.push({label:isBlocked(otherOf(c))?'ביטול חסימה':'חסימה',icon:'block',danger:true,fn:()=>blockToggle(otherOf(c))});
     if(c.type==='group'&&c.members.includes(ME))it.push({label:'יציאה מהקבוצה',icon:'logout',danger:true,fn:()=>exitGroup(c)});
     openMenu(el,it)},
-  chatInfo:()=>{const c=CH[CUR];if(!c)return;if(c.type==='direct'){const o=otherOf(c);if(o===ME)goPage('profile');else goPage('contactinfo',o)}else goPage('groupinfo',c.id)},
+  chatInfo:()=>{const c=CH[CUR];if(!c)return;if(c.type==='direct'){const o=otherOf(c);if(o===ME)push(pgSelf,'self',true);else goPage('contactinfo',o)}else goPage('groupinfo',c.id)},
   _old:()=>openSheet('שיחות',`<div class="hero">${ic('phone',44)}<p>שיחות חיות אינן זמינות כשהאפליקציה רצה בתוך Claude. אפשר לשלוח הודעת וידאו עם קול: מצלמים בטלפון, והחבר רואה ושומע אותך.</p></div><div class="btns"><button class="btn ghost" data-a="closeSheet">סגירה</button><button class="btn" data-a="att" data-k="vmsg">הודעת וידאו</button></div>`),
   sendText:()=>sendText(),
   sendOrMic:()=>{const ta=$('#ctext');if(ta&&(ta.value.trim()||editing))sendText();else startRec()},
@@ -1963,7 +2172,13 @@ const A={
   pinChange:()=>pinPad('קוד נוכחי',S().privacy.pin,()=>setTimeout(()=>pinPad('קוד חדש',null,p=>{S().privacy.pin=p;saveState();toast('הקוד עודכן')},true),50)),
   blockAdd:()=>peoplePicker('חסימת משתמש/ת',u=>{if(!isBlocked(u))blockToggle(u);drawPages()},Object.keys(ST.blocked)),
   unblock:el=>{blockToggle(el.dataset.uid);drawPages()},
-  setWall:el=>{const c=el.dataset.c;if(c)pref(c).wallpaper=el.dataset.w||null;else S().wallpaper=el.dataset.w;saveState();drawPages();if(CUR)buildChat();toast('הטפט עודכן')},
+  setWall:el=>{setWallpaper(el.dataset.w,el.dataset.c);toast('הרקע עודכן')},
+  wallPhoto:el=>pickFile('image/*',f=>addCustomWall(f,el.dataset.c)),
+  wallDel:el=>askConfirm('למחוק את התמונה מהרקעים?','','מחיקה',()=>removeCustomWall(el.dataset.id)),
+  wpCat:el=>{WPCAT=el.dataset.k;drawPages()},
+  setBStyle:el=>{const c=el.dataset.c;if(c)pref(c).bstyle=el.dataset.k||null;else S().bstyle=el.dataset.k;saveState();drawPages();if(CUR)buildChat();toast('סגנון ההודעות עודכן')},
+  chatBStyle:el=>push(()=>pgBubbleStyle(el.dataset.c),'bsc',true),
+  selfRename:()=>askText('שם הצ׳אט',selfName(),v=>{ST.selfName=v;saveState();refresh();drawPages();if(CUR)drawHead()},{max:40,help:'השם מוצג רק אצלך.'}),
   archiveAll:()=>askConfirm('להעביר את כל הצ׳אטים לארכיון?','','העברה',()=>{Object.keys(CH).forEach(k=>{pref(k).archived=true;pref(k).pinned=false});saveState();refresh();toast('כל הצ׳אטים הועברו לארכיון')},false),
   exportCur:()=>{if(!CUR){toast('פתחו קודם צ׳אט');return}copy(exportChat(CUR))},
   clearAll:()=>askConfirm('לנקות את כל הצ׳אטים?','ההודעות יוסתרו אצלך בלבד.','ניקוי',()=>{Object.keys(CH).forEach(k=>{pref(k).cleared=Date.now();ST.reads[k]={...(CH[k].sent||{})}});saveState();if(CUR)drawMsgs();refresh();toast('הצ׳אטים נוקו')}),
@@ -1977,7 +2192,7 @@ const A={
   exitGroupC:el=>exitGroup(CH[el.dataset.c]),
   searchChatU:async el=>{const c=await ensureDirect(el.dataset.uid);if(c){openChat(c.id);chatSearch='';drawCSearch()}},
   searchChat:el=>{openChat(el.dataset.c);chatSearch='';drawCSearch()},
-  chatWall:el=>push(()=>pgWallpaper(el.dataset.c),'wpc',true),
+  chatWall:el=>{WPCAT='sport';push(()=>pgWallpaper(el.dataset.c),'wpc',true)},
   disappear:el=>disappearSheet(CH[el.dataset.c]),
   editGroup:el=>{const c=CH[el.dataset.c];askText('שם הקבוצה',c.name,v=>{qw('chats/'+c.id,()=>db.doc('chats/'+c.id).update({name:v}));sendMsg(c.id,{type:'system',ev:'renamed',name:v})},{max:60})},
   editDesc:el=>{const c=CH[el.dataset.c];askText('תיאור הקבוצה',c.desc||'',v=>{qw('chats/'+c.id,()=>db.doc('chats/'+c.id).update({desc:v}));sendMsg(c.id,{type:'system',ev:'desc'})},{multi:true,max:500,allowEmpty:true})},
