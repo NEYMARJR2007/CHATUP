@@ -554,6 +554,24 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .bs-ocean{--out:linear-gradient(135deg,#06b6d4,#2563eb);--out-ink:#fff;--out-muted:rgba(255,255,255,.85);--in:#e0f7ff;--in-ink:#083344;--in-meta:#0e7490}
 .bs-minimal{--out:#111;--out-ink:#fff;--out-muted:#aaa;--in:#f2f2f2;--in-ink:#111;--in-meta:#777}
 .bs-minimal .bub{box-shadow:none;border-radius:20px!important;border:1px solid rgba(127,127,127,.35)}
+
+.vischip{margin-top:12px;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13px}
+.visn{display:flex;align-items:center;gap:4px;margin-top:3px;color:var(--accent);font-size:12px;font-weight:600}
+.lnk{color:var(--accent);font-weight:700;text-decoration:underline;padding:0;font-size:inherit}
+.srow.dis{opacity:.55}.srow.dis .sw{pointer-events:none}
+.bdwrap{padding:8px 12px 2px;display:flex;flex-direction:column;gap:8px}
+.bdcard{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:linear-gradient(135deg,var(--accent-soft),var(--panel2));border:1px solid var(--line)}
+.bdcard .rm{display:flex;flex-direction:column;min-width:0;flex:1}.bdcard .rm b{font-size:14.5px}.bdcard .rm span{font-size:12.5px;color:var(--muted)}
+.bdcard .btn{height:34px;padding:0 14px;font-size:13.5px;flex:none}
+.ckcard{margin:10px 12px;border-radius:18px;background:var(--panel2);border:1px solid var(--line);overflow:hidden}
+.ckh{display:flex;gap:12px;align-items:flex-start;padding:14px 16px 6px}.ckh b{display:block;font-size:15.5px}.ckh small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.ckic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);flex:none}
+.ckl{list-style:none;margin:0;padding:0 20px;display:flex;flex-direction:column;gap:10px}.ckl li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px}.ckl li svg{color:var(--accent);flex:none;margin-top:2px}
+.lprev{display:flex;gap:10px;align-items:center;padding:8px 10px;margin:0 0 6px;border-radius:10px;background:rgba(127,127,127,.14);color:inherit;text-decoration:none;max-width:280px}
+.lprev img{width:28px;height:28px;border-radius:6px;flex:none;background:#fff}.lprev span{display:flex;flex-direction:column;min-width:0}.lprev b{font-size:13.5px}.lprev small{font-size:11.5px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#reqbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--panel2);border-top:1px solid var(--line);font-size:13px}#reqbar span{flex:1;display:flex;align-items:center;gap:6px;min-width:0}
+.lockbtns{display:flex;flex-direction:column;gap:10px;width:min(280px,100%)}.lockbtns .btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px}
+.nofx [data-a="callFx"]{display:none}
 .who-tag{font-size:11px;font-weight:800;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 6px}
 </style>
 </head>
@@ -718,7 +736,7 @@ function pname(uid){if(uid===ME)return 'את/ה';const c=ST?.contacts?.[uid];if(
 function pshort(uid){return pname(uid).replace(/^~\s*/,'').split(' ')[0]}
 function pobj(uid){const p=prof(uid);return{name:uid===ME?(p.name||'אני'):pname(uid),photo:p.photo||null,color:p.color||colorFor(uid)}}
 const isBlocked=uid=>!!ST?.blocked?.[uid];
-const isOnline=uid=>online.has(uid)&&!isBlocked(uid);
+const isOnline=uid=>online.has(uid)&&!isBlocked(uid)&&canSeeOnline(uid);
 
 /* ================= avatars & chat meta ================= */
 function av(o,size=48){
@@ -888,7 +906,7 @@ function drawChatList(){
   if(Q){
     const q=Q.toLowerCase().replace(/^@/,'');
     const cs=all.filter(c=>!pref(c.id).locked&&chatMeta(c).name.toLowerCase().includes(q));
-    const ppl=Object.keys(P).filter(u=>u!==ME&&!all.some(c=>c.type==='direct'&&c.members.includes(u))&&((P[u].name||'').toLowerCase().includes(q)||(P[u].username||'').includes(q)||(q.length>=4&&digits(P[u].phone).includes(digits(q))&&digits(q))));
+    const ppl=Object.keys(P).filter(u=>u!==ME&&!all.some(c=>c.type==='direct'&&c.members.includes(u))&&((P[u].name||'').toLowerCase().includes(q)||(P[u].username||'').includes(q)||(q.length>=4&&!!digits(q)&&(digits(P[u].phone).includes(digits(q))||phoneMatch(u,q)))));
     if(cs.length)h+=`<div class="sec">צ׳אטים</div>`+cs.map(chatRow).join('');
     if(ppl.length)h+=`<div class="sec">אנשים ב־SpicyyChat</div>`+ppl.map(u=>personRow(u)).join('');
     if(!h)h=`<div class="empty"><b>לא נמצאו תוצאות</b>חפשו לפי שם, @שם משתמש או מספר טלפון.</div>`;
@@ -897,7 +915,8 @@ function drawChatList(){
   const locked=all.filter(c=>pref(c.id).locked),arch=all.filter(c=>pref(c.id).archived&&!pref(c.id).locked);
   if(F==='all'&&locked.length)h+=`<button class="arow" data-a="openLocked"><span class="aic">${ic('lock')}</span>צ׳אטים נעולים<span class="cnt">${locked.length}</span></button>`;
   if(F==='all'&&arch.length){const u=arch.filter(c=>unreadOf(c)).length;h+=`<button class="arow" data-a="go" data-p="archived"><span class="aic">${ic('archive')}</span>בארכיון<span class="cnt">${u||arch.length}</span></button>`}
-  let L=all.filter(c=>!pref(c.id).archived&&!pref(c.id).locked);
+  if(F==='all')h+=reqRow();
+  let L=all.filter(c=>!pref(c.id).archived&&!pref(c.id).locked&&!isRequest(c));
   if(F==='unread')L=L.filter(c=>unreadOf(c)||pref(c.id).markUnread);
   if(F==='fav')L=L.filter(c=>pref(c.id).fav);
   if(F==='groups')L=L.filter(c=>c.type==='group');
@@ -1350,7 +1369,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 5.0</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 6.0</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1368,7 +1387,7 @@ function pgAccount(){const a=S().account;return{title:'חשבון',body:`${TG('�
 function pgTwoStep(){const a=S().account;return{title:'אימות דו־שלבי',body:`<div class="hero">${ic('key',56)}<p>${a.twoStep?'אימות דו־שלבי מופעל. הקוד יידרש כדי למחוק את החשבון או לשנות את מספר הטלפון.':'הוסיפו קוד PIN בן 6 ספרות כדי להגן על פעולות רגישות בחשבון.'}</p></div><div class="btns">${a.twoStep?`<button class="btn ghost" data-a="set2step">שינוי קוד</button><button class="btn red" data-a="off2step">כיבוי</button>`:`<button class="btn full" data-a="set2step">הפעלה</button>`}</div>`}}
 function pgDeleteAcc(){return{title:'מחיקת החשבון',body:`<div class="hero" style="color:var(--danger)">${ic('trash',52)}</div><p class="ptext" style="font-size:15px">הפרופיל, הסטטוסים וההגדרות שלך יימחקו, ותצא/י מכל הקבוצות. הודעות שכבר שלחת יישארו אצל מי שקיבל אותן.</p><form id="daf"><div class="field"><label for="dap">כדי לאשר, הקלידו את שם המשתמש שלך</label><input class="inp" id="dap" dir="ltr" placeholder="${esc(prof(ME).username||'')}"></div><div class="btns"><button class="btn red full">מחיקת החשבון שלי</button></div></form>`,after:el=>$('#daf',el).addEventListener('submit',async e=>{e.preventDefault();if($('#dap',el).value.replace(/^@/,'').trim().toLowerCase()!==(prof(ME).username||'')){toast('שם המשתמש אינו תואם');return}
   const go=async()=>{for(const c of Object.values(CH)){if(c.type==='group'&&c.members.includes(ME)){await qw('chats/'+c.id,()=>db.doc('chats/'+c.id).update({members:c.members.filter(x=>x!==ME)}))}}
-    await qw('profiles/'+ME,()=>db.doc('profiles/'+ME).delete());await qw('status/'+ME,()=>db.doc('status/'+ME).delete());await qw(`data/users/${ME}/state`,()=>db.doc(`data/users/${ME}/state`).delete());const un=prof(ME).username;if(un)await FDB.doc('usernames/'+un).delete().catch(()=>{});await qw('presence/'+ME,()=>db.doc('presence/'+ME).delete());try{await fauth.currentUser.delete()}catch(e){authErr(e);await fauth.signOut()}location.reload()};
+    await unshareAll();await qw('profiles/'+ME,()=>db.doc('profiles/'+ME).delete());await qw('status/'+ME,()=>db.doc('status/'+ME).delete());await qw(`data/users/${ME}/state`,()=>db.doc(`data/users/${ME}/state`).delete());const un=prof(ME).username;if(un)await FDB.doc('usernames/'+un).delete().catch(()=>{});await qw('presence/'+ME,()=>db.doc('presence/'+ME).delete());try{await fauth.currentUser.delete()}catch(e){authErr(e);await fauth.signOut()}location.reload()};
   if(S().account.twoStep)askText('קוד אימות דו־שלבי','',v=>{if(v===S().account.twoStep)go();else toast('קוד שגוי')},{type:'password',ltr:true,max:6});else go()})}}
 function pgPrivacy(){
   const p=S().privacy;
@@ -1391,8 +1410,8 @@ function pgStorage(){const L=Object.values(CH).map(c=>({c,size:JSON.stringify(c)
 function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מוגברת','הכהיית טקסט משני וקווים מפרידים','access.contrast','eye')}${TG('אנימציות','מעברים והנפשות','access.anim','refresh')}${GO('type','גודל גופן',RADIOS.fontSize.lab[S().fontSize],'r:fontSize')}`}}
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
-function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם, התמונה, שם המשתמש והסטטוסים גלויים לכל משתמשי SpicyyChat.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 5.0 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 6.0 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -1411,7 +1430,7 @@ function pgNewChat(){
 }
 function pgAddContact(){return{title:'איש קשר חדש',body:`<form id="acf"><div class="field"><label for="acq">שם משתמש או מספר טלפון</label><input class="inp" id="acq" dir="ltr" placeholder="@username או 050-1234567" required></div><div class="field"><label for="acn">שם לשמירה (לא חובה)</label><input class="inp" id="acn" maxlength="40" placeholder="איך יופיע/תופיע אצלך"></div><div class="btns"><button class="btn full">חיפוש ושמירה</button></div></form><p class="ptext">אפשר להוסיף רק אנשים שכבר נכנסו ל־SpicyyChat ויצרו פרופיל.</p>`,after:el=>$('#acf',el).addEventListener('submit',e=>{
   e.preventDefault();const q=$('#acq',el).value.trim().replace(/^@/,'').toLowerCase();const dq=digits(q);
-  const u=Object.keys(P).find(x=>x!==ME&&((P[x].username||'')===q||(dq.length>=7&&digits(P[x].phone).endsWith(dq.slice(-9)))));
+  const u=Object.keys(P).find(x=>x!==ME&&((P[x].username||'')===q||(dq.length>=7&&phoneMatch(x,dq))));
   if(!u){toast('לא נמצא משתמש. בדקו את שם המשתמש או המספר.');return}
   ST.contacts[u]={name:$('#acn',el).value.trim(),added:Date.now()};saveState();toast(`${pname(u)} נשמר/ה באנשי הקשר`);dm(u)})}}
 function pgNewGroup(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'הוספת משתתפים',body:L.length?`<div id="ngl">${L.map(u=>`<label class="row">${av(pobj(u),44)}<span class="rm"><span class="rn">${esc(pname(u))}</span><span class="rp">${esc(prof(u).about||'')}</span></span><input type="checkbox" class="chk" value="${u}"></label>`).join('')}</div><div class="btns"><button class="btn full" data-a="ngNext">המשך</button></div>`:`<div class="empty"><b>עוד אין אנשים להוסיף</b>אפשר ליצור קבוצה ריקה ולשתף קישור הזמנה.</div><div class="btns"><button class="btn full" data-a="ngNext">יצירת קבוצה</button></div>`}}
@@ -1574,7 +1593,7 @@ function statusText(){
 function postStatus(o){
   const items=[...liveStatus(ME),{id:rid(10),t:Date.now(),...o}];
   while(items.length>1&&JSON.stringify(items).length>800000)items.shift();
-  STATUS[ME]={items};qw('status/'+ME,()=>db.doc('status/'+ME).set({items:clone(items)}));toast('הסטטוס פורסם');setTab('updates');
+  STATUS[ME]={items};qw('status/'+ME,()=>db.doc('status/'+ME).set(statusDoc(items)));toast('הסטטוס פורסם');setTab('updates');
 }
 function statusCam(){pickFile('image/*',f=>readImage(f,900,.8,preview=>{
   openSheet('סטטוס חדש',`<div style="padding:0 16px"><img src="${preview}" alt="" style="width:100%;max-height:340px;object-fit:contain;border-radius:16px;background:#000"></div><form id="scf" class="crow" style="padding:12px 16px"><div class="cfield"><input class="inp" id="scc" placeholder="הוספת כיתוב…" style="border:0;background:none"></div><button class="sendbtn" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></form>`,d=>$('#scf',d).addEventListener('submit',e=>{e.preventDefault();const cap=$('#scc',d).value.trim();closeSheet(true);storeImage(f,url=>postStatus({type:'image',img:url,cap}))}))}),true)}
@@ -1635,9 +1654,10 @@ async function onboarding(){
   <form id="obf"><div class="hero" style="padding:0 0 6px"><button type="button" class="avedit" id="obph" aria-label="תמונת פרופיל"><span class="av" id="obav" style="width:88px;height:88px;background:var(--accent-soft);color:var(--accent)">${ic('camera',30)}</span></button></div>
   <div class="field"><label for="obn">השם שלך</label><input class="inp" id="obn" maxlength="40" required value="${esc(suggested)}" autocomplete="name"></div>
   <div class="field"><label for="obu">שם משתמש</label><input class="inp" id="obu" dir="ltr" maxlength="30" required placeholder="username" autocomplete="username"><small style="color:var(--muted)">כך חברים ימצאו אותך: אותיות באנגלית, ספרות, נקודה וקו תחתון.</small></div>
-  <div class="field"><label for="obp">מספר טלפון (לא חובה)</label><input class="inp" id="obp" dir="ltr" inputmode="tel" placeholder="+972 50-123-4567" autocomplete="tel"><small style="color:var(--muted)">המספר יוצג בפרופיל שלך ויאפשר לחפש אותך לפי טלפון.</small></div>
+  <div class="field"><label for="obp">מספר טלפון (לא חובה)</label><input class="inp" id="obp" dir="ltr" inputmode="tel" placeholder="+972 50-123-4567" autocomplete="tel"><small style="color:var(--muted)">כברירת מחדל רק אנשי הקשר שלך יראו את המספר. אפשר לשנות בהגדרות ← פרטיות.</small></div>
+  <div class="field"><label for="obb">יום הולדת (לא חובה)</label><input class="inp" id="obb" type="date" min="1900-01-01"><small style="color:var(--muted)">כברירת מחדל רק אנשי הקשר שלך יראו את התאריך.</small></div>
   <div class="btns"><button class="btn full">יצירת פרופיל</button></div></form>
-  <p class="small">${ic('lock',12)} השם, התמונה ושם המשתמש גלויים למשתמשי SpicyyChat כדי שחברים יוכלו למצוא אותך.</p><div class="btns"><button class="btn ghost full" type="button" id="oblo">יציאה מהחשבון</button></div></div>`;
+  <p class="small">${ic('lock',12)} השם ושם המשתמש גלויים למשתמשי SpicyyChat כדי שחברים יוכלו למצוא אותך. את שאר הפרטים אפשר להסתיר בהגדרות הפרטיות.</p><div class="btns"><button class="btn ghost full" type="button" id="oblo">יציאה מהחשבון</button></div></div>`;
   $('#layers').appendChild(el);let photo=null;
   $('#oblo',el).addEventListener('click',()=>fauth.signOut().then(()=>location.reload()));
   $('#obph',el).addEventListener('click',()=>pickFile('image/*',f=>readImage(f,200,.75,u=>{photo=u;$('#obav',el).innerHTML=`<img src="${u}" alt="">`})));
@@ -1647,8 +1667,8 @@ async function onboarding(){
     if(!/^[a-z0-9._]{3,30}$/.test(un)){toast('שם משתמש: 3–30 תווים באנגלית, ספרות, נקודה או קו תחתון');return}
     const btn=$('#obf button.btn',el);btn.disabled=true;btn.textContent='יוצר…';
     if(!await claimUsername(un)){btn.disabled=false;btn.textContent='יצירת פרופיל';return}
-    const d={name,username:un,phone:ph,about:'זמין/ה ב־SpicyyChat',photo,color:colorFor(ME),created:Date.now(),lastSeen:Date.now()};
-    try{await db.doc('profiles/'+ME).set(d);canWriteChecked=true;P[ME]=d;el.remove();start()}
+    const d={name,username:un,phone:ph,bday:parseBday(($('#obb',el)||{}).value),about:'זמין/ה ב־SpicyyChat',photo,color:colorFor(ME),created:Date.now(),lastSeen:Date.now()};
+    try{await createProfile(d);canWriteChecked=true;el.remove();start()}
     catch(err){btn.disabled=false;btn.textContent='יצירת פרופיל';dbErr(err)}
   });
 }
@@ -1814,7 +1834,7 @@ async function setVideoOut(C){
 }
 function signalCam(C){if(C.ref)C.ref.update({cam:{[ME]:!!C.camOn}}).catch(()=>{})}
 function newPC(C){
-  const pc=new RTCPeerConnection(ICE());
+  const pc=new RTCPeerConnection(iceCfg());
   pc.ontrack=e=>{if(CALL!==C)return;const t=e.track;if(!C.remote.getTracks().includes(t))C.remote.addTrack(t);
     if(t.kind==='video'){t.onunmute=()=>{if(CALL===C){C.remoteFlow=true;updRemoteVid(C)}};t.onmute=()=>{if(CALL===C){C.remoteFlow=false;updRemoteVid(C)}};C.remoteFlow=!t.muted}
     bindCallMedia();updRemoteVid(C)};
@@ -2727,6 +2747,563 @@ sendText=function(){Spell.cur=null;Spell.render(null);return __sendText()};
 const __start6=start;
 start=function(){__start6();setTimeout(()=>{const old='Chat'+'UP',a=prof(ME).about;if(a&&a.includes(old))writeProfile({about:a.split(old).join('SpicyyChat')})},3000)};
 
+/* ================= privacy (v6.0) ================= */
+IC.cake='<path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3M12 8v3M17 8v3"/><path d="M7 4h.01M12 4h.01M17 4h.01"/>';
+IC.finger='<path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/>';
+
+const PV_DEF={lastSeenVis:'all',onlineVis:'all',photoVis:'all',aboutVis:'all',linksVis:'all',statusVis:'all',phoneVis:'contacts',bdayVis:'contacts',groupsVis:'all',
+  ex:{},only:{},bdayNotify:false,bdayYear:true,findByPhone:true,silenceUnknown:false,blockUnknown:false,ipProtect:false,noLinkPreview:false,strict:false,lockAfter:0,camFx:true};
+function pv(){
+  const p=S().privacy;
+  if(!p.v7){if(p.lastSeen===false&&p.lastSeenVis===undefined)p.lastSeenVis='nobody';p.v7=1}
+  for(const k in PV_DEF)if(p[k]===undefined){const v=PV_DEF[k];p[k]=v&&typeof v==='object'?JSON.parse(JSON.stringify(v)):v}
+  return p;
+}
+const VLAB={all:'כולם',contacts:'אנשי הקשר שלי',except:'אנשי הקשר שלי מלבד…',only:'רק לשתף עם…',nobody:'אף אחד'};
+const O4=['all','contacts','except','nobody'],O5=['all','contacts','except','only','nobody'];
+const VF={
+  lastSeen:{t:'נראה/תה לאחרונה ומחובר/ת',key:'lastSeenVis',opts:O4,q:'מי יכול לראות מתי הייתי מחובר/ת לאחרונה'},
+  photo:{t:'תמונת פרופיל',key:'photoVis',opts:O4,q:'מי יכול לראות את תמונת הפרופיל שלי'},
+  about:{t:'אודות',key:'aboutVis',opts:O4,q:'מי יכול לראות את האודות שלי'},
+  links:{t:'קישורים',key:'linksVis',opts:O4,q:'מי יכול לראות את הקישורים בפרופיל שלי'},
+  status:{t:'סטטוס',key:'statusVis',opts:['all','contacts','except','only'],q:'מי יכול לראות את עדכוני הסטטוס שלי'},
+  phone:{t:'מספר טלפון',key:'phoneVis',opts:O5,q:'מי יכול לראות את מספר הטלפון שלי'},
+  bday:{t:'יום הולדת',key:'bdayVis',opts:O5,q:'מי יכול לראות את יום ההולדת שלי'},
+  groups:{t:'קבוצות',key:'groupsVis',opts:['all','contacts','except'],q:'מי יכול להוסיף אותי לקבוצות'},
+};
+const visOf=k=>pv()[VF[k].key];
+const listOf=(k,mode)=>((mode==='ex'?pv().ex:pv().only)[k]||[]).filter(u=>P[u]&&u!==ME);
+function visLabel(k){
+  const v=visOf(k);
+  if(v==='except'){const n=listOf(k,'ex').length;return n?`אנשי הקשר שלי, מלבד ${n}`:'אנשי הקשר שלי'}
+  if(v==='only'){const n=listOf(k,'only').length;return n?(n===1?'משותף עם איש קשר אחד':`משותף עם ${n} אנשים`):'אף אחד'}
+  return VLAB[v];
+}
+const lsLabel=()=>visLabel('lastSeen')+(pv().onlineVis==='all'&&pv().lastSeenVis!=='all'?' · מחובר/ת: כולם':'');
+const LOCKA=[[0,'מיד'],[60000,'אחרי דקה'],[1800000,'אחרי 30 דקות']];
+const appLockLabel=()=>S().privacy.appLock?'מופעלת · '+(LOCKA.find(x=>x[0]===(pv().lockAfter||0))||LOCKA[0])[1]:'כבויה';
+function allowedFor(k,u){
+  if(u===ME)return true;if(isBlocked(u))return false;
+  const v=visOf(k),c=!!(ST.contacts&&ST.contacts[u]);
+  if(v==='all')return true;if(v==='contacts')return c;
+  if(v==='except')return c&&!((pv().ex[k]||[]).includes(u));
+  if(v==='only')return (pv().only[k]||[]).includes(u);
+  return false;
+}
+
+/* ----- phone lookup without publishing the number ----- */
+function cyrb53(str,seed=0){let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return(4294967296*(2097151&h2)+(h1>>>0)).toString(36)}
+const phoneKey=ph=>{const d=digits(ph);return d.length>=7?d.slice(-9):''};
+const PHM=new Map();
+function phoneHash(ph){const k=phoneKey(ph);if(!k)return null;if(PHM.has(k))return PHM.get(k);let h='spicyy|'+k;for(let i=0;i<3000;i++)h=cyrb53(h+'|'+i,i);PHM.set(k,h);return h}
+function phoneMatch(u,q){
+  const k=phoneKey(q);if(!k)return false;const p=P[u]||{};
+  if(p.phone&&phoneKey(p.phone)===k)return true;
+  return k.length>=9&&!!(PUB[u]&&PUB[u].ph)&&PUB[u].ph===phoneHash(q);
+}
+
+/* ----- profile split: public doc + private doc + per-viewer shared docs ----- */
+let PUB={},SH={},FULL=null,SHW=null,OWNST=null;
+const privPath=()=>`data/users/${ME}/profile`;
+const SENS=['photo','about','lastSeen','lastSeenS','phone','links','bday','showLast','ph','vis','gadd','bdn'];
+const bdayOut=b=>(!b||!b.m)?null:(pv().bdayYear?{d:b.d,m:b.m,y:b.y||null}:{d:b.d,m:b.m,y:null});
+function pubBody(F){
+  const p=pv(),o={};
+  for(const k in F)if(!SENS.includes(k)&&F[k]!==undefined)o[k]=F[k];
+  o.photo=null;
+  if(visOf('photo')==='all'&&F.photo)o.photo=F.photo;
+  if(visOf('about')==='all'&&F.about)o.about=F.about;
+  if(visOf('links')==='all'&&F.links&&F.links.length)o.links=F.links;
+  if(visOf('phone')==='all'&&F.phone)o.phone=F.phone;
+  if(visOf('bday')==='all'&&F.bday)o.bday=bdayOut(F.bday);
+  if(p.lastSeenVis==='all'&&F.lastSeen)o.lastSeen=F.lastSeen;
+  o.vis={ls:p.lastSeenVis==='all'?'all':'x',on:p.onlineVis};
+  o.gadd=p.groupsVis==='all'?'all':'x';o.bdn=!!p.bdayNotify;
+  const h=p.findByPhone&&F.phone?phoneHash(F.phone):null;if(h)o.ph=h;
+  return o;
+}
+function sharedFor(u,F){
+  const p=pv(),f={};
+  const add=(k,fld,val)=>{if(visOf(k)!=='all'&&val!=null&&val!==''&&allowedFor(k,u))f[fld]=val};
+  add('photo','photo',F.photo);add('about','about',F.about);add('links','links',F.links&&F.links.length?F.links:null);
+  add('phone','phone',F.phone);add('bday','bday',bdayOut(F.bday));
+  if(p.lastSeenVis!=='all'&&allowedFor('lastSeen',u)){f.ls=1;if(F.lastSeenS)f.lastSeen=F.lastSeenS}
+  if(p.groupsVis!=='all'&&allowedFor('groups',u))f.ga=1;
+  return f;
+}
+function mergeP(){
+  const n={};for(const u in PUB)n[u]=SH[u]?{...PUB[u],...SH[u]}:PUB[u];
+  if(PUB[ME]||FULL)n[ME]={...(PUB[ME]||{}),...(FULL||{})};
+  return n;
+}
+async function loadFull(){
+  if(P[ME])PUB[ME]=clone(P[ME]);
+  try{const s=await db.doc(privPath()).get();if(s.exists)FULL=clone(s.data());else if(P[ME])FULL=clone(P[ME])}
+  catch(e){if(P[ME])FULL=clone(P[ME])}
+  if(FULL)P[ME]={...(P[ME]||{}),...FULL};
+}
+async function createProfile(d){
+  FULL=clone(d);const pub=pubBody(FULL);
+  await db.doc(privPath()).set(clone(FULL));
+  await db.doc('profiles/'+ME).set(pub);
+  PUB[ME]=pub;P[ME]={...pub,...FULL};
+}
+let persT=0;
+function persistProfile(){
+  clearTimeout(persT);if(!FULL)return;
+  const priv=clone(FULL),pub=pubBody(FULL);PUB[ME]=pub;P=mergeP();
+  qw(privPath(),()=>db.doc(privPath()).set(priv));
+  qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(pub));
+  scheduleShare();
+}
+const persistSoon=()=>{clearTimeout(persT);persT=setTimeout(persistProfile,700)};
+writeProfile=function(patch){
+  if(!FULL)FULL=clone(P[ME]||{});
+  Object.assign(FULL,clone(patch));P[ME]={...(P[ME]||{}),...patch};
+  persistProfile();refresh();
+};
+function touchLastSeen(){
+  if(!FULL)return;const now=Date.now(),p=pv();FULL.lastSeen=now;
+  if(p.lastSeenVis==='all')qw('profiles/'+ME,()=>db.doc('profiles/'+ME).update({lastSeen:now}));
+  else if(p.lastSeenVis!=='nobody'&&now-(FULL.lastSeenS||0)>60000){FULL.lastSeenS=now;syncShare()}
+  qw(privPath(),()=>db.doc(privPath()).update({lastSeen:now,lastSeenS:FULL.lastSeenS||null}));
+}
+async function loadSHW(){
+  const m={};
+  try{const s=await db.collection('shared').where('owner','==',ME).get();s.docs.forEach(d=>{const x=d.data();if(x&&x.viewer)m[x.viewer]=JSON.stringify(x.f||{})})}catch(e){console.warn('shared',e)}
+  SHW=m;
+}
+let shT=0,shBusy=null;
+function scheduleShare(){if(!FULL||!READY)return;clearTimeout(shT);shT=setTimeout(syncShare,1200)}
+async function syncShare(){
+  if(!FULL)return;if(shBusy)return shBusy.then(syncShare);
+  shBusy=(async()=>{
+    if(!SHW)await loadSHW();
+    const want={};
+    for(const u of Object.keys(PUB)){if(u===ME)continue;const f=sharedFor(u,FULL);if(Object.keys(f).length)want[u]=f}
+    for(const u in want){const j=JSON.stringify(want[u]);if(SHW[u]===j)continue;SHW[u]=j;const id=ME+'_'+u;const body={owner:ME,viewer:u,f:want[u],t:Date.now()};qw('shared/'+id,()=>db.doc('shared/'+id).set(body))}
+    for(const u of Object.keys(SHW)){if(want[u])continue;delete SHW[u];const id=ME+'_'+u;qw('shared/'+id,()=>db.doc('shared/'+id).delete())}
+    syncStatusAud();
+  })().finally(()=>{shBusy=null});
+  return shBusy;
+}
+function subscribeShared(){
+  db.collection('shared').where('viewer','==',ME).onSnapshot(s=>{
+    const n={};s.docs.forEach(d=>{const x=d.data();if(x&&x.owner)n[x.owner]=x.f||{}});
+    SH=n;P=mergeP();refresh();if(CUR)drawHead();bdayCheck();
+  },e=>console.warn('shared',e));
+}
+async function unshareAll(){
+  try{if(!SHW)await loadSHW();await Promise.all(Object.keys(SHW).map(u=>db.doc('shared/'+ME+'_'+u).delete().catch(()=>{})));await db.doc(privPath()).delete().catch(()=>{})}catch(e){}
+}
+
+/* ----- last seen & online ----- */
+function canSeeOnline(u){
+  if(u===ME)return true;const p=pv();
+  if(p.lastSeenVis==='nobody'&&p.onlineVis!=='all')return false;
+  const v=(PUB[u]&&PUB[u].vis)||null;if(!v)return true;
+  if(v.on==='all'||v.ls==='all')return true;
+  return !!(SH[u]&&SH[u].ls);
+}
+lastSeenText=function(u){
+  if(!u||u===ME||isBlocked(u))return '';
+  if(isOnline(u))return 'מחובר/ת עכשיו';
+  if(pv().lastSeenVis==='nobody')return '';
+  const p=prof(u);if(!p.lastSeen||p.showLast===false)return '';
+  const t=p.lastSeen,mins=Math.round((Date.now()-t)/60000);
+  if(mins<1)return 'נראה/תה לאחרונה ממש עכשיו';
+  if(mins<60)return `נראה/תה לאחרונה לפני ${mins===1?'דקה':mins+' דקות'}`;
+  return 'נראה/תה לאחרונה '+(sameDay(t,Date.now())?'היום':dayLabel(t))+' ב־'+fmtTime(t);
+};
+
+/* ----- status audience ----- */
+function statusAud(){
+  if(visOf('status')==='all')return{pub:true,allow:[]};
+  return{pub:false,allow:Object.keys(PUB).filter(u=>u!==ME&&allowedFor('status',u)).sort()};
+}
+function statusDoc(items){return{items:clone(items),...statusAud()}}
+function syncStatusAud(){
+  const x=OWNST;if(!x||!READY)return;const a=statusAud();
+  if(x.pub!==a.pub||JSON.stringify(x.allow||[])!==JSON.stringify(a.allow)){OWNST={...x,...a};qw('status/'+ME,()=>db.doc('status/'+ME).update(a))}
+}
+function subscribeStatus(){
+  const parts={pub:{},al:{},me:null};
+  const upd=()=>{const n={...parts.pub,...parts.al};if(parts.me)n[ME]=parts.me;else delete n[ME];STATUS=n;refresh()};
+  const col=s=>{const n={};s.docs.forEach(d=>n[d.id]=d.data());return n};
+  db.collection('status').where('pub','==',true).onSnapshot(s=>{parts.pub=col(s);upd()},dbErr);
+  db.collection('status').where('allow','array-contains',ME).onSnapshot(s=>{parts.al=col(s);upd()},dbErr);
+  db.doc('status/'+ME).onSnapshot(s=>{parts.me=s.exists?s.data():null;OWNST=parts.me;upd();syncStatusAud()},dbErr);
+}
+
+/* ----- birthdays ----- */
+const HMONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+const bdayText=b=>(!b||!b.m)?'':`${b.d} ב${HMONTHS[b.m-1]}${b.y?' '+b.y:''}`;
+const isBdayToday=b=>{if(!b||!b.m)return false;const n=new Date();return n.getMonth()+1===b.m&&n.getDate()===b.d};
+function parseBday(v){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');return m?{y:+m[1],m:+m[2],d:+m[3]}:null}
+const bdayInput=b=>b&&b.m?`${b.y||2000}-${pad(b.m)}-${pad(b.d)}`:'';
+const dayKey=()=>{const n=new Date();return n.getFullYear()+'-'+(n.getMonth()+1)+'-'+n.getDate()};
+const bdayPeople=()=>Object.keys((ST&&ST.contacts)||{}).filter(u=>u!==ME&&P[u]&&!isBlocked(u)&&P[u].bdn&&isBdayToday(P[u].bday));
+function bdayCheck(){
+  if(!READY||!ST)return;const k=dayKey();ST.bdayN=ST.bdayN||{};let ch=false;
+  for(const u of bdayPeople()){if(ST.bdayN[u]===k)continue;ST.bdayN[u]=k;ch=true;sysNotify('🎂 יום הולדת',`היום יום ההולדת של ${pname(u)}. שלחו ברכה!`,{cid:dmId(u)})}
+  if(ch){saveState();drawChatList()}
+}
+const __dcl7=drawChatList;
+drawChatList=function(){
+  __dcl7();
+  try{const el=$('#chatList');if(!el||Q||F!=='all')return;const k=dayKey();
+    const L=bdayPeople().filter(u=>((ST.bdayHide||{})[u])!==k);if(!L.length)return;
+    const d=document.createElement('div');d.className='bdwrap';
+    d.innerHTML=L.map(u=>`<div class="bdcard">${av(pobj(u),42)}<div class="rm"><b>🎂 היום יום ההולדת של ${esc(pshort(u))}</b><span>שלחו ברכה ותשמחו אותו/ה</span></div><button class="btn" data-a="bdayWish" data-uid="${u}">ברכה</button><button class="ib" data-a="bdayHide" data-uid="${u}" aria-label="הסתרה">${ic('x',16)}</button></div>`).join('');
+    el.prepend(d);
+  }catch(e){console.warn(e)}
+};
+
+/* ----- links ----- */
+function normUrl(v){v=String(v||'').trim();if(!v)return '';if(!/^https?:\/\//i.test(v))v='https://'+v;try{const u=new URL(v);if(!/^https?:$/.test(u.protocol)||!u.hostname.includes('.'))return null;return u.href}catch(e){return null}}
+const safeUrl=l=>/^https?:\/\//i.test(String(l))?String(l):'#';
+const shortUrl=l=>String(l).replace(/^https?:\/\/(www\.)?/i,'').replace(/\/$/,'').slice(0,40);
+
+/* ----- profile page ----- */
+const visNote=k=>`<span class="visn">${ic('eye',12)} ${esc(visLabel(k))}</span>`;
+pgProfile=function(){
+  const F=FULL||prof(ME),links=F.links||[];
+  return{title:'פרופיל',body:`<div class="hero"><div class="avedit">${meAv(132)}<button class="cam" data-a="meAvatar" aria-label="שינוי תמונה">${ic('camera',20)}</button></div><button class="vischip" data-a="go" data-p="vis" data-arg="photo">${ic('eye',14)} מי רואה את התמונה: ${esc(visLabel('photo'))}</button></div>
+  ${R('user','שם',esc(F.name||''),'meName')}
+  ${R('info','אודות',esc(F.about||'')+visNote('about'),'meAbout')}
+  ${R('at','שם משתמש','@'+esc(F.username||''),'meUser')}
+  ${R('phone','טלפון',(F.phone?`<span dir="ltr">${esc(F.phone)}</span>`:'לא הוגדר')+visNote('phone'),'mePhone')}
+  ${R('cake','יום הולדת',(F.bday?esc(bdayText(F.bday)):'לא הוגדר · הוספה')+visNote('bday'),'meBday')}
+  ${R('link','קישורים',(links.length?links.map(l=>`<span dir="ltr">${esc(shortUrl(l))}</span>`).join(' · '):'אתר, אינסטגרם, טיקטוק…')+visNote('links'),'meLinks')}
+  ${F.photo?R('trash','הסרת תמונת הפרופיל','','meAvatarDel','','danger'):''}
+  <p class="ptext">השם ושם המשתמש גלויים לכולם כדי שחברים יוכלו למצוא אותך. מי רואה את שאר הפרטים נקבע ב<button class="lnk" data-a="go" data-p="privacy">הגדרות הפרטיות</button>.</p>`};
+};
+function bdaySheet(){
+  const b=(FULL||prof(ME)).bday;const max=new Date().toISOString().slice(0,10);
+  openSheet('יום הולדת',`<form id="bdf"><div class="field"><label for="bdi">תאריך לידה</label><input class="inp" id="bdi" type="date" min="1900-01-01" max="${max}" value="${bdayInput(b)}" required></div><p class="ptext">מי יראה את התאריך: ${esc(visLabel('bday'))}. אפשר לשנות בהגדרות ← פרטיות ← יום הולדת.</p><div class="btns">${b?'<button type="button" class="btn ghost" id="bdx">הסרה</button>':'<button type="button" class="btn ghost" data-a="closeSheet">ביטול</button>'}<button class="btn" type="submit">שמירה</button></div></form>`,d=>{
+    $('#bdf',d).addEventListener('submit',e=>{e.preventDefault();const v=parseBday($('#bdi',d).value);if(!v){toast('בחרו תאריך');return}closeSheet(true);writeProfile({bday:v});drawPages();toast('יום ההולדת נשמר')});
+    const x=$('#bdx',d);x&&x.addEventListener('click',()=>{closeSheet(true);writeProfile({bday:null});drawPages();toast('יום ההולדת הוסר')});
+  });
+}
+function linksSheet(){
+  const L=(FULL||prof(ME)).links||[];
+  openSheet('קישורים',`<form id="lkf"><p class="ptext">אפשר להוסיף עד 3 קישורים: אתר, אינסטגרם, טיקטוק, יוטיוב ועוד.</p>${[0,1,2].map(i=>`<div class="field"><input class="inp lk" dir="ltr" inputmode="url" maxlength="200" placeholder="instagram.com/username" value="${esc(L[i]||'')}"></div>`).join('')}<div class="btns"><button type="button" class="btn ghost" data-a="closeSheet">ביטול</button><button class="btn" type="submit">שמירה</button></div></form>`,d=>{
+    $('#lkf',d).addEventListener('submit',e=>{e.preventDefault();const out=[];
+      for(const i of $$('.lk',d)){if(!i.value.trim())continue;const u=normUrl(i.value);if(!u){toast('הקישור לא תקין: '+i.value.trim());i.focus();return}out.push(u)}
+      closeSheet(true);writeProfile({links:out});drawPages();toast('הקישורים נשמרו')});
+  });
+}
+const RADIO=(name,attr,val,cur,label,desc='')=>`<label class="srow"><input type="radio" class="radio" name="${name}" ${attr} value="${val}" ${String(cur)===String(val)?'checked':''}><span class="stx"><b>${label}</b>${desc?`<small>${desc}</small>`:''}</span></label>`;
+function photoVisSheet(){
+  const v=visOf('photo');
+  openSheet('מי יכול לראות את תמונת הפרופיל שלך?',`<div class="hero" style="padding:2px 0 8px">${meAv(84)}</div>${VF.photo.opts.map(o=>RADIO('pvs','data-vis="photo" data-sheet="1"',o,v,VLAB[o])).join('')}<div class="btns"><button class="btn full" data-a="closeSheet">סיום</button></div>`);
+}
+
+/* ----- contact info: birthday, links, phone ----- */
+const __pci7=pgContactInfo;
+pgContactInfo=function(u){
+  const r=__pci7(u);if(!r||!P[u]||u===ME)return r;const p=prof(u);let add='';
+  if(p.bday&&p.bday.m)add+=`<div class="srow"><span class="sic">${ic('cake')}</span><span class="stx"><b>${esc(bdayText(p.bday))}${isBdayToday(p.bday)?' · היום! 🎉':''}</b><small>יום הולדת</small></span></div>`;
+  (Array.isArray(p.links)?p.links:[]).forEach(l=>{add+=`<a class="srow" href="${esc(safeUrl(l))}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none"><span class="sic">${ic('link')}</span><span class="stx"><b dir="ltr">${esc(shortUrl(l))}</b><small>קישור</small></span></a>`});
+  if(p.phone)add+=`<div class="srow"><span class="sic">${ic('phone')}</span><span class="stx"><b dir="ltr">${esc(p.phone)}</b><small>טלפון</small></span></div>`;
+  const anchor='<small>אודות</small></span></div>';r.body=r.body.replace(anchor,anchor+add);
+  return r;
+};
+
+/* ----- groups: who can add me ----- */
+function canAddMe(u){if(u===ME)return true;const g=(PUB[u]||{}).gadd;if(!g||g==='all')return true;return !!(SH[u]&&SH[u].ga)}
+const __cg7=createGroup;
+createGroup=async function(name,desc,photo,members,extra){
+  const no=members.filter(u=>!canAddMe(u)),ok=members.filter(u=>canAddMe(u));
+  const id=await __cg7(name,desc,photo,ok,extra);
+  if(no.length)setTimeout(()=>groupInviteNote(id,no),500);
+  return id;
+};
+function groupInviteNote(cid,L){
+  openSheet('לא כולם נוספו',`<p class="ptext" style="font-size:15px">${L.map(u=>esc(pname(u))).join(', ')} ${L.length>1?'לא מאפשרים':'לא מאפשר/ת'} להוסיף ${L.length>1?'אותם':'אותו/ה'} לקבוצות. אפשר לשלוח קישור הזמנה בצ׳אט פרטי.</p><div class="btns"><button class="btn ghost" data-a="closeSheet">לא עכשיו</button><button class="btn" data-a="sendGroupInvites" data-c="${cid}" data-u="${L.join(',')}">שליחת הזמנה</button></div>`);
+}
+
+/* ----- calls: silence unknown callers, protect IP ----- */
+const hasTurn=()=>Array.isArray(CFG.turn)&&CFG.turn.some(t=>[].concat(t.urls||t.url||[]).some(u=>/^turns?:/.test(String(u))));
+function iceCfg(){const c=ICE();if(pv().ipProtect&&hasTurn())c.iceTransportPolicy='relay';return c}
+const __inc7=incoming;
+incoming=function(id,d){
+  if(pv().silenceUnknown&&d.from!==ME&&!ST.contacts[d.from]){
+    logCall({id,peer:d.from,dir:'missed',video:!!d.video,t:Date.now(),dur:0,silenced:true});
+    toast(`שיחה מ־${pname(d.from)} הושתקה, כי הוא/היא לא באנשי הקשר`);
+    const ref=db.doc('calls/'+id);
+    setTimeout(()=>ref.get().then(s=>{const x=s.data();if(x&&x.state==='ringing')ref.update({state:'missed'}).catch(()=>{})}).catch(()=>{}),40000);
+    return;
+  }
+  return __inc7(id,d);
+};
+const __fxa7=FX.active;
+FX.active=C=>pv().camFx!==false&&__fxa7(C);
+const __as7=applySettings;
+applySettings=function(){__as7();try{document.body.classList.toggle('nofx',pv().camFx===false)}catch(e){}};
+
+/* ----- messages from unknown accounts ----- */
+function isRequest(c){
+  if(!c||c.type!=='direct'||!pv().blockUnknown)return false;
+  const o=otherOf(c);if(!o||o===ME||ST.contacts[o]||pref(c.id).accepted)return false;
+  if(c.createdBy===ME||((c.sent||{})[ME]>0))return false;
+  return !!(c.last&&c.last.by!==ME);
+}
+function reqRow(){const n=Object.values(CH).filter(isRequest).length;return n?`<button class="arow" data-a="go" data-p="requests"><span class="aic">${ic('mail')}</span>בקשות הודעה<span class="cnt">${n}</span></button>`:''}
+function pgRequests(){
+  const L=sortChats(Object.values(CH).filter(isRequest));
+  return{title:'בקשות הודעה',body:`<p class="ptext">הודעות מאנשים שלא שמורים באנשי הקשר שלך ושלא כתבת להם. לא יגיעו מהן צלילים או באנרים. אחרי שתענו או תאשרו, הצ׳אט יעבור לרשימה הרגילה.</p>${L.length?L.map(chatRow).join(''):'<div class="empty"><b>אין בקשות הודעה</b></div>'}`};
+}
+function reqBar(){
+  $('#reqbar')?.remove();const c=CH[CUR];if(!isRequest(c))return;
+  const comp=$('#composer'),row=comp&&$('.crow',comp);if(!row)return;const o=otherOf(c);
+  const d=document.createElement('div');d.id='reqbar';
+  d.innerHTML=`<span>${ic('info',16)} ${esc(pname(o))} לא שמור/ה באנשי הקשר שלך</span><button class="flw" data-a="blockU" data-uid="${o}">חסימה</button><button class="flw" data-a="reqOk" data-c="${c.id}">אישור</button>`;
+  comp.insertBefore(d,row);
+}
+const __dc7=drawComposer;
+drawComposer=function(){__dc7();try{reqBar()}catch(e){}};
+const __sm7=sendMsg;
+sendMsg=function(...a){const r=__sm7(...a);try{$('#reqbar')?.remove()}catch(e){}return r};
+
+/* ----- link previews ----- */
+const __mb7=msgBody;
+msgBody=function(c,m,out){
+  let h=__mb7(c,m,out);
+  if(m&&m.type==='text'&&!m.deleted&&!pv().noLinkPreview){
+    const u=(String(m.text||'').match(/https?:\/\/[^\s<>"]+/)||[])[0];
+    if(u){try{const x=new URL(u);const host=x.hostname.replace(/^www\./,'');const path=(x.pathname+x.search).replace(/\/$/,'');
+      h=`<a class="lprev" href="${esc(x.href)}" target="_blank" rel="noopener"><img src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(x.hostname)}&sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><span><b>${esc(host)}</b>${path?`<small dir="ltr">${esc(path.slice(0,60))}</small>`:''}</span></a>`+h}catch(e){}}
+  }
+  return h;
+};
+
+/* ----- app lock: timeout + fingerprint ----- */
+const LOCK={hid:0,skip:0};
+let BIO_OK=false;
+const b64u=buf=>btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const unb64u=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+const BIO={
+  key:()=>'spicyy-bio-'+ME,
+  get(){try{return localStorage.getItem(BIO.key())}catch(e){return null}},
+  async avail(){try{return !!(window.PublicKeyCredential&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())}catch(e){return false}},
+  async enroll(){
+    const me=prof(ME);
+    const cred=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:'SpicyyChat'},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:me.username||'user',displayName:me.name||'SpicyyChat'},pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'discouraged'},timeout:60000}});
+    localStorage.setItem(BIO.key(),b64u(cred.rawId));return true;
+  },
+  async verify(){const raw=BIO.get();if(!raw)return false;await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:unb64u(raw)}],userVerification:'required',timeout:60000}});return true},
+  off(){try{localStorage.removeItem(BIO.key())}catch(e){}},
+};
+lockScreen=function(){
+  if($('#lockscr'))return;closeSheet(true);closeMenu();
+  const bio=!!BIO.get();
+  const el=document.createElement('div');el.className='lock';el.id='lockscr';
+  el.innerHTML=`<div class="logo">Spicyy<b>Chat</b></div>${ic('lock',40)}<p>SpicyyChat נעולה</p><div class="lockbtns">${bio?`<button class="btn" id="unb">${ic('finger',18)} טביעת אצבע</button>`:''}<button class="btn ${bio?'ghost':''}" id="unl">פתיחה עם קוד</button></div>`;
+  $('#layers').appendChild(el);
+  const done=()=>{el.remove();closeSheet(true)};
+  const ask=()=>pinPad('פתיחת SpicyyChat',S().privacy.pin,done);
+  $('#unl',el).addEventListener('click',ask);
+  if(bio){const go=()=>BIO.verify().then(ok=>{if(ok)done()}).catch(()=>{});$('#unb',el).addEventListener('click',go);go()}else ask();
+};
+const __pf7=pickFile;
+pickFile=function(...a){LOCK.skip=Date.now()+10*60000;return __pf7(...a)};
+document.addEventListener('visibilitychange',()=>{
+  if(!READY)return;
+  if(document.hidden){LOCK.hid=Date.now();return}
+  const p=S().privacy;if(!p.appLock||!p.pin||$('#lockscr')||CALL)return;
+  if(LOCK.skip>Date.now()){LOCK.skip=0;return}
+  if(LOCK.hid&&Date.now()-LOCK.hid>=(pv().lockAfter||0))lockScreen();
+});
+pgAppLock=function(){
+  const p=S().privacy,q=pv(),bio=!!BIO.get();
+  return{title:'נעילת אפליקציה',body:`<div class="hero">${ic('lock',52)}<p>כשהאפשרות מופעלת, צריך להזין קוד${BIO_OK?' או טביעת אצבע':''} כדי לפתוח את SpicyyChat במכשיר הזה.</p></div>
+  <label class="srow"><span class="sic">${ic('key')}</span><span class="stx"><b>נעילה עם קוד</b></span><input type="checkbox" class="sw" id="alk" ${p.appLock?'checked':''}></label>
+  ${p.appLock&&BIO_OK?`<label class="srow"><span class="sic">${ic('finger')}</span><span class="stx"><b>פתיחה עם טביעת אצבע</b><small>במכשיר הזה</small></span><input type="checkbox" class="sw" id="albio" ${bio?'checked':''}></label>`:''}
+  ${p.appLock?`<div class="gap"></div><div class="plabel">נעילה אוטומטית</div>${LOCKA.map(([v,l])=>RADIO('locka','data-locka="1"',v,q.lockAfter||0,l)).join('')}<p class="ptext">הזמן שעובר מהרגע שיוצאים מהאפליקציה ועד שהיא ננעלת.</p>`:''}
+  ${p.pin?R('key','שינוי קוד הנעילה','','pinChange'):''}`,after:el=>{
+    $('#alk',el).addEventListener('change',e=>{if(e.target.checked){if(!p.pin)pinPad('יצירת קוד נעילה',null,x=>{p.pin=x;p.appLock=true;saveState();drawPages()},true,()=>drawPages());else{p.appLock=true;saveState();drawPages()}}else{p.appLock=false;BIO.off();saveState();drawPages()}});
+    const b=$('#albio',el);b&&b.addEventListener('change',e=>{if(e.target.checked)BIO.enroll().then(()=>{toast('פתיחה עם טביעת אצבע הופעלה');drawPages()}).catch(()=>{toast('לא הצלחנו להפעיל טביעת אצבע במכשיר הזה');drawPages()});else{BIO.off();drawPages()}});
+  }};
+};
+
+/* ----- settings pages ----- */
+const strictKeys=['silenceUnknown','blockUnknown','noLinkPreview','ipProtect'];
+const strictLocked=k=>pv().strict&&strictKeys.includes(k);
+const TGP=(title,desc,k,icon,dis)=>`<label class="srow ${dis?'dis':''}">${icon?`<span class="sic">${ic(icon)}</span>`:''}<span class="stx"><b>${title}</b>${desc?`<small>${desc}</small>`:''}</span><input type="checkbox" class="sw" data-pset="${k}" ${pv()[k]?'checked':''} ${dis?'disabled':''}></label>`;
+const strictNote=()=>pv().strict?`<p class="ptext">${ic('shield',13)} חלק מההגדרות נעולות כי <button class="lnk" data-a="go" data-p="strict">הגדרות חשבון מחמירות</button> מופעלות.</p>`:'';
+const lockedCount=()=>Object.keys(CH).filter(k=>pref(k).locked).length;
+pgPrivacy=function(){
+  const p=S().privacy,q=pv();
+  return{title:'פרטיות',body:`<div class="plabel">מי יכול לראות את הפרטים האישיים שלי</div>
+  ${GO('clock','נראה/תה לאחרונה ומחובר/ת',esc(lsLabel()),'vis','data-arg="lastSeen"')}
+  ${GO('user','תמונת פרופיל',esc(visLabel('photo')),'vis','data-arg="photo"')}
+  ${GO('info','אודות',esc(visLabel('about')),'vis','data-arg="about"')}
+  ${GO('link','קישורים',esc(visLabel('links')),'vis','data-arg="links"')}
+  ${GO('status','סטטוס',esc(visLabel('status')),'vis','data-arg="status"')}
+  ${GO('phone','מספר טלפון',esc(visLabel('phone')),'vis','data-arg="phone"')}
+  ${GO('cake','יום הולדת',esc(visLabel('bday')),'vis','data-arg="bday"')}
+  <div class="gap"></div>
+  ${TG('אישורי קריאה','כשהאפשרות כבויה, לא תשלח/י אישורי קריאה ולא תראה/י אישורי קריאה מאחרים. בקבוצות אישורי קריאה תמיד נשלחים.','privacy.readReceipts','check')}
+  <div class="gap"></div><div class="plabel">הודעות נעלמות</div>
+  ${GO('timer','טיימר ברירת מחדל',timerLabel(p.defaultTimer),'r:defaultTimer')}
+  <div class="gap"></div>
+  ${GO('users','קבוצות',esc(visLabel('groups')),'vis','data-arg="groups"')}
+  ${GO('location','מיקום בזמן אמת',liveCount()?liveCount()+' צ׳אטים':'אין','liveloc')}
+  ${GO('phoneoff','שיחות',q.silenceUnknown?'השתקת מספרים לא מוכרים: מופעלת':'השתקת מספרים לא מוכרים: כבויה','callspriv')}
+  ${GO('block','אנשי קשר חסומים',Object.keys(ST.blocked).length||'אין','blocked')}
+  ${GO('lock','נעילת אפליקציה',appLockLabel(),'applock')}
+  ${R('lock','נעילת צ׳אטים',lockedCount()+' צ׳אטים נעולים','openLocked')}
+  ${TGP('אפקטים במצלמה','פילטרים, מדבקות ורקעים בשיחות וידאו','camFx','sparkle')}
+  <div class="gap"></div>
+  ${GO('shield','מתקדם','הגנה על כתובת IP, תצוגה מקדימה של קישורים, חשבונות לא מוכרים','advanced')}
+  ${GO('eye','בדיקת פרטיות','שליטה על הפרטיות ובחירת ההגדרות המתאימות לך','checkup')}
+  <p class="ptext">${ic('lock',13)} ההודעות, השיחות והפרטים שהסתרת מוגנים בכללי אבטחה בשרת: מי שאין לו הרשאה לא יכול לקרוא אותם.</p>`};
+};
+function pgVis(k){
+  const f=VF[k];if(!f)return{title:'פרטיות',body:''};const p=pv(),v=visOf(k);
+  const mode=v==='except'?'ex':v==='only'?'only':null;
+  let body=`<div class="plabel">${f.q}</div>`+f.opts.map(o=>RADIO('vis_'+k,`data-vis="${k}"`,o,v,VLAB[o])).join('');
+  if(mode)body+=R('users',mode==='ex'?'אנשי קשר שהוחרגו':'אנשים שנבחרו',String(listOf(k,mode).length),'go',`data-p="visPick" data-arg="${k}:${mode}"`);
+  if(k==='lastSeen')body+=`<div class="gap"></div><div class="plabel">מי יכול לראות שאני מחובר/ת</div>${RADIO('vis_on','data-online="1"','all',p.onlineVis,'כולם')}${RADIO('vis_on','data-online="1"','same',p.onlineVis,'זהה ל״נראה/תה לאחרונה״')}<p class="ptext">אם לא תשתף/י את ״נראה/תה לאחרונה״ ואת ״מחובר/ת״, לא תוכל/י לראות את הפרטים האלה גם אצל אחרים.</p>`;
+  if(k==='photo'){const F=FULL||prof(ME);body+=`<div class="gap"></div>${R('camera',F.photo?'החלפת תמונת הפרופיל':'הוספת תמונת פרופיל','','meAvatar')}`}
+  if(k==='about')body+=`<div class="gap"></div>${R('info','האודות שלי',esc((FULL||prof(ME)).about||'לא הוגדר'),'meAbout')}`;
+  if(k==='links')body+=`<div class="gap"></div>${R('link','הקישורים שלי',((FULL||prof(ME)).links||[]).length?((FULL||prof(ME)).links||[]).map(l=>esc(shortUrl(l))).join(' · '):'הוספה','meLinks')}`;
+  if(k==='phone')body+=`<div class="gap"></div>${R('phone','המספר שלי',(FULL||prof(ME)).phone?`<span dir="ltr">${esc((FULL||prof(ME)).phone)}</span>`:'לא הוגדר','mePhone')}${TGP('אפשר למצוא אותי לפי מספר הטלפון','מי שכבר יודע את המספר שלך יוכל למצוא אותך בחיפוש, גם אם המספר מוסתר ממנו.','findByPhone','search')}<p class="ptext">${ic('lock',13)} המספר לא נשלח למי שאין לו הרשאה לראות אותו. השרת חוסם את הגישה.</p>`;
+  if(k==='bday'){const b=(FULL||prof(ME)).bday;body+=`<div class="gap"></div>${R('cake','תאריך הלידה שלי',b?esc(bdayText(b)):'לא הוגדר · הוספה','meBday')}${TGP('הצגת שנת הלידה','כשהאפשרות כבויה, אחרים יראו רק יום וחודש.','bdayYear','calendar')}${TGP('תזכורת לאנשים ששמרו אותי','ביום ההולדת שלך, מי ששמר אותך באנשי הקשר ויכול לראות את התאריך יקבל תזכורת לברך אותך.','bdayNotify','bell')}`}
+  if(k==='groups')body+=`<p class="ptext">מי שלא יכול להוסיף אותך לקבוצה יוכל לשלוח לך קישור הזמנה בצ׳אט פרטי, ואת/ה תחליט/י אם להצטרף.</p>`;
+  if(k==='status')body+=`<p class="ptext">השינוי חל מיד, גם על סטטוסים שכבר פרסמת.</p>`;
+  return{title:f.t,body};
+}
+const vpCount=(k,mode)=>{const n=listOf(k,mode).length;return mode==='ex'?(n?`${n} אנשי קשר לא יראו`:'אף איש קשר לא הוחרג'):(n?`${n} נבחרו`:'עוד לא נבחר אף אחד')};
+const byName=(a,b)=>pname(a).localeCompare(pname(b),'he');
+function vpCandidates(mode){
+  const contacts=Object.keys(ST.contacts).filter(u=>P[u]&&u!==ME).sort(byName);
+  const others=mode==='only'?Object.keys(P).filter(u=>u!==ME&&!ST.contacts[u]).sort(byName):[];
+  return{contacts,others};
+}
+function pgVisPick(arg){
+  const [k,mode]=String(arg).split(':');const sel=new Set(listOf(k,mode));const {contacts,others}=vpCandidates(mode);
+  const title=mode==='ex'?'אנשי הקשר שלי מלבד…':'רק לשתף עם…';
+  const row=u=>`<label class="row">${av(pobj(u),44)}<span class="rm"><span class="rn">${esc(pname(u))}</span><span class="rp">${esc(prof(u).about||'')}</span></span><input type="checkbox" class="chk" data-vpick="${k}:${mode}" value="${u}" ${sel.has(u)?'checked':''}></label>`;
+  if(!contacts.length&&!others.length)return{title,body:'<div class="empty"><b>אין עדיין אנשי קשר</b>שמרו אנשים באנשי הקשר כדי לבחור מתוכם.</div>'};
+  return{title,actions:`<button class="ib" data-a="vpAll" data-arg="${k}:${mode}" aria-label="בחירת הכול">${ic('check')}</button>`,body:`<p class="ptext" id="vpcnt" data-k="${k}" data-m="${mode}">${vpCount(k,mode)}</p>`+
+    (contacts.length?`<div class="plabel">אנשי הקשר שלי · ${contacts.length}</div>`+contacts.map(row).join(''):(mode==='ex'?'<div class="empty"><b>אין עדיין אנשי קשר שמורים</b>שמרו אנשים באנשי הקשר כדי להחריג אותם.</div>':''))+
+    (others.length?`<div class="plabel">אנשים נוספים ב־SpicyyChat</div>`+others.map(row).join(''):'')};
+}
+function liveList(){
+  const now=Date.now(),L=[];
+  for(const cid in MS){if(!CH[cid])continue;let m=null;try{m=msgsOf(cid).filter(x=>x.from===ME&&x.type==='location'&&x.live&&!x.deleted&&now-x.t<8*3600e3).pop()}catch(e){}if(m)L.push([CH[cid],m])}
+  return L;
+}
+const liveCount=()=>liveList().length;
+function pgLiveLoc(){
+  const L=liveList();
+  return{title:'מיקום בזמן אמת',body:`<div class="hero">${ic('location',52)}<p>${L.length?`את/ה משתף/ת מיקום חי ב־${L.length} צ׳אטים`:'אינך משתף/ת מיקום חי באף צ׳אט'}</p></div>${L.map(([c,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${m.id}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${esc(m.label||'')} · ${listTime(m.t)}</span></span></button>`).join('')}<p class="ptext">מיקום חי גלוי רק לחברי הצ׳אט שבו שלחת אותו. כדי להפסיק לשתף, מוחקים את הודעת המיקום.</p>`};
+}
+function pgCallsPriv(){
+  return{title:'שיחות',body:`${TGP('השתקת שיחות ממספרים לא מוכרים','שיחות מאנשים שלא שמורים באנשי הקשר שלך לא יצלצלו, אבל יופיעו בלשונית השיחות.','silenceUnknown','phoneoff',strictLocked('silenceUnknown'))}${strictNote()}<p class="ptext">כשהאפליקציה סגורה לגמרי, ייתכן שהתראה על השיחה עדיין תגיע.</p>`};
+}
+function pgAdvanced(){
+  const t=hasTurn();
+  return{title:'מתקדם',body:`${TGP('חסימת הודעות מחשבונות לא מוכרים','הודעות מאנשים שלא שמורים אצלך ושלא כתבת להם יעברו ל״בקשות הודעה״, בלי צליל ובלי באנר.','blockUnknown','block',strictLocked('blockUnknown'))}
+  ${TGP('הגנה על כתובת ה־IP בשיחות',t?'השיחות יעברו דרך שרת ממסר, כך שהצד השני לא יוכל לדעת מה כתובת ה־IP שלך ובערך איפה את/ה. איכות השיחה עלולה לרדת מעט.':'כדי להפעיל צריך שרת ממסר (TURN) בקובץ config.js. כרגע אין שרת כזה.','ipProtect','shield',strictLocked('ipProtect')||!t)}
+  ${TGP('השבתת תצוגה מקדימה של קישורים','לא ייטענו סמל ופרטים של אתרים מקישורים בצ׳אט, כדי שהאתרים לא יקבלו את כתובת ה־IP שלך.','noLinkPreview','link',strictLocked('noLinkPreview'))}
+  <div class="gap"></div>${GO('shield','הגדרות חשבון מחמירות',pv().strict?'מופעלות':'כבויות','strict')}${strictNote()}`};
+}
+function pgStrict(){
+  const on=pv().strict;
+  const L=['שיחות ממספרים לא מוכרים מושתקות','הודעות מחשבונות לא מוכרים עוברות ל״בקשות הודעה״','תצוגה מקדימה של קישורים מושבתת','רק אנשי הקשר שלך יכולים להוסיף אותך לקבוצות',...(hasTurn()?['כתובת ה־IP מוגנת בשיחות']:[])];
+  return{title:'הגדרות חשבון מחמירות',body:`<div class="hero">${ic('shield',56)}<p>הגנה מקסימלית מפני הטרדות ואנשים לא מוכרים. כשההגדרות מופעלות:</p></div><ul class="ckl">${L.map(x=>`<li>${ic('check',16)}<span>${x}</span></li>`).join('')}</ul><p class="ptext">כל עוד ההגדרות מופעלות, אי אפשר לשנות את האפשרויות האלה אחת אחת. כשמכבים, הן חוזרות למצב שהיה לפני.</p><div class="btns"><button class="btn full ${on?'red':''}" data-a="strictToggle">${on?'כיבוי':'הפעלה'}</button></div>`};
+}
+function strictOn(){
+  const p=pv();p.strictPrev={silenceUnknown:p.silenceUnknown,blockUnknown:p.blockUnknown,noLinkPreview:p.noLinkPreview,ipProtect:p.ipProtect,groupsVis:p.groupsVis};
+  Object.assign(p,{silenceUnknown:true,blockUnknown:true,noLinkPreview:true,ipProtect:hasTurn(),strict:true});
+  if(p.groupsVis==='all')p.groupsVis='contacts';
+  privChanged('groups');toast('הגדרות חשבון מחמירות הופעלו');if(CUR)drawMsgs(true);
+}
+function strictOff(){
+  const p=pv();Object.assign(p,p.strictPrev||{silenceUnknown:false,blockUnknown:false,noLinkPreview:false,ipProtect:false});p.strict=false;delete p.strictPrev;
+  privChanged('groups');toast('הגדרות חשבון מחמירות כובו');if(CUR)drawMsgs(true);
+}
+function pgCheckup(){
+  const p=S().privacy,q=pv();
+  const card=(icon,t,d,rows)=>`<div class="ckcard"><div class="ckh"><span class="ckic">${ic(icon,22)}</span><div><b>${t}</b><small>${d}</small></div></div>${rows}</div>`;
+  return{title:'בדיקת פרטיות',body:`<div class="hero">${ic('shield',52)}<p>כאן אפשר לעבור על הגדרות הפרטיות החשובות ולבחור מה מתאים לך.</p></div>
+  ${card('users','מי יכול ליצור איתך קשר','מי יכול להוסיף אותך לקבוצות, ומה קורה כשאנשים לא מוכרים פונים אליך.',
+    GO('users','קבוצות',esc(visLabel('groups')),'vis','data-arg="groups"')+GO('phoneoff','שיחות ממספרים לא מוכרים',q.silenceUnknown?'מושתקות':'מצלצלות','callspriv')+GO('mail','הודעות מחשבונות לא מוכרים',q.blockUnknown?'עוברות לבקשות הודעה':'מגיעות לרשימת הצ׳אטים','advanced')+GO('block','אנשי קשר חסומים',Object.keys(ST.blocked).length||'אין','blocked'))}
+  ${card('eye','שליטה על הפרטים האישיים שלך','מי רואה את התמונה, האודות, הטלפון, יום ההולדת ומתי היית מחובר/ת.',
+    GO('clock','נראה/תה לאחרונה ומחובר/ת',esc(lsLabel()),'vis','data-arg="lastSeen"')+GO('user','תמונת פרופיל',esc(visLabel('photo')),'vis','data-arg="photo"')+GO('info','אודות',esc(visLabel('about')),'vis','data-arg="about"')+GO('phone','מספר טלפון',esc(visLabel('phone')),'vis','data-arg="phone"')+GO('cake','יום הולדת',esc(visLabel('bday')),'vis','data-arg="bday"')+GO('status','סטטוס',esc(visLabel('status')),'vis','data-arg="status"'))}
+  ${card('lock','הגנה נוספת על הצ׳אטים','הודעות נעלמות, אישורי קריאה ונעילת צ׳אטים.',
+    GO('timer','טיימר ברירת מחדל',timerLabel(p.defaultTimer),'r:defaultTimer')+TG('אישורי קריאה','','privacy.readReceipts','check')+R('lock','נעילת צ׳אטים',lockedCount()+' צ׳אטים נעולים','openLocked'))}
+  ${card('key','הגנה נוספת על החשבון','נעילת האפליקציה, אימות דו־שלבי והגדרות מחמירות.',
+    GO('lock','נעילת אפליקציה',appLockLabel(),'applock')+GO('key','אימות דו־שלבי',S().account.twoStep?'מופעל':'כבוי','twostep')+GO('shield','הגדרות חשבון מחמירות',q.strict?'מופעלות':'כבויות','strict'))}`};
+}
+Object.assign(PAGES,{privacy:()=>pgPrivacy(),profile:()=>pgProfile(),applock:()=>pgAppLock(),callspriv:pgCallsPriv,liveloc:pgLiveLoc,advanced:pgAdvanced,strict:pgStrict,checkup:pgCheckup,requests:pgRequests});
+const __gp7=goPage;
+goPage=function(p,arg){
+  if(p==='vis')return push(()=>pgVis(arg),'vis_'+arg,true);
+  if(p==='visPick')return push(()=>pgVisPick(arg),'vp_'+arg,true);
+  return __gp7(p,arg);
+};
+
+/* ----- applying changes ----- */
+const PUBKEYS=['photo','about','links','phone','bday','lastSeen','online','groups','findByPhone','bdayNotify','bdayYear'];
+function privChanged(k,soft){
+  saveState();if(PUBKEYS.includes(k))persistSoon();else scheduleShare();
+  if(k==='status')setTimeout(syncStatusAud,200);
+  refresh();if(CUR)drawHead();
+  if(soft){const c=$('#vpcnt');if(c)c.textContent=vpCount(c.dataset.k,c.dataset.m)}
+  else drawPages();
+}
+function setVis(k,v,fromSheet){
+  pv()[VF[k].key]=v;
+  if(v==='except'||v==='only'){privChanged(k,true);if(fromSheet)closeSheet(true);goPage('visPick',k+':'+(v==='except'?'ex':'only'));return}
+  privChanged(k);
+}
+function pset(k,val){
+  const p=pv();
+  if(strictLocked(k)){drawPages();return}
+  if(k==='ipProtect'&&val&&!hasTurn()){toast('צריך להגדיר שרת TURN כדי להפעיל את האפשרות');drawPages();return}
+  p[k]=val;applySettings();
+  if(k==='camFx'&&CALL){CALL.fxOpen=false;setVideoOut(CALL);renderCall()}
+  if(k==='noLinkPreview'&&CUR)drawMsgs(true);
+  privChanged(k);
+}
+document.addEventListener('change',e=>{
+  const t=e.target;if(!t||!t.dataset)return;
+  if(t.dataset.vis){setVis(t.dataset.vis,t.value,!!t.dataset.sheet);return}
+  if(t.dataset.online){pv().onlineVis=t.value;privChanged('online');return}
+  if(t.dataset.pset){pset(t.dataset.pset,t.checked);return}
+  if(t.dataset.locka){pv().lockAfter=+t.value;saveState();drawPages();return}
+  if(t.dataset.vpick){const [k,mode]=t.dataset.vpick.split(':');const box=mode==='ex'?pv().ex:pv().only;const L=new Set(box[k]||[]);if(t.checked)L.add(t.value);else L.delete(t.value);box[k]=[...L];privChanged(k,true);return}
+});
+/* contacts or blocks changed: re-share */
+const contactsSig=()=>JSON.stringify([Object.keys((ST&&ST.contacts)||{}).sort(),Object.keys((ST&&ST.blocked)||{}).sort()]);
+let sig7=null;
+const __ss7=saveState;
+saveState=function(){__ss7();if(sig7===null||!READY)return;const s=contactsSig();if(s!==sig7){sig7=s;scheduleShare()}};
+function A7(){return{
+  meAvatar:()=>pickFile('image/*',f=>readImage(f,200,.75,u=>{writeProfile({photo:u});drawPages();drawNav();toast('תמונת הפרופיל עודכנה');photoVisSheet()})),
+  meBday:()=>bdaySheet(),meLinks:()=>linksSheet(),
+  bdayWish:el=>{const u=el.dataset.uid;Promise.resolve(dm(u)).then(()=>setTimeout(()=>{const t=$('#ctext');if(t&&!t.value){t.value='מזל טוב! 🎉🎂 ';t.dispatchEvent(new Event('input'));t.focus()}},350))},
+  bdayHide:el=>{(ST.bdayHide=ST.bdayHide||{})[el.dataset.uid]=dayKey();saveState();drawChatList()},
+  vpAll:el=>{const [k,mode]=String(el.dataset.arg).split(':');const {contacts,others}=vpCandidates(mode);const all=[...contacts,...others];const box=mode==='ex'?pv().ex:pv().only;const cur=listOf(k,mode);box[k]=cur.length>=all.length?[]:all;privChanged(k)},
+  strictToggle:()=>{if(pv().strict)strictOff();else strictOn()},
+  reqOk:el=>{pref(el.dataset.c).accepted=true;saveState();$('#reqbar')?.remove();refresh();toast('הצ׳אט הועבר לרשימת הצ׳אטים')},
+  addMember:el=>{const c=CH[el.dataset.c];peoplePicker('הוספת משתתף',u=>{if(!canAddMe(u)){groupInviteNote(c.id,[u]);return}const members=[...c.members,u];qw('chats/'+c.id,()=>db.doc('chats/'+c.id).update({members}));sendMsg(c.id,{type:'system',ev:'added',target:u});toast(pname(u)+' נוסף/ה')},c.members)},
+  sendGroupInvites:async el=>{const cid=el.dataset.c,c=CH[cid];const L=(el.dataset.u||'').split(',').filter(Boolean);closeSheet(true);const link=location.href.split('#')[0]+'#'+cid;
+    for(const u of L){try{const d=await ensureDirect(u);if(d)await sendMsg(d.id,{type:'text',text:`הזמנה להצטרף לקבוצה "${c?c.name:''}" ב־SpicyyChat: ${link}`})}catch(e){console.warn(e)}}
+    toast(L.length>1?'ההזמנות נשלחו':'ההזמנה נשלחה')},
+}}
+const __start7=start;
+start=function(){
+  __start7();sig7=contactsSig();
+  if(FULL)persistProfile();
+  BIO.avail().then(v=>{BIO_OK=v});
+  setTimeout(bdayCheck,2500);setInterval(bdayCheck,30*60000);
+};
+
 /* ================= event wiring ================= */
 const A={
   noop:()=>{},
@@ -2823,7 +3400,7 @@ const A={
   rsvp:el=>{const cid=CUR,mid=el.dataset.mid;writeMyST(cid,s=>{if(s.going[mid])delete s.going[mid];else s.going[mid]=true});RS[cid]=RS[cid]||{};RS[cid][ME]=clone(MYST[cid]);drawMsgs()},
   viewStatus:el=>openStatus(el.dataset.k),statusText:()=>statusText(),statusCam:()=>statusCam(),
   svClose:()=>closeSV(),
-  svDelete:()=>{const it=liveStatus(ME)[SV.ii];const items=liveStatus(ME).filter(s=>s!==it);STATUS[ME]={items};qw('status/'+ME,()=>db.doc('status/'+ME).set({items:clone(items)}));toast('הסטטוס נמחק');closeSV()},
+  svDelete:()=>{const it=liveStatus(ME)[SV.ii];const items=liveStatus(ME).filter(s=>s!==it);STATUS[ME]={items};qw('status/'+ME,()=>db.doc('status/'+ME).set(statusDoc(items)));toast('הסטטוס נמחק');closeSV()},
   svLike:async el=>{const c=await ensureDirect(el.dataset.k);if(c){sendMsg(c.id,{type:'text',text:'❤️',status:true});toast('❤️ נשלח')}},
   follow:el=>{const id=el.dataset.ch;if(ST.follows[id])delete ST.follows[id];else ST.follows[id]=true;saveState();toast(ST.follows[id]?'את/ה עוקב/ת אחרי הערוץ':'הפסקת לעקוב');if(stack.length)drawPages();if(TAB==='updates')drawSide()},
   chReact:el=>{const id=el.dataset.ch,pid=el.dataset.p;const cur=CHN[id]?.reacts?.[pid]?.[ME];SF=['❤️','👍','😂','😮','😢','🙏'].map(e=>()=>{closeSheet(true);const v=cur===e?'':e;CHN[id].reacts=CHN[id].reacts||{};CHN[id].reacts[pid]={...(CHN[id].reacts[pid]||{}),[ME]:v};qw('channels/'+id,()=>db.doc('channels/'+id).update({reacts:{[pid]:{[ME]:v}}}));drawPages()});
@@ -2900,6 +3477,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){if($('#menu'))closeMenu();else if($('#sheet'))closeSheet();else if($('#viewer')){SV?closeSV():$('#viewer').remove()}else if(stack.length)pop();else if(CUR&&innerWidth<900)closeChat()}
   if((e.key==='Enter'||e.key===' ')&&e.target.matches('.row[role="button"]')){e.preventDefault();e.target.click()}
 });
+Object.assign(A,A7());
 document.addEventListener('input',e=>{if(e.target.id==='q'){Q=e.target.value;drawChatList()}});
 document.addEventListener('change',e=>{
   const t=e.target;
@@ -2921,7 +3499,7 @@ document.addEventListener('contextmenu',e=>{const el=e.target.closest('[data-lp]
 function runLP(el){if(el.dataset.lp==='chat')chatRowMenu(el.dataset.id);else msgActions(el.dataset.mid)}
 document.addEventListener('visibilitychange',()=>{
   if(!READY)return;
-  if(document.hidden){setTyping(null);if(S().privacy.lastSeen)qw('profiles/'+ME,()=>db.doc('profiles/'+ME).update({lastSeen:Date.now()}))}
+  if(document.hidden){setTyping(null);touchLastSeen()}
   else markRead();
   presWrite();
 });
@@ -2934,7 +3512,7 @@ function onChats(s){
   if(!firstChats){
     for(const id in next){const c=next[id],o=CH[id];
       if(c.last&&c.last.by!==ME&&(!o||!o.last||o.last.t<c.last.t)&&!isBlocked(c.last.by)){
-        if(CUR!==id||document.hidden){banner(c);if(!isMuted(id)){beep(c.type==='group'?'group':'msg');vibrate();if(document.hidden&&!(c.type==='group'&&!S().notif.groups))sysNotify(chatMeta(c).name,S().notif.preview?((c.type==='group'?pshort(c.last.by)+': ':'')+(c.last.text||'')):'הודעה חדשה',{cid:id})}}
+        if((CUR!==id||document.hidden)&&!isRequest(c)){banner(c);if(!isMuted(id)){beep(c.type==='group'?'group':'msg');vibrate();if(document.hidden&&!(c.type==='group'&&!S().notif.groups))sysNotify(chatMeta(c).name,S().notif.preview?((c.type==='group'?pshort(c.last.by)+': ':'')+(c.last.text||'')):'הודעה חדשה',{cid:id})}}
         if(pref(id).archived&&!S().keepArchived){pref(id).archived=false;saveState()}
         if(pref(id).hiddenChat){delete pref(id).hiddenChat;saveState()}
       }
@@ -2951,9 +3529,9 @@ function onChats(s){
 }
 const dlvPending={};let lastCS=null;
 function subscribeAll(){
-  db.collection('profiles').onSnapshot(s=>{const n={};s.docs.forEach(d=>n[d.id]=d.data());P=n;refresh();if(CUR){drawHead()}},dbErr);
+  db.collection('profiles').onSnapshot(s=>{const n={};s.docs.forEach(d=>n[d.id]=d.data());PUB=n;P=mergeP();refresh();scheduleShare();if(CUR){drawHead()}},dbErr);
   db.collection('chats').where('members','array-contains',ME).onSnapshot(onChats,dbErr);
-  db.collection('status').onSnapshot(s=>{const n={};s.docs.forEach(d=>n[d.id]=d.data());STATUS=n;if(n[ME]&&!SV)STATUS[ME]=n[ME];refresh()},dbErr);
+  subscribeStatus();subscribeShared();
   db.collection('channels').onSnapshot(s=>{const n={};s.docs.forEach(d=>n[d.id]=d.data());CHN=n;refresh()},dbErr);
   db.collection('comms').where('members','array-contains',ME).onSnapshot(s=>{const n={};s.docs.forEach(d=>n[d.id]=d.data());COMM=n;refresh()},dbErr);
 }
@@ -2973,7 +3551,7 @@ window.addEventListener('hashchange',checkHashJoin);
 function start(){
   READY=true;$('#onb')?.remove();gate('none');
   drawNav();drawSide();$('#main').innerHTML=emptyMain();
-  if(S().privacy.lastSeen)qw('profiles/'+ME,()=>db.doc('profiles/'+ME).update({lastSeen:Date.now()}));
+  touchLastSeen();
   if(S().privacy.appLock&&S().privacy.pin)lockScreen();
   checkHashJoin();
 }
@@ -2999,6 +3577,7 @@ async function afterLogin(){
   ST.settings={...DEFAULTS(),...(ST.settings||{})};['notif','privacy','account','access'].forEach(k=>ST.settings[k]={...DEFAULTS()[k],...(ST.settings[k]||{})});
   applySettings();
   try{const p=await db.doc('profiles/'+ME).get();if(p.exists)P[ME]=p.data()}catch(e){}
+  await loadFull();
   for(const f of [subscribeAll,startPresence,listenIncoming,subscribeLog,registerSW]){try{f()}catch(e){console.error(f.name,e)}}
   gate('none');
   if(!P[ME]){drawNav();drawSide();$('#main').innerHTML=emptyMain();onboarding()}
