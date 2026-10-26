@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ChatUP</title>
+<title>SpicyyChat</title>
 <meta name="theme-color" content="#5B3FF5">
-<meta name="description" content="ChatUP: הודעות, שיחות קול ווידאו, קבוצות וסטטוסים">
+<meta name="description" content="SpicyyChat: הודעות, שיחות קול ווידאו, קבוצות וסטטוסים">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ChatUP">
+<meta name="apple-mobile-web-app-title" content="SpicyyChat">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}img{max-width:100%}[hidden]{display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -480,6 +480,12 @@ textarea.inp{height:auto;min-height:90px;padding:10px 14px;resize:vertical}
 .call .lv.mir{transform:scaleX(-1)}
 .cctl button.ans2{background:#0B8FB3}
 
+#spellbar{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;background:var(--panel);border-radius:16px;padding:6px 10px;margin-bottom:6px;box-shadow:var(--bshadow)}
+#spellbar .spw{flex:none;color:var(--muted);font-size:13.5px}
+#spellbar .spw s{color:var(--danger);text-decoration-thickness:2px}
+#spellbar .spc{flex:none;padding:6px 14px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:14.5px}
+#spellbar .ib{width:32px;height:32px;margin-inline-start:auto}
+.hero .lastseen{color:var(--muted);font-size:14px}.hero .lastseen.on{color:var(--ok);font-weight:700}
 .cbottom{margin-top:auto;position:relative;z-index:3;width:100%;display:flex;flex-direction:column;align-items:center;gap:12px}
 .cbottom .cctl{margin-top:0;gap:12px;padding:12px 14px;max-width:100%}
 .cbottom .cctl button{width:54px;height:54px;border-radius:18px}
@@ -684,7 +690,7 @@ const MYST={};       // my per-chat state doc
 let openUnsubs=[];
 let online=new Set(); const typing={};
 let firstChats=true;
-const DEFAULTS=()=>({theme:'system',wallpaper:'dots',fontSize:'m',enterSend:true,keepArchived:true,
+const DEFAULTS=()=>({theme:'system',wallpaper:'dots',spell:true,fontSize:'m',enterSend:true,keepArchived:true,
   notif:{show:true,sound:true,preview:true,groups:true,reactions:true,vibrate:true,system:false},
   privacy:{lastSeen:true,readReceipts:true,defaultTimer:0,appLock:false,pin:null},
   account:{twoStep:null,securityNotif:true,email:''},access:{contrast:false,anim:true}});
@@ -708,7 +714,7 @@ const S=()=>ST.settings;
 
 /* ================= people ================= */
 function prof(uid){return P[uid]||{}}
-function pname(uid){if(uid===ME)return 'את/ה';const c=ST?.contacts?.[uid];if(c&&c.name)return c.name;const p=P[uid];return p?.name?('~ '+p.name):'משתמש/ת ChatUP'}
+function pname(uid){if(uid===ME)return 'את/ה';const c=ST?.contacts?.[uid];if(c&&c.name)return c.name;const p=P[uid];return p?.name?('~ '+p.name):'משתמש/ת SpicyyChat'}
 function pshort(uid){return pname(uid).replace(/^~\s*/,'').split(' ')[0]}
 function pobj(uid){const p=prof(uid);return{name:uid===ME?(p.name||'אני'):pname(uid),photo:p.photo||null,color:p.color||colorFor(uid)}}
 const isBlocked=uid=>!!ST?.blocked?.[uid];
@@ -812,14 +818,14 @@ function gate(kind){
   $('#gate')?.remove();if(kind==='none')return;
   const el=document.createElement('div');el.className='gate';el.id='gate';
   const T={
-    loading:`<div class="spin"></div><p>מתחבר ל־ChatUP…</p>`,
-    nohost:`<p>לא הצלחנו לטעון את ChatUP. בדקו את החיבור לאינטרנט ורעננו את הדף.</p>`,
+    loading:`<div class="spin"></div><p>מתחבר ל־SpicyyChat…</p>`,
+    nohost:`<p>לא הצלחנו לטעון את SpicyyChat. בדקו את החיבור לאינטרנט ורעננו את הדף.</p>`,
     setup:`<p>האפליקציה עוד לא מחוברת לשרת. פתחו את הקובץ config.js והדביקו בו את פרטי פרויקט ה־Firebase (ראו מדריך ההתקנה).</p>`,
-    noaccess:`<p>אין לך עדיין גישה ל־ChatUP. בקשו מבעל/ת האפליקציה להזמין אותך (בתפריט השיתוף, עם הרשאת עריכה), ואז פתחו שוב את הקישור כשאתם מחוברים.</p>`,
-    readonly:`<p>יש לך הרשאת צפייה בלבד, ולכן אי אפשר לשלוח הודעות. בקשו מבעל/ת ChatUP לשנות את ההרשאה שלך לעריכה.</p>`,
-    revoked:`<p>הגישה שלך ל־ChatUP השתנתה. רעננו את הדף כדי להמשיך.</p>`,
+    noaccess:`<p>אין לך עדיין גישה ל־SpicyyChat. בקשו מבעל/ת האפליקציה להזמין אותך (בתפריט השיתוף, עם הרשאת עריכה), ואז פתחו שוב את הקישור כשאתם מחוברים.</p>`,
+    readonly:`<p>יש לך הרשאת צפייה בלבד, ולכן אי אפשר לשלוח הודעות. בקשו מבעל/ת SpicyyChat לשנות את ההרשאה שלך לעריכה.</p>`,
+    revoked:`<p>הגישה שלך ל־SpicyyChat השתנתה. רעננו את הדף כדי להמשיך.</p>`,
   };
-  el.innerHTML=`<div class="onbc"><div class="logo">Chat<b>UP</b></div>${T[kind]||''}</div>`;
+  el.innerHTML=`<div class="onbc"><div class="logo">Spicyy<b>Chat</b></div>${T[kind]||''}</div>`;
   $('#layers').appendChild(el);
 }
 
@@ -850,7 +856,7 @@ function liveBadge(){return `<span class="livedot ${ROOM_ON?'':'off'}" title="${
 /* ================= CHATS TAB ================= */
 const FILTERS=[['all','הכל'],['unread','לא נקראו'],['fav','מועדפים'],['groups','קבוצות']];
 function viewChats(){
-  return `<div class="shead"><div class="logo">Chat<b>UP</b></div><button class="ib" data-a="statusCam" aria-label="סטטוס עם תמונה">${ic('camera')}</button><button class="ib" data-a="mainMenu" aria-label="תפריט">${ic('more')}</button></div>
+  return `<div class="shead"><div class="logo">Spicyy<b>Chat</b></div><button class="ib" data-a="statusCam" aria-label="סטטוס עם תמונה">${ic('camera')}</button><button class="ib" data-a="mainMenu" aria-label="תפריט">${ic('more')}</button></div>
   <label class="search">${ic('search',18)}<input id="q" type="search" placeholder="חיפוש צ׳אטים ואנשים" value="${esc(Q)}" autocomplete="off" aria-label="חיפוש"></label>
   <div class="chips">${allFilters().map(([k,l])=>`<button class="chip ${F===k?'on':''}" data-a="filter" data-f="${esc(k)}">${esc(l)}</button>`).join('')}<button class="chip" data-a="newList" aria-label="רשימה חדשה">+</button></div>
   <div class="list" id="chatList"></div>
@@ -884,7 +890,7 @@ function drawChatList(){
     const cs=all.filter(c=>!pref(c.id).locked&&chatMeta(c).name.toLowerCase().includes(q));
     const ppl=Object.keys(P).filter(u=>u!==ME&&!all.some(c=>c.type==='direct'&&c.members.includes(u))&&((P[u].name||'').toLowerCase().includes(q)||(P[u].username||'').includes(q)||(q.length>=4&&digits(P[u].phone).includes(digits(q))&&digits(q))));
     if(cs.length)h+=`<div class="sec">צ׳אטים</div>`+cs.map(chatRow).join('');
-    if(ppl.length)h+=`<div class="sec">אנשים ב־ChatUP</div>`+ppl.map(u=>personRow(u)).join('');
+    if(ppl.length)h+=`<div class="sec">אנשים ב־SpicyyChat</div>`+ppl.map(u=>personRow(u)).join('');
     if(!h)h=`<div class="empty"><b>לא נמצאו תוצאות</b>חפשו לפי שם, @שם משתמש או מספר טלפון.</div>`;
     el.innerHTML=h;return;
   }
@@ -900,7 +906,7 @@ function drawChatList(){
   h+=L.map(chatRow).join('');
   if(!L.length){
     if(F==='all'){const others=Object.keys(P).filter(u=>u!==ME);
-      h+=`<div class="empty"><b>ברוכים הבאים ל־ChatUP 👋</b>${others.length?'אלה האנשים שכבר נמצאים כאן. בחרו מישהו כדי להתחיל לדבר.':'עוד אין כאן אנשים נוספים. הזמינו חברים כדי להתחיל לדבר.'}</div>${others.map(u=>personRow(u)).join('')}<div class="btns"><button class="btn ghost full" data-a="go" data-p="invite">הזמנת חברים</button></div>`;
+      h+=`<div class="empty"><b>ברוכים הבאים ל־SpicyyChat 👋</b>${others.length?'אלה האנשים שכבר נמצאים כאן. בחרו מישהו כדי להתחיל לדבר.':'עוד אין כאן אנשים נוספים. הזמינו חברים כדי להתחיל לדבר.'}</div>${others.map(u=>personRow(u)).join('')}<div class="btns"><button class="btn ghost full" data-a="go" data-p="invite">הזמנת חברים</button></div>`;
     } else if(F.startsWith('l:'))h+=`<div class="empty"><b>הרשימה ריקה</b>הוסיפו לה צ׳אטים.</div><div class="btns"><button class="btn ghost full" data-a="listEdit" data-id="${esc(F.slice(2))}">הוספת צ׳אטים לרשימה</button></div>`;
     else h+=`<div class="empty"><b>${F==='unread'?'אין הודעות שלא נקראו':F==='fav'?'עוד אין מועדפים':'עוד אין קבוצות'}</b>${F==='fav'?'לחיצה ארוכה על צ׳אט ← "הוספה למועדפים".':''}</div>`;
   }
@@ -942,7 +948,7 @@ function toggleLock(cid){
 }
 
 /* ================= CONVERSATION ================= */
-function emptyMain(){return `<div class="mainempty"><div class="mark">Chat<b>UP</b></div><p>בחרו צ׳אט מהרשימה או התחילו שיחה חדשה עם חבר, קבוצה או קהילה.</p><button class="btn" data-a="newChat">צ׳אט חדש</button><span class="lk">${liveBadge()}</span></div>`}
+function emptyMain(){return `<div class="mainempty"><div class="mark">Spicyy<b>Chat</b></div><p>בחרו צ׳אט מהרשימה או התחילו שיחה חדשה עם חבר, קבוצה או קהילה.</p><button class="btn" data-a="newChat">צ׳אט חדש</button><span class="lk">${liveBadge()}</span></div>`}
 function openChat(cid,mid){
   const c=CH[cid];if(!c)return;
   if(pref(cid).locked&&!unlocked){pinPad('הזינו את קוד הנעילה',S().privacy.pin,()=>{unlocked=true;openChat(cid,mid)});return}
@@ -984,7 +990,7 @@ function subtitle(c){
     const o=otherOf(c);if(o===ME)return['שמרו כאן הודעות, קישורים ותזכורות לעצמכם',''];
     if(isBlocked(o))return['',''];
     if(ty.length)return['מקליד/ה…','on'];if(isOnline(o))return['מחובר/ת','on'];
-    const p=prof(o);if(p.lastSeen&&p.showLast!==false&&S().privacy.lastSeen)return['נראה/תה לאחרונה '+(sameDay(p.lastSeen,Date.now())?'היום':dayLabel(p.lastSeen))+' ב־'+fmtTime(p.lastSeen),''];
+    {const ls=lastSeenText(o);if(ls)return[ls,'']}
     return['',''];
   }
   if(ty.length)return[pshort(ty[0])+' מקליד/ה…','on'];
@@ -1259,7 +1265,7 @@ function doAttach(k){
 function peoplePicker(title,cb,exclude=[]){
   const L=Object.keys(P).filter(u=>u!==ME&&!exclude.includes(u)).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));
   SF=L.map(u=>()=>{closeSheet(true);cb(u)});
-  openSheet(title,L.map((u,i)=>`<button class="row" data-a="sf" data-i="${i}">${av(pobj(u),42)}<span class="rm"><span class="rn">${esc(pname(u))}</span><span class="rp">${esc(prof(u).about||'')}</span></span></button>`).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b>הזמינו חברים ל־ChatUP.</div>');
+  openSheet(title,L.map((u,i)=>`<button class="row" data-a="sf" data-i="${i}">${av(pobj(u),42)}<span class="rm"><span class="rn">${esc(pname(u))}</span><span class="rp">${esc(prof(u).about||'')}</span></span></button>`).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b>הזמינו חברים ל־SpicyyChat.</div>');
 }
 function pollSheet(cid){
   openSheet('יצירת סקר',`<form id="pf"><div class="field"><label for="pq">שאלה</label><input class="inp" id="pq" maxlength="200" placeholder="שאלו שאלה" required></div><div class="field"><label>אפשרויות</label><div id="popts" style="display:flex;flex-direction:column;gap:8px"><input class="inp po" placeholder="+ הוספת אפשרות" maxlength="100"><input class="inp po" placeholder="+ הוספת אפשרות" maxlength="100"></div></div><label class="srow"><span class="stx"><b>אפשר לבחור כמה תשובות</b></span><input type="checkbox" class="sw" id="pmulti" checked></label><div class="btns"><button class="btn full">שליחה</button></div></form>`,d=>{
@@ -1338,13 +1344,13 @@ function viewSettings(){
   ${GO('data','אחסון ונתונים','ניצול אחסון לפי צ׳אט','storage')}
   ${GO('access','נגישות','ניגודיות מוגברת, אנימציות','access')}
   ${GO('starf','הודעות מסומנות בכוכב','','starred')}
-  ${R('download','התקנה במסך הבית','הוספת ChatUP כאפליקציה בטלפון','install')}
+  ${R('download','התקנה במסך הבית','הוספת SpicyyChat כאפליקציה בטלפון','install')}
   ${GO('laptop','מכשירים מקושרים','','linked')}
   <div class="gap"></div>
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">ChatUP · גרסה 4.4</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 5.0</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1356,7 +1362,7 @@ function pgProfile(){
   ${R('at','שם משתמש','@'+esc(me.username||''),'meUser')}
   ${R('phone','טלפון',me.phone?`<span dir="ltr">${esc(me.phone)}</span>`:'לא הוגדר','mePhone')}
   ${me.photo?R('trash','הסרת תמונת הפרופיל','','meAvatarDel','','danger'):''}
-  <p class="ptext">השם, התמונה ושם המשתמש גלויים לכל מי שמשתמש ב־ChatUP. כך חברים יכולים למצוא אותך.</p>`};
+  <p class="ptext">השם, התמונה ושם המשתמש גלויים לכל מי שמשתמש ב־SpicyyChat. כך חברים יכולים למצוא אותך.</p>`};
 }
 function pgAccount(){const a=S().account;return{title:'חשבון',body:`${TG('התראות אבטחה','הצגת התראה כשמישהו חדש מצטרף לצ׳אט','account.securityNotif','shield')}${GO('key','אימות דו־שלבי',a.twoStep?'מופעל':'כבוי','twostep')}${R('mail','אימייל החשבון',esc(fauth.currentUser?.email||''),'noop')}${(fauth.currentUser?.providerData||[]).some(p=>p.providerId==='password')?R('key','שינוי סיסמה','נשלח אליך קישור לאימייל','pwReset'):''}${R('trash','מחיקת החשבון','','go','data-p="delacc"','danger')}`}}
 function pgTwoStep(){const a=S().account;return{title:'אימות דו־שלבי',body:`<div class="hero">${ic('key',56)}<p>${a.twoStep?'אימות דו־שלבי מופעל. הקוד יידרש כדי למחוק את החשבון או לשנות את מספר הטלפון.':'הוסיפו קוד PIN בן 6 ספרות כדי להגן על פעולות רגישות בחשבון.'}</p></div><div class="btns">${a.twoStep?`<button class="btn ghost" data-a="set2step">שינוי קוד</button><button class="btn red" data-a="off2step">כיבוי</button>`:`<button class="btn full" data-a="set2step">הפעלה</button>`}</div>`}}
@@ -1378,21 +1384,21 @@ function pgPrivacy(){
   <p class="ptext">${ic('lock',13)} ההודעות, השיחות וההגדרות הפרטיות מוגנות בכללי אבטחה בשרת: רק חברי הצ׳אט יכולים לקרוא את ההודעות שלו.</p>`};
 }
 function pgBlocked(){const L=Object.keys(ST.blocked);return{title:'אנשי קשר חסומים',actions:`<button class="ib" data-a="blockAdd" aria-label="הוספה">${ic('userplus')}</button>`,body:L.length?L.map(u=>`<div class="row">${av(pobj(u),44)}<span class="rm"><span class="rn">${esc(pname(u))}</span></span><button class="flw" data-a="unblock" data-uid="${u}">ביטול חסימה</button></div>`).join(''):`<div class="empty"><b>אין אנשי קשר חסומים</b>הודעות מאנשים חסומים לא יוצגו ולא יגיעו אליך התראות מהם.</div>`}}
-function pgAppLock(){const p=S().privacy;return{title:'נעילת אפליקציה',body:`<div class="hero">${ic('lock',52)}<p>כשהאפשרות מופעלת, צריך להזין קוד כדי לפתוח את ChatUP במכשיר הזה.</p></div><label class="srow"><span class="stx"><b>נעילה עם קוד</b></span><input type="checkbox" class="sw" id="alk" ${p.appLock?'checked':''}></label>${p.pin?R('key','שינוי קוד הנעילה','','pinChange'):''}`,after:el=>$('#alk',el).addEventListener('change',e=>{if(e.target.checked){if(!p.pin)pinPad('יצירת קוד נעילה',null,x=>{p.pin=x;p.appLock=true;saveState();drawPages()},true,()=>drawPages());else{p.appLock=true;saveState();drawPages()}}else{p.appLock=false;saveState();drawPages()}})}}
-function pgChatsSet(){const s=S();return{title:'צ׳אטים',body:`<div class="plabel">תצוגה</div>${GO('sun','ערכת נושא',RADIOS.theme.lab[s.theme],'r:theme')}${GO('image','רקעים','ספורט, חלל, ים, טבע, נופים, סרטים או תמונה שלך','wallpaper')}${GO('palette','סגנון הודעות',esc((BSTYLES.find(b=>b[0]===(S().bstyle||'classic'))||['',''])[1]),'bstyle')}<div class="gap"></div><div class="plabel">הגדרות צ׳אט</div>${TG('מקש Enter שולח','Shift+Enter יורד שורה.','enterSend')}${GO('type','גודל גופן',RADIOS.fontSize.lab[s.fontSize],'r:fontSize')}<div class="gap"></div><div class="plabel">צ׳אטים בארכיון</div>${TG('השארת צ׳אטים בארכיון','צ׳אטים בארכיון יישארו שם גם כשתגיע הודעה חדשה','keepArchived')}<div class="gap"></div>${R('archive','העברת כל הצ׳אטים לארכיון','','archiveAll')}${R('copy','ייצוא הצ׳אט הפתוח','העתקת ההודעות כטקסט','exportCur')}${R('x','ניקוי כל הצ׳אטים','ההודעות יוסתרו אצלך בלבד','clearAll','','danger')}`}}
-function pgNotif(){return{title:'התראות',body:`${pushRow()}${TG('באנר בתוך האפליקציה','כשמגיעה הודעה בצ׳אט אחר','notif.show')}${TG('תצוגה מקדימה','הצגת תוכן ההודעה בהתראה','notif.preview')}<div class="gap"></div><div class="plabel">צלילים</div>${TG('צלילים','השמעת צלילים בהודעות ובשיחות','notif.sound')}${GO('bell','צליל הודעות',esc(toneName('msg')),'tone','data-arg="msg"')}${GO('users','צליל קבוצות',esc(toneName('group')),'tone','data-arg="group"')}${GO('phone','רינגטון לשיחות',esc(toneName('call')),'tone','data-arg="call"')}<div class="gap"></div><div class="plabel">הודעות</div>${TG('רטט','','notif.vibrate')}${TG('התראות מקבוצות','','notif.groups')}<p class="ptext">כשההתראות מופעלות, הודעות ושיחות נכנסות יופיעו בטלפון גם כש־ChatUP סגורה. צ׳אטים מושתקים ואנשים חסומים לא ישלחו התראות.</p><div class="btns"><button class="btn ghost full" data-a="testNotif">בדיקת התראה</button></div>`}}
-function pgStorage(){const L=Object.values(CH).map(c=>({c,size:JSON.stringify(c).length+(c.id===CUR?JSON.stringify(MS[c.id]?.docs||{}).length:0)})).sort((a,b)=>b.size-a.size);return{title:'אחסון ונתונים',body:`<p class="ptext">ההודעות נשמרות בשרת של ChatUP ולא תופסות מקום במכשיר. כאן אפשר לנקות צ׳אטים אצלך.</p>${L.map(({c})=>`<div class="row">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp num">${(c.sent?Object.values(c.sent).reduce((a,b)=>a+b,0):0)} הודעות</span></span><button class="flw" data-a="clearChatId" data-c="${c.id}">ניקוי</button></div>`).join('')}`}}
+function pgAppLock(){const p=S().privacy;return{title:'נעילת אפליקציה',body:`<div class="hero">${ic('lock',52)}<p>כשהאפשרות מופעלת, צריך להזין קוד כדי לפתוח את SpicyyChat במכשיר הזה.</p></div><label class="srow"><span class="stx"><b>נעילה עם קוד</b></span><input type="checkbox" class="sw" id="alk" ${p.appLock?'checked':''}></label>${p.pin?R('key','שינוי קוד הנעילה','','pinChange'):''}`,after:el=>$('#alk',el).addEventListener('change',e=>{if(e.target.checked){if(!p.pin)pinPad('יצירת קוד נעילה',null,x=>{p.pin=x;p.appLock=true;saveState();drawPages()},true,()=>drawPages());else{p.appLock=true;saveState();drawPages()}}else{p.appLock=false;saveState();drawPages()}})}}
+function pgChatsSet(){const s=S();return{title:'צ׳אטים',body:`<div class="plabel">תצוגה</div>${GO('sun','ערכת נושא',RADIOS.theme.lab[s.theme],'r:theme')}${GO('image','רקעים','ספורט, חלל, ים, טבע, נופים, סרטים או תמונה שלך','wallpaper')}${GO('palette','סגנון הודעות',esc((BSTYLES.find(b=>b[0]===(S().bstyle||'classic'))||['',''])[1]),'bstyle')}<div class="gap"></div><div class="plabel">הגדרות צ׳אט</div>${TG('מקש Enter שולח','Shift+Enter יורד שורה.','enterSend')}${TG('הצעות לתיקון שגיאות כתיב','בזמן הכתיבה תופיע הצעה לתקן מילים עם שגיאות כתיב','spell')}${GO('type','גודל גופן',RADIOS.fontSize.lab[s.fontSize],'r:fontSize')}<div class="gap"></div><div class="plabel">צ׳אטים בארכיון</div>${TG('השארת צ׳אטים בארכיון','צ׳אטים בארכיון יישארו שם גם כשתגיע הודעה חדשה','keepArchived')}<div class="gap"></div>${R('archive','העברת כל הצ׳אטים לארכיון','','archiveAll')}${R('copy','ייצוא הצ׳אט הפתוח','העתקת ההודעות כטקסט','exportCur')}${R('x','ניקוי כל הצ׳אטים','ההודעות יוסתרו אצלך בלבד','clearAll','','danger')}`}}
+function pgNotif(){return{title:'התראות',body:`${pushRow()}${TG('באנר בתוך האפליקציה','כשמגיעה הודעה בצ׳אט אחר','notif.show')}${TG('תצוגה מקדימה','הצגת תוכן ההודעה בהתראה','notif.preview')}<div class="gap"></div><div class="plabel">צלילים</div>${TG('צלילים','השמעת צלילים בהודעות ובשיחות','notif.sound')}${GO('bell','צליל הודעות',esc(toneName('msg')),'tone','data-arg="msg"')}${GO('users','צליל קבוצות',esc(toneName('group')),'tone','data-arg="group"')}${GO('phone','רינגטון לשיחות',esc(toneName('call')),'tone','data-arg="call"')}<div class="gap"></div><div class="plabel">הודעות</div>${TG('רטט','','notif.vibrate')}${TG('התראות מקבוצות','','notif.groups')}<p class="ptext">כשההתראות מופעלות, הודעות ושיחות נכנסות יופיעו בטלפון גם כש־SpicyyChat סגורה. צ׳אטים מושתקים ואנשים חסומים לא ישלחו התראות.</p><div class="btns"><button class="btn ghost full" data-a="testNotif">בדיקת התראה</button></div>`}}
+function pgStorage(){const L=Object.values(CH).map(c=>({c,size:JSON.stringify(c).length+(c.id===CUR?JSON.stringify(MS[c.id]?.docs||{}).length:0)})).sort((a,b)=>b.size-a.size);return{title:'אחסון ונתונים',body:`<p class="ptext">ההודעות נשמרות בשרת של SpicyyChat ולא תופסות מקום במכשיר. כאן אפשר לנקות צ׳אטים אצלך.</p>${L.map(({c})=>`<div class="row">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp num">${(c.sent?Object.values(c.sent).reduce((a,b)=>a+b,0):0)} הודעות</span></span><button class="flw" data-a="clearChatId" data-c="${c.id}">ניקוי</button></div>`).join('')}`}}
 function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מוגברת','הכהיית טקסט משני וקווים מפרידים','access.contrast','eye')}${TG('אנימציות','מעברים והנפשות','access.anim','refresh')}${GO('type','גודל גופן',RADIOS.fontSize.lab[S().fontSize],'r:fontSize')}`}}
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
-function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־ChatUP תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם, התמונה, שם המשתמש והסטטוסים גלויים לכל משתמשי ChatUP.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Chat<b>UP</b></div><p>גרסה 4.4 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 ChatUP</p></div>`}}
-function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־ChatUP! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־ChatUP · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
-function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־ChatUP',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
+function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם, התמונה, שם המשתמש והסטטוסים גלויים לכל משתמשי SpicyyChat.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 5.0 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
+function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
-function pgLinked(){return{title:'מכשירים מקושרים',body:`<div class="hero">${ic('laptop',60)}<p>ChatUP עובדת בכל מכשיר שבו נכנסים לאותו חשבון: טלפון, מחשב וטאבלט. ההודעות מסונכרנות אוטומטית.</p></div><div class="srow"><span class="sic">${ic('laptop')}</span><span class="stx"><b>המכשיר הזה</b><small>פעיל עכשיו</small></span></div>`}}
+function pgLinked(){return{title:'מכשירים מקושרים',body:`<div class="hero">${ic('laptop',60)}<p>SpicyyChat עובדת בכל מכשיר שבו נכנסים לאותו חשבון: טלפון, מחשב וטאבלט. ההודעות מסונכרנות אוטומטית.</p></div><div class="srow"><span class="sic">${ic('laptop')}</span><span class="stx"><b>המכשיר הזה</b><small>פעיל עכשיו</small></span></div>`}}
 function qrSVG(seed){let h=0;for(const c of seed)h=(h*131+c.charCodeAt(0))>>>0;const rand=()=>(h=(h*1103515245+12345)>>>0)/4294967296;const N=25;let r='';const finder=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#17152B"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#5B3FF5"/>`;for(let y=0;y<N;y++)for(let x=0;x<N;x++){const inF=(x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9);if(!inF&&rand()>.52)r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#17152B"/>`}return `<svg viewBox="0 0 ${N} ${N}" shape-rendering="crispEdges">${r}${finder(0,0)}${finder(N-7,0)}${finder(0,N-7)}</svg>`}
-function pgQR(){const me=prof(ME);return{title:'הכרטיס שלי',body:`<div class="hero">${meAv(72)}<h3>${esc(me.name||'')}</h3><p dir="ltr">@${esc(me.username||'')}</p></div><div class="qr">${qrSVG(ME)}</div><p class="ptext" style="text-align:center">חברים ב־ChatUP יכולים למצוא אותך בחיפוש לפי @${esc(me.username||'')}.</p>`}}
+function pgQR(){const me=prof(ME);return{title:'הכרטיס שלי',body:`<div class="hero">${meAv(72)}<h3>${esc(me.name||'')}</h3><p dir="ltr">@${esc(me.username||'')}</p></div><div class="qr">${qrSVG(ME)}</div><p class="ptext" style="text-align:center">חברים ב־SpicyyChat יכולים למצוא אותך בחיפוש לפי @${esc(me.username||'')}.</p>`}}
 function pgArchived(){const L=sortChats(Object.values(CH).filter(c=>pref(c.id).archived&&!pref(c.id).locked));return{title:'בארכיון',body:`<p class="ptext">${S().keepArchived?'הצ׳אטים יישארו בארכיון גם כשתגיע הודעה חדשה.':'צ׳אטים יוצאו מהארכיון כשתגיע הודעה חדשה.'}</p>`+(L.length?L.map(chatRow).join(''):`<div class="empty"><b>אין צ׳אטים בארכיון</b></div>`)}}
 
 /* ----- new chat / contacts / groups ----- */
@@ -1401,9 +1407,9 @@ function pgNewChat(){
   const others=Object.keys(P).filter(u=>u!==ME&&!ST.contacts[u]);
   return{title:'צ׳אט חדש',body:`${R('users','קבוצה חדשה','','go','data-p="newgroup"','accent')}${R('userplus','איש קשר חדש','לפי שם משתמש או מספר טלפון','go','data-p="addcontact"','accent')}${R('users','קהילה חדשה','','go','data-p="newcomm"','accent')}${R('megaphone','רשימת תפוצה חדשה','','newBroadcast','','accent')}${R('bookmark',esc(selfName()),'','dm','data-uid="'+ME+'"','accent')}
   ${contacts.length?`<div class="plabel">אנשי הקשר שלי · ${contacts.length}</div>`+contacts.map(u=>personRow(u)).join(''):''}
-  <div class="plabel">אנשים ב־ChatUP · ${others.length}</div>${others.map(u=>personRow(u)).join('')||'<p class="ptext">עוד אין אנשים נוספים. הזמינו חברים מהגדרות ← הזמנת חברים.</p>'}`};
+  <div class="plabel">אנשים ב־SpicyyChat · ${others.length}</div>${others.map(u=>personRow(u)).join('')||'<p class="ptext">עוד אין אנשים נוספים. הזמינו חברים מהגדרות ← הזמנת חברים.</p>'}`};
 }
-function pgAddContact(){return{title:'איש קשר חדש',body:`<form id="acf"><div class="field"><label for="acq">שם משתמש או מספר טלפון</label><input class="inp" id="acq" dir="ltr" placeholder="@username או 050-1234567" required></div><div class="field"><label for="acn">שם לשמירה (לא חובה)</label><input class="inp" id="acn" maxlength="40" placeholder="איך יופיע/תופיע אצלך"></div><div class="btns"><button class="btn full">חיפוש ושמירה</button></div></form><p class="ptext">אפשר להוסיף רק אנשים שכבר נכנסו ל־ChatUP ויצרו פרופיל.</p>`,after:el=>$('#acf',el).addEventListener('submit',e=>{
+function pgAddContact(){return{title:'איש קשר חדש',body:`<form id="acf"><div class="field"><label for="acq">שם משתמש או מספר טלפון</label><input class="inp" id="acq" dir="ltr" placeholder="@username או 050-1234567" required></div><div class="field"><label for="acn">שם לשמירה (לא חובה)</label><input class="inp" id="acn" maxlength="40" placeholder="איך יופיע/תופיע אצלך"></div><div class="btns"><button class="btn full">חיפוש ושמירה</button></div></form><p class="ptext">אפשר להוסיף רק אנשים שכבר נכנסו ל־SpicyyChat ויצרו פרופיל.</p>`,after:el=>$('#acf',el).addEventListener('submit',e=>{
   e.preventDefault();const q=$('#acq',el).value.trim().replace(/^@/,'').toLowerCase();const dq=digits(q);
   const u=Object.keys(P).find(x=>x!==ME&&((P[x].username||'')===q||(dq.length>=7&&digits(P[x].phone).endsWith(dq.slice(-9)))));
   if(!u){toast('לא נמצא משתמש. בדקו את שם המשתמש או המספר.');return}
@@ -1451,9 +1457,9 @@ function infoCommon(c){
   <label class="srow"><span class="sic">${ic('heart')}</span><span class="stx"><b>מועדפים</b></span><input type="checkbox" class="sw" data-chatset="fav" data-c="${c.id}" ${pr.fav?'checked':''}></label>`;
 }
 function pgContactInfo(u){
-  const p=prof(u);if(!P[u])return{title:'פרטי איש קשר',body:'<div class="empty"><b>המשתמש/ת כבר לא ב־ChatUP</b></div>'};
+  const p=prof(u);if(!P[u])return{title:'פרטי איש קשר',body:'<div class="empty"><b>המשתמש/ת כבר לא ב־SpicyyChat</b></div>'};
   const c=CH[dmId(u)];const groups=Object.values(CH).filter(g=>g.type==='group'&&g.members.includes(u)&&g.members.includes(ME));const saved=ST.contacts[u];
-  return{title:'פרטי איש קשר',actions:`<button class="ib" data-a="editContact" data-uid="${u}" aria-label="עריכת שם">${ic('edit')}</button>`,body:`<div class="hero">${av(pobj(u),120)}<h3>${esc(pname(u))}</h3>${saved?.name?`<p>~ ${esc(p.name||'')}</p>`:''}<p dir="ltr">@${esc(p.username||'')}${p.phone?' · '+esc(p.phone):''}</p>
+  return{title:'פרטי איש קשר',actions:`<button class="ib" data-a="editContact" data-uid="${u}" aria-label="עריכת שם">${ic('edit')}</button>`,body:`<div class="hero">${av(pobj(u),120)}<h3>${esc(pname(u))}</h3>${lastSeenText(u)?`<p class="lastseen ${isOnline(u)?'on':''}">${esc(lastSeenText(u))}</p>`:''}${saved?.name?`<p>~ ${esc(p.name||'')}</p>`:''}<p dir="ltr">@${esc(p.username||'')}${p.phone?' · '+esc(p.phone):''}</p>
   <div class="acts"><button class="hbtn" data-a="dm" data-uid="${u}">${ic('chat')}הודעה</button><button class="hbtn" data-a="callU" data-uid="${u}">${ic('phone')}שיחה</button><button class="hbtn" data-a="callU" data-uid="${u}" data-v="1">${ic('video')}וידאו</button><button class="hbtn" data-a="searchChatU" data-uid="${u}">${ic('search')}חיפוש</button></div></div>
   <div class="gap"></div><div class="srow"><span class="stx"><b>${esc(p.about||'—')}</b><small>אודות</small></span></div>
   ${saved?'':R('userplus','שמירה באנשי הקשר','','saveContact','data-uid="'+u+'"','accent')}
@@ -1560,7 +1566,7 @@ function closeSV(){if(SV)cancelAnimationFrame(SV.raf);SV=null;$('#viewer')?.remo
 const SBG=['#5B3FF5','#D93D44','#14935F','#D9840F','#0B8FB3','#BE185D','#17152B'];
 function statusText(){
   let bi=0;const el=document.createElement('div');el.className='viewer tcomp';el.id='viewer';el.style.background=SBG[0];
-  el.innerHTML=`<div class="vhead"><button class="ib" data-a="svClose" aria-label="סגירה">${ic('x')}</button><span style="flex:1"></span><button class="ib" id="sbgb" aria-label="החלפת צבע רקע">${ic('palette')}</button></div><div class="vbody"><textarea id="stt" maxlength="700" placeholder="כתבו סטטוס"></textarea></div><div class="vfoot"><span class="views" style="justify-content:flex-start">${ic('lock',14)} גלוי לכל המשתמשים ב־ChatUP · 24 שעות</span><button class="sendbtn" id="stsend" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></div>`;
+  el.innerHTML=`<div class="vhead"><button class="ib" data-a="svClose" aria-label="סגירה">${ic('x')}</button><span style="flex:1"></span><button class="ib" id="sbgb" aria-label="החלפת צבע רקע">${ic('palette')}</button></div><div class="vbody"><textarea id="stt" maxlength="700" placeholder="כתבו סטטוס"></textarea></div><div class="vfoot"><span class="views" style="justify-content:flex-start">${ic('lock',14)} גלוי לכל המשתמשים ב־SpicyyChat · 24 שעות</span><button class="sendbtn" id="stsend" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></div>`;
   $('#layers').appendChild(el);const ta=$('#stt',el);ta.focus();
   $('#sbgb',el).addEventListener('click',()=>{bi=(bi+1)%SBG.length;el.style.background=SBG[bi]});
   $('#stsend',el).addEventListener('click',()=>{const t=ta.value.trim();if(!t){ta.focus();return}postStatus({type:'text',text:t,bg:SBG[bi]});el.remove()});
@@ -1617,21 +1623,21 @@ function pinPad(title,expect,cb,create,onCancel){
 }
 function lockScreen(){
   const el=document.createElement('div');el.className='lock';el.id='lockscr';
-  el.innerHTML=`<div class="logo">Chat<b>UP</b></div>${ic('lock',40)}<p>ChatUP נעולה</p><button class="btn" id="unl">פתיחה</button>`;
-  $('#layers').appendChild(el);const ask=()=>pinPad('פתיחת ChatUP',S().privacy.pin,()=>el.remove());$('#unl',el).addEventListener('click',ask);ask();
+  el.innerHTML=`<div class="logo">Spicyy<b>Chat</b></div>${ic('lock',40)}<p>SpicyyChat נעולה</p><button class="btn" id="unl">פתיחה</button>`;
+  $('#layers').appendChild(el);const ask=()=>pinPad('פתיחת SpicyyChat',S().privacy.pin,()=>el.remove());$('#unl',el).addEventListener('click',ask);ask();
 }
 
 /* ================= onboarding ================= */
 async function onboarding(){
   let suggested='';try{suggested=(await user.name())||''}catch(e){}
   const el=document.createElement('div');el.className='onb';el.id='onb';
-  el.innerHTML=`<div class="onbc"><div class="logo">Chat<b>UP</b></div><p class="tag">הודעות, קבוצות, סטטוסים וערוצים. בזמן אמת.</p>
+  el.innerHTML=`<div class="onbc"><div class="logo">Spicyy<b>Chat</b></div><p class="tag">הודעות, קבוצות, סטטוסים וערוצים. בזמן אמת.</p>
   <form id="obf"><div class="hero" style="padding:0 0 6px"><button type="button" class="avedit" id="obph" aria-label="תמונת פרופיל"><span class="av" id="obav" style="width:88px;height:88px;background:var(--accent-soft);color:var(--accent)">${ic('camera',30)}</span></button></div>
   <div class="field"><label for="obn">השם שלך</label><input class="inp" id="obn" maxlength="40" required value="${esc(suggested)}" autocomplete="name"></div>
   <div class="field"><label for="obu">שם משתמש</label><input class="inp" id="obu" dir="ltr" maxlength="30" required placeholder="username" autocomplete="username"><small style="color:var(--muted)">כך חברים ימצאו אותך: אותיות באנגלית, ספרות, נקודה וקו תחתון.</small></div>
   <div class="field"><label for="obp">מספר טלפון (לא חובה)</label><input class="inp" id="obp" dir="ltr" inputmode="tel" placeholder="+972 50-123-4567" autocomplete="tel"><small style="color:var(--muted)">המספר יוצג בפרופיל שלך ויאפשר לחפש אותך לפי טלפון.</small></div>
   <div class="btns"><button class="btn full">יצירת פרופיל</button></div></form>
-  <p class="small">${ic('lock',12)} השם, התמונה ושם המשתמש גלויים למשתמשי ChatUP כדי שחברים יוכלו למצוא אותך.</p><div class="btns"><button class="btn ghost full" type="button" id="oblo">יציאה מהחשבון</button></div></div>`;
+  <p class="small">${ic('lock',12)} השם, התמונה ושם המשתמש גלויים למשתמשי SpicyyChat כדי שחברים יוכלו למצוא אותך.</p><div class="btns"><button class="btn ghost full" type="button" id="oblo">יציאה מהחשבון</button></div></div>`;
   $('#layers').appendChild(el);let photo=null;
   $('#oblo',el).addEventListener('click',()=>fauth.signOut().then(()=>location.reload()));
   $('#obph',el).addEventListener('click',()=>pickFile('image/*',f=>readImage(f,200,.75,u=>{photo=u;$('#obav',el).innerHTML=`<img src="${u}" alt="">`})));
@@ -1641,7 +1647,7 @@ async function onboarding(){
     if(!/^[a-z0-9._]{3,30}$/.test(un)){toast('שם משתמש: 3–30 תווים באנגלית, ספרות, נקודה או קו תחתון');return}
     const btn=$('#obf button.btn',el);btn.disabled=true;btn.textContent='יוצר…';
     if(!await claimUsername(un)){btn.disabled=false;btn.textContent='יצירת פרופיל';return}
-    const d={name,username:un,phone:ph,about:'זמין/ה ב־ChatUP',photo,color:colorFor(ME),created:Date.now(),lastSeen:Date.now()};
+    const d={name,username:un,phone:ph,about:'זמין/ה ב־SpicyyChat',photo,color:colorFor(ME),created:Date.now(),lastSeen:Date.now()};
     try{await db.doc('profiles/'+ME).set(d);canWriteChecked=true;P[ME]=d;el.remove();start()}
     catch(err){btn.disabled=false;btn.textContent='יצירת פרופיל';dbErr(err)}
   });
@@ -1721,9 +1727,9 @@ function sysNotify(title,body,data,opts={}){
 }
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e});
 function installApp(){
-  if(matchMedia('(display-mode: standalone)').matches||navigator.standalone){toast('ChatUP כבר מותקנת במכשיר הזה');return}
+  if(matchMedia('(display-mode: standalone)').matches||navigator.standalone){toast('SpicyyChat כבר מותקנת במכשיר הזה');return}
   if(deferredInstall){deferredInstall.prompt();deferredInstall=null;return}
-  if(/iphone|ipad|ipod/i.test(navigator.userAgent))openSheet('התקנה באייפון',`<ol class="ptext" style="color:var(--ink);font-size:15.5px;line-height:1.9;padding-inline-start:34px"><li>פתחו את ChatUP ב־Safari</li><li>לחצו על כפתור השיתוף (ריבוע עם חץ למעלה)</li><li>בחרו "הוספה למסך הבית"</li><li>לחצו "הוספה"</li></ol>`);
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent))openSheet('התקנה באייפון',`<ol class="ptext" style="color:var(--ink);font-size:15.5px;line-height:1.9;padding-inline-start:34px"><li>פתחו את SpicyyChat ב־Safari</li><li>לחצו על כפתור השיתוף (ריבוע עם חץ למעלה)</li><li>בחרו "הוספה למסך הבית"</li><li>לחצו "הוספה"</li></ol>`);
   else openSheet('התקנה',`<p class="ptext" style="font-size:15.5px;color:var(--ink)">בתפריט של Chrome (שלוש הנקודות) בחרו "התקנת אפליקציה" או "הוספה למסך הבית".</p>`);
 }
 
@@ -1944,7 +1950,7 @@ function renderCall(){
   const p=pobj(C.peer),live=C.state==='live',rv=live&&C.remoteVid,vidCall=C.camOn||C.remoteVid||(C.video&&!live);
   el.style.setProperty('--cc',p.color);el.classList.toggle('isvid',!!rv);
   el.innerHTML=`<video id="rv" class="rv" autoplay playsinline ${rv?'':'hidden'}></video><audio id="ra" autoplay></audio>
-  <div class="ctop"><span class="clabel">${ic('lock',13)} ${vidCall?'שיחת וידאו':'שיחה קולית'} · ChatUP</span><h2>${esc(p.name)}</h2><span class="cstat" id="cstat"></span></div>
+  <div class="ctop"><span class="clabel">${ic('lock',13)} ${vidCall?'שיחת וידאו':'שיחה קולית'} · SpicyyChat</span><h2>${esc(p.name)}</h2><span class="cstat" id="cstat"></span></div>
   <div class="cav ${live?'':'ring'}" ${rv?'hidden':''}>${av(p,128)}</div>
   ${C.state!=='ringing-in'&&C.camOn?`<video id="lv" class="lv ${C.facing==='user'?'mir':''}" autoplay playsinline muted></video>`:''}
   <div class="cbottom">${C.fxOpen&&C.camOn?FX.panel(C):''}
@@ -1983,7 +1989,7 @@ function authScreen(){
   gate('none');$('#auth')?.remove();
   const el=document.createElement('div');el.className='onb';el.id='auth';let mode='login';
   const draw=()=>{
-    el.innerHTML=`<div class="onbc"><div class="logo">Chat<b>UP</b></div><p class="tag">${mode==='login'?'כניסה לחשבון':mode==='signup'?'יצירת חשבון חדש':'איפוס סיסמה'}</p>
+    el.innerHTML=`<div class="onbc"><div class="logo">Spicyy<b>Chat</b></div><p class="tag">${mode==='login'?'כניסה לחשבון':mode==='signup'?'יצירת חשבון חדש':'איפוס סיסמה'}</p>
     ${mode!=='reset'?`<div class="btns"><button class="btn ghost full" id="gbtn" type="button">כניסה עם Google</button></div><p class="small" style="padding-top:0">או עם אימייל וסיסמה</p>`:''}
     <form id="af"><div class="field"><label for="ae">אימייל</label><input class="inp" id="ae" type="email" dir="ltr" required autocomplete="email"></div>
     ${mode!=='reset'?`<div class="field"><label for="ap">סיסמה</label><input class="inp" id="ap" type="password" dir="ltr" required minlength="6" autocomplete="${mode==='login'?'current-password':'new-password'}"></div>`:''}
@@ -2315,11 +2321,11 @@ async function pushPost(path,body){
 function pushNotify(cid,m){
   const c=CH[cid];if(!c||c.type==='broadcast')return;
   if(!(c.members||[]).some(u=>u!==ME))return;
-  const myName=prof(ME).name||'ChatUP';
+  const myName=prof(ME).name||'SpicyyChat';
   const group=c.type==='group';
   pushPost('/notify',{chat:cid,title:group?(c.name||'קבוצה'):myName,body:(group?myName+': ':'')+previewText(m)});
 }
-function pushCall(C){pushPost('/call',{call:C.id,title:prof(ME).name||'ChatUP'})}
+function pushCall(C){pushPost('/call',{call:C.id,title:prof(ME).name||'SpicyyChat'})}
 const __sendMsg=sendMsg;
 sendMsg=async function(cid,msg){const m=await __sendMsg(cid,msg);try{if(m&&m.type!=='system'&&!(m.type==='call'&&!m.missed))pushNotify(cid,m)}catch(e){}return m};
 const __start=start;
@@ -2332,7 +2338,7 @@ drawChatList=function(){
   const st=pushState();
   if((st==='off'||st==='ios')&&!ST.pushDismissed){
     const d=document.createElement('div');d.className='pushcard';
-    d.innerHTML=st==='ios'?`<b>${ic('bell',18)} התראות באייפון</b><span>כדי לקבל התראות כשהאפליקציה סגורה, התקינו את ChatUP למסך הבית דרך Safari ← שיתוף ← הוספה למסך הבית.</span><div class="pcb"><button class="btn ghost" data-a="pushLater">הבנתי</button></div>`:`<b>${ic('bell',18)} לא לפספס אף הודעה</b><span>הפעילו התראות כדי לקבל הודעות ושיחות גם כשהאפליקציה סגורה.</span><div class="pcb"><button class="btn ghost" data-a="pushLater">לא עכשיו</button><button class="btn" data-a="pushOn">הפעלה</button></div>`;
+    d.innerHTML=st==='ios'?`<b>${ic('bell',18)} התראות באייפון</b><span>כדי לקבל התראות כשהאפליקציה סגורה, התקינו את SpicyyChat למסך הבית דרך Safari ← שיתוף ← הוספה למסך הבית.</span><div class="pcb"><button class="btn ghost" data-a="pushLater">הבנתי</button></div>`:`<b>${ic('bell',18)} לא לפספס אף הודעה</b><span>הפעילו התראות כדי לקבל הודעות ושיחות גם כשהאפליקציה סגורה.</span><div class="pcb"><button class="btn ghost" data-a="pushLater">לא עכשיו</button><button class="btn" data-a="pushOn">הפעלה</button></div>`;
     el.prepend(d);
   }
 };
@@ -2452,13 +2458,13 @@ const FX={
     const u=Math.min(W,H)/360;ctx.save();
     if(s==='stadium'){
       ctx.fillStyle='rgba(10,40,20,.85)';ctx.fillRect(12*u,12*u,190*u,34*u);ctx.fillStyle='#e11d48';ctx.fillRect(12*u,12*u,40*u,34*u);
-      ctx.fillStyle='#fff';ctx.font=`700 ${15*u}px sans-serif`;ctx.textBaseline='middle';ctx.fillText('LIVE',17*u,29*u);ctx.fillText('ChatUP  1 : 0  ⚽',60*u,29*u);
+      ctx.fillStyle='#fff';ctx.font=`700 ${15*u}px sans-serif`;ctx.textBaseline='middle';ctx.fillText('LIVE',17*u,29*u);ctx.fillText('SpicyyChat  1 : 0  ⚽',60*u,29*u);
       const g=ctx.createLinearGradient(0,H-50*u,0,H);g.addColorStop(0,'rgba(22,107,44,0)');g.addColorStop(1,'rgba(22,107,44,.9)');ctx.fillStyle=g;ctx.fillRect(0,H-50*u,W,50*u);
       ctx.fillStyle='#fff';ctx.font=`700 ${13*u}px sans-serif`;ctx.fillText(`⏱ ${String(Math.floor(t/60)+1).padStart(2,'0')}'`,W-60*u,29*u);
     } else if(s==='news'){
       ctx.fillStyle='#b91c1c';ctx.fillRect(0,H-62*u,W,30*u);ctx.fillStyle='#111';ctx.fillRect(0,H-32*u,W,32*u);
       ctx.fillStyle='#fff';ctx.font=`800 ${16*u}px sans-serif`;ctx.textBaseline='middle';ctx.textAlign='right';ctx.fillText('מבזק · BREAKING NEWS',W-14*u,H-47*u);
-      ctx.font=`600 ${13*u}px sans-serif`;ctx.textAlign='left';const msg='ChatUP News · שידור חי מהשיחה · ';const x=W-((t*60*u)%(W*2));ctx.fillText(msg+msg,x,H-16*u);
+      ctx.font=`600 ${13*u}px sans-serif`;ctx.textAlign='left';const msg='SpicyyChat News · שידור חי מהשיחה · ';const x=W-((t*60*u)%(W*2));ctx.fillText(msg+msg,x,H-16*u);
     } else if(s==='cinema'){
       const bh=H*.12;ctx.fillStyle='#000';ctx.fillRect(0,0,W,bh);ctx.fillRect(0,H-bh,W,bh);
       ctx.fillStyle='#2a2a2a';for(let x=8;x<W;x+=26*u){ctx.fillRect(x,bh*.3,12*u,bh*.4);ctx.fillRect(x,H-bh*.7,12*u,bh*.4)}
@@ -2501,7 +2507,7 @@ function fxBgPhoto(){pickFile('image/*',f=>readImage(f,1280,.85,u=>{const k=rid(
 const N=n=>440*Math.pow(2,(n-69)/12); /* midi note -> Hz */
 /* each tone: list of [midi or Hz(if >200 treat as Hz), start(s), dur(s), wave, vol] */
 const TONES_MSG=[
-  ['chatup','ChatUP (ברירת מחדל)',[[78,0,.18,'sine',.5],[83,.12,.22,'sine',.5]]],
+  ['chatup','SpicyyChat (ברירת מחדל)',[[78,0,.18,'sine',.5],[83,.12,.22,'sine',.5]]],
   ['pop','פופ',[[84,0,.07,'sine',.6],[96,.05,.06,'sine',.4]]],
   ['bubble','בועה',[[72,0,.12,'sine',.5,'up'],[79,.1,.12,'sine',.4,'up']]],
   ['chime','פעמונים',[[88,0,.5,'triangle',.4],[93,.12,.6,'triangle',.35],[100,.24,.7,'triangle',.3]]],
@@ -2588,7 +2594,7 @@ function pgTone(kind){
   return{title:T[kind],body:`<p class="ptext">לחצו על ▶ כדי לשמוע. הבחירה נשמרת מיד.</p>
   ${row('none','ללא צליל')}
   <div class="srow tonerow"><label class="tonel"><input type="radio" class="radio" name="tone" data-tone="${kind}" value="custom" ${cur==='custom'?'checked':''}><span class="stx"><b>צליל מהקבצים שלי</b><small id="custName">${esc(Sound.names[kind]||'שיר או צליל מהטלפון')}</small></span></label><button class="ib" data-a="toneFile" data-k="${kind}" aria-label="בחירת קובץ">${ic('file',18)}</button>${cur==='custom'?`<button class="ib" data-a="tonePrev" data-k="${kind}" data-id="custom" aria-label="השמעה">${ic('play',18)}</button>`:''}</div>
-  <div class="plabel">צלילים של ChatUP</div>
+  <div class="plabel">צלילים של SpicyyChat</div>
   ${list.map(t=>row(t[0],t[1])).join('')}
   <p class="ptext">${ic('info',13)} הצליל שבוחרים כאן מושמע כשהאפליקציה פתוחה או ברקע. כשהאפליקציה סגורה לגמרי, הטלפון משמיע את צליל ההתראות הרגיל שלו.</p>`};
 }
@@ -2599,6 +2605,128 @@ document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset||!t.da
 });
 function toneFile(kind){pickFile('audio/*',async f=>{if(f.size>10*1048576){toast('הקובץ גדול מ־10MB. בחרו קטע קצר יותר.');return}try{await Sound.saveCustom(kind,f,f.name);Sound.names[kind]=f.name;S().sounds=S().sounds||{};S().sounds[kind]='custom';saveState();drawPages();toast('הצליל עודכן: '+f.name)}catch(e){toast('לא הצלחנו לשמור את הצליל')}})}
 
+/* ================= last seen text (used in chat header and contact info) ================= */
+function lastSeenText(u){
+  if(!u||u===ME||isBlocked(u))return '';
+  if(isOnline(u))return 'מחובר/ת עכשיו';
+  const p=prof(u);
+  if(!p.lastSeen||p.showLast===false||!S().privacy.lastSeen)return '';
+  const t=p.lastSeen,mins=Math.round((Date.now()-t)/60000);
+  if(mins<1)return 'נראה/תה לאחרונה ממש עכשיו';
+  if(mins<60)return `נראה/תה לאחרונה לפני ${mins===1?'דקה':mins+' דקות'}`;
+  return 'נראה/תה לאחרונה '+(sameDay(t,Date.now())?'היום':dayLabel(t))+' ב־'+fmtTime(t);
+}
+
+/* ================= spelling suggestions ================= */
+const HE_LETTERS='אבגדהוזחטיכלמנסעפצקרשתךםןףץ';
+const EN_LETTERS='abcdefghijklmnopqrstuvwxyz';
+const FINALS={'כ':'ך','מ':'ם','נ':'ן','פ':'ף','צ':'ץ'},UNFINAL={'ך':'כ','ם':'מ','ן':'נ','ף':'פ','ץ':'צ'};
+const PREFIX='ושהבכלמ';
+const Spell={
+  he:null,en:null,loading:null,failed:false,ignore:new Set(),memo:new Map(),
+  url:{he:'https://cdn.jsdelivr.net/gh/hermitdave/FrequencyWords@master/content/2018/he/he_50k.txt',en:'https://cdn.jsdelivr.net/gh/hermitdave/FrequencyWords@master/content/2018/en/en_50k.txt'},
+  enabled(){return S().spell!==false},
+  parse(txt){const m=new Map();for(const line of txt.split('\n')){const i=line.lastIndexOf(' ');if(i<1)continue;const w=line.slice(0,i).trim(),n=+line.slice(i+1);if(w&&n)m.set(w,n)}return m},
+  load(){
+    if(Spell.he||Spell.failed)return Promise.resolve(!!Spell.he);
+    if(Spell.loading)return Spell.loading;
+    Spell.loading=(async()=>{
+      const get=async u=>{const r=await fetch(u);if(!r.ok)throw new Error(r.status);return r.text()};
+      const [h,e]=await Promise.all([get(Spell.url.he),get(Spell.url.en).catch(()=>'')]);
+      Spell.he=Spell.parse(h);Spell.en=Spell.parse(e);return true;
+    })().catch(err=>{console.warn('spell',err);Spell.failed=true;return false});
+    return Spell.loading;
+  },
+  isHe(w){return /^[א-ת]+$/.test(w)},
+  personal(w){
+    if(Spell.ignore.has(w)||(ST.dict||[]).includes(w))return true;
+    for(const u in P){const n=(pname(u)+' '+(P[u].name||'')).toLowerCase();if(n.split(/\s+/).includes(w.toLowerCase()))return true}
+    return false;
+  },
+  knownHe(w){
+    const d=Spell.he;if(d.has(w))return true;
+    for(let i=1;i<=3&&i<w.length-1;i++){if(!PREFIX.includes(w[i-1]))break;const s=w.slice(i);if(d.has(s)&&s.length>=2)return true}
+    return false;
+  },
+  known(w){
+    if(Spell.personal(w))return true;
+    if(Spell.isHe(w))return Spell.knownHe(w);
+    const l=w.toLowerCase();return Spell.en.has(l);
+  },
+  edits1(w,abc){
+    const out=new Set();
+    for(let i=0;i<=w.length;i++){
+      const a=w.slice(0,i),b=w.slice(i);
+      if(b)out.add(a+b.slice(1));
+      if(b.length>1)out.add(a+b[1]+b[0]+b.slice(2));
+      for(const c of abc){if(b)out.add(a+c+b.slice(1));out.add(a+c+b)}
+    }
+    out.delete(w);return out;
+  },
+  freq(w){if(Spell.isHe(w)){let f=Spell.he.get(w)||0;if(!f){for(let i=1;i<=3&&i<w.length-1;i++){if(!PREFIX.includes(w[i-1]))break;const g=Spell.he.get(w.slice(i));if(g){f=g/3;break}}}return f}return Spell.en.get(w.toLowerCase())||0},
+  fixFinals(w){
+    if(!Spell.isHe(w))return w;
+    let s=[...w].map((c,i,a)=>i<a.length-1&&UNFINAL[c]?UNFINAL[c]:c);
+    const last=s[s.length-1];if(FINALS[last])s[s.length-1]=FINALS[last];
+    return s.join('');
+  },
+  suggest(w){
+    if(Spell.memo.has(w))return Spell.memo.get(w);
+    const he=Spell.isHe(w),abc=he?HE_LETTERS:EN_LETTERS,base=he?w:w.toLowerCase();
+    const score=new Map();
+    const add=(c,d)=>{if(c===base||c.length<1)return;const f=Spell.freq(c);if(!f)return;const s=d*1e9-f;if(!score.has(c)||score.get(c)>s)score.set(c,s)};
+    const ff=Spell.fixFinals(base);if(ff!==base)add(ff,0);
+    const e1=Spell.edits1(base,abc);for(const c of e1)add(Spell.fixFinals(c),1);
+    if(score.size===0&&base.length<=7){for(const c of e1)for(const c2 of Spell.edits1(c,abc))add(Spell.fixFinals(c2),2)}
+    let res=[...score.entries()].sort((a,b)=>a[1]-b[1]).map(x=>x[0]).slice(0,3);
+    if(!he&&w[0]===w[0].toUpperCase())res=res.map(r=>r[0].toUpperCase()+r.slice(1));
+    Spell.memo.set(w,res);if(Spell.memo.size>500)Spell.memo.clear();
+    return res;
+  },
+  /* find the last finished word that looks misspelled */
+  check(text){
+    const re=/[א-תa-zA-Z]+(?:['׳"״][א-תa-zA-Z]+)*/g;let m,found=null;
+    while((m=re.exec(text))){
+      const w=m[0],end=m.index+w.length;
+      if(end===text.length)continue;                 /* still typing this word */
+      if(/['׳"״]/.test(w)||w.length<2)continue;
+      if(!Spell.isHe(w)&&(w.length<3||/[A-Z].*[A-Z]/.test(w)))continue;
+      if(Spell.known(w))continue;
+      const sug=Spell.suggest(w);if(sug.length)found={w,start:m.index,end,sug};
+    }
+    return found;
+  },
+  timer:0,cur:null,
+  attach(){
+    const ta=$('#ctext');if(!ta||ta.dataset.spell)return;ta.dataset.spell='1';
+    ta.setAttribute('spellcheck','true');ta.setAttribute('lang','he');
+    const run=()=>{clearTimeout(Spell.timer);Spell.timer=setTimeout(async()=>{if(!Spell.enabled()){Spell.render(null);return}if(!(await Spell.load()))return;Spell.cur=Spell.check(ta.value);Spell.render(Spell.cur)},280)};
+    ta.addEventListener('input',run);ta.addEventListener('focus',()=>{Spell.load()},{once:true});
+  },
+  render(f){
+    let bar=$('#spellbar');
+    if(!f){bar&&bar.remove();return}
+    if(!bar){const comp=$('#composer');const row=comp&&$('.crow',comp);if(!row)return;bar=document.createElement('div');bar.id='spellbar';comp.insertBefore(bar,row)}
+    bar.innerHTML=`<span class="spw"><s>${esc(f.w)}</s> ←</span>${f.sug.map((s,i)=>`<button class="spc" data-a="spellFix" data-i="${i}">${esc(s)}</button>`).join('')}<button class="ib" data-a="spellIgnore" aria-label="השארת המילה כמו שהיא" title="השארת המילה">${ic('x',16)}</button>`;
+  },
+  apply(i){
+    const ta=$('#ctext'),f=Spell.cur;if(!ta||!f)return;
+    if(ta.value.slice(f.start,f.end)!==f.w){Spell.render(null);return}
+    const rep=f.sug[i];const pos=ta.selectionStart;
+    ta.value=ta.value.slice(0,f.start)+rep+ta.value.slice(f.end);
+    const np=pos>=f.end?pos+(rep.length-f.w.length):pos;ta.setSelectionRange(np,np);
+    ta.dispatchEvent(new Event('input'));ta.focus();
+  },
+  ignoreCur(){const f=Spell.cur;if(!f)return;Spell.ignore.add(f.w);ST.dict=[...(ST.dict||[]),f.w].slice(-500);saveState();Spell.cur=null;Spell.render(null);const ta=$('#ctext');if(ta)ta.dispatchEvent(new Event('input'))},
+};
+const __drawComposer=drawComposer;
+drawComposer=function(){__drawComposer();try{Spell.attach()}catch(e){}};
+const __sendText=sendText;
+sendText=function(){Spell.cur=null;Spell.render(null);return __sendText()};
+/* the app was renamed: update the old default "about" line once */
+const __start6=start;
+start=function(){__start6();setTimeout(()=>{const old='Chat'+'UP',a=prof(ME).about;if(a&&a.includes(old))writeProfile({about:a.split(old).join('SpicyyChat')})},3000)};
+
 /* ================= event wiring ================= */
 const A={
   noop:()=>{},
@@ -2608,6 +2736,8 @@ const A={
   filter:el=>{F=el.dataset.f;$$('.chip').forEach(c=>c.classList.toggle('on',c.dataset.f===F));drawChatList()},
   useFilter:el=>{F=el.dataset.f;setTab('chats')},
   newList:()=>createList(),
+  spellFix:el=>Spell.apply(+el.dataset.i),
+  spellIgnore:()=>Spell.ignoreCur(),
   pushToggle:async()=>{const st=pushState();
     if(st==='on'){askConfirm('לכבות התראות?','לא תקבל/י התראות על הודעות ושיחות כשהאפליקציה סגורה.','כיבוי',async()=>{await pushUnsubscribe();drawPages();toast('ההתראות כובו')},false);return}
     if(st==='off'){try{const r=await pushSubscribe(true);toast(r==='on'?'ההתראות הופעלו':r==='denied'?'ההתראות חסומות. אפשרו אותן בהגדרות הדפדפן.':'ההתראות לא הופעלו')}catch(e){console.warn(e);toast('לא הצלחנו להפעיל התראות. נסו שוב.')}drawPages();refresh();return}
@@ -2630,7 +2760,7 @@ const A={
   newChat:()=>goPage('newchat'),
   mainMenu:el=>openMenu(el,[
     {label:'קבוצה חדשה',icon:'users',fn:()=>goPage('newgroup')},{label:'קהילה חדשה',icon:'users',fn:()=>goPage('newcomm')},
-    {label:'רשימת תפוצה חדשה',icon:'megaphone',fn:newBroadcast},{label:'אנשים ב־ChatUP',icon:'user',fn:()=>goPage('people')},
+    {label:'רשימת תפוצה חדשה',icon:'megaphone',fn:newBroadcast},{label:'אנשים ב־SpicyyChat',icon:'user',fn:()=>goPage('people')},
     {label:'הודעות מסומנות בכוכב',icon:'star',fn:()=>goPage('starred')},
     {label:'סימון הכל כנקרא',icon:'check',fn:()=>{Object.values(CH).forEach(c=>{ST.reads[c.id]={...(c.sent||{})};pref(c.id).markUnread=false});saveState();refresh();toast('כל הצ׳אטים סומנו כנקראו')}},
     {label:'הגדרות',icon:'gear',fn:()=>setTab('settings')}]),
@@ -2668,13 +2798,13 @@ const A={
   tonePrev:el=>{const k=el.dataset.k,id=el.dataset.id;if(k==='call'){Sound.ringStart(id);setTimeout(()=>Sound.ringStop(),3500)}else Sound.play(k,id)},
   toneFile:el=>toneFile(el.dataset.k),
   callFlip:()=>flipCamera(),
-  newCall:()=>{const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));openSheet('שיחה חדשה',L.map(u=>`<div class="row">${av(pobj(u),42)}<span class="rm"><span class="rn">${esc(pname(u))}</span>${isOnline(u)?'<span class="rp">מחובר/ת</span>':''}</span><button class="ib" data-a="callC2" data-uid="${u}" aria-label="שיחה קולית">${ic('phone')}</button><button class="ib" data-a="callC2" data-uid="${u}" data-v="1" aria-label="שיחת וידאו">${ic('video')}</button></div>`).join('')||'<div class="empty"><b>עוד אין אנשים נוספים</b>הזמינו חברים ל־ChatUP.</div>')},
+  newCall:()=>{const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));openSheet('שיחה חדשה',L.map(u=>`<div class="row">${av(pobj(u),42)}<span class="rm"><span class="rn">${esc(pname(u))}</span>${isOnline(u)?'<span class="rp">מחובר/ת</span>':''}</span><button class="ib" data-a="callC2" data-uid="${u}" aria-label="שיחה קולית">${ic('phone')}</button><button class="ib" data-a="callC2" data-uid="${u}" data-v="1" aria-label="שיחת וידאו">${ic('video')}</button></div>`).join('')||'<div class="empty"><b>עוד אין אנשים נוספים</b>הזמינו חברים ל־SpicyyChat.</div>')},
   callC2:el=>{closeSheet(true);startCall(el.dataset.uid,!!el.dataset.v)},
   callsMenu:el=>openMenu(el,[{label:'ניקוי יומן השיחות',icon:'trash',danger:true,fn:()=>askConfirm('לנקות את יומן השיחות?','','ניקוי',()=>{LOG.forEach(l=>qw(`data/users/${ME}/state/log/${l.id}`,()=>db.doc(`data/users/${ME}/state/log/${l.id}`).delete()))})}]),
   install:()=>installApp(),
   logout:()=>askConfirm('לצאת מהחשבון?','תוכל/י להתחבר שוב בכל זמן.','יציאה',async()=>{try{await db.doc('presence/'+ME).set({t:Date.now(),on:false,typing:null})}catch(e){}await fauth.signOut();location.reload()},false),
   pwReset:()=>fauth.sendPasswordResetEmail(fauth.currentUser.email).then(()=>toast('שלחנו קישור לשינוי סיסמה לאימייל שלך'),authErr),
-  shareInvite:()=>{const me=prof(ME);navigator.share({title:'ChatUP',text:`בוא/י לדבר איתי ב־ChatUP! שם המשתמש שלי: @${me.username||''}`,url:location.href.split('#')[0]}).catch(()=>{})},
+  shareInvite:()=>{const me=prof(ME);navigator.share({title:'SpicyyChat',text:`בוא/י לדבר איתי ב־SpicyyChat! שם המשתמש שלי: @${me.username||''}`,url:location.href.split('#')[0]}).catch(()=>{})},
   emoji:()=>{const p=$('#emojiPanel');if(!p)return;if(!p.innerHTML)p.innerHTML=`<div class="emojis">${EMOJI.map(e=>`<button data-a="emojiPick" data-e="${e}" aria-label="${e}">${e}</button>`).join('')}</div>`;p.hidden=!p.hidden},
   emojiPick:el=>{const ta=$('#ctext');if(!ta)return;const s=ta.selectionStart??ta.value.length;ta.value=ta.value.slice(0,s)+el.dataset.e+ta.value.slice(ta.selectionEnd??s);ta.selectionStart=ta.selectionEnd=s+el.dataset.e.length;updSend();autosize()},
   attach:()=>attachSheet(),att:el=>doAttach(el.dataset.k),
@@ -2704,7 +2834,7 @@ const A={
   ngNext:()=>{const ids=$$('#ngl input:checked').map(i=>i.value);groupNameSheet(ids)},
   newBroadcast:()=>newBroadcast(),
   meName:()=>askText('השם שלך',prof(ME).name,v=>{writeProfile({name:v});drawPages();drawNav()},{max:40}),
-  meAbout:()=>{const opts=['זמין/ה ב־ChatUP','עסוק/ה','בעבודה','בפגישה','בדרכים','הסוללה עומדת להיגמר','לא יכול/ה לדבר, רק הודעות','בחדר כושר','ישן/ה'];SF=[()=>{closeSheet(true);askText('אודות',prof(ME).about,v=>{writeProfile({about:v});drawPages()},{max:139})},...opts.map(o=>()=>{closeSheet(true);writeProfile({about:o});drawPages()})];
+  meAbout:()=>{const opts=['זמין/ה ב־SpicyyChat','עסוק/ה','בעבודה','בפגישה','בדרכים','הסוללה עומדת להיגמר','לא יכול/ה לדבר, רק הודעות','בחדר כושר','ישן/ה'];SF=[()=>{closeSheet(true);askText('אודות',prof(ME).about,v=>{writeProfile({about:v});drawPages()},{max:139})},...opts.map(o=>()=>{closeSheet(true);writeProfile({about:o});drawPages()})];
     openSheet('אודות',`<button class="srow accent" data-a="sf" data-i="0"><span class="sic">${ic('edit')}</span><span class="stx"><b>${esc(prof(ME).about||'')}</b><small>עריכה</small></span></button><div class="plabel">בחירת אודות</div>${opts.map((o,i)=>`<button class="srow" data-a="sf" data-i="${i+1}"><span class="stx"><b>${o}</b></span>${prof(ME).about===o?ic('check'):''}</button>`).join('')}`)},
   meUser:()=>askText('שם משתמש',prof(ME).username,v=>{v=v.replace(/^@/,'').toLowerCase();if(!/^[a-z0-9._]{3,30}$/.test(v)){toast('3–30 תווים: אותיות באנגלית, ספרות, נקודה וקו תחתון');return}const old=prof(ME).username;claimUsername(v,old).then(ok=>{if(ok){writeProfile({username:v});drawPages()}})},{ltr:true,max:30}),
   mePhone:()=>askText('מספר טלפון',prof(ME).phone||'',v=>{writeProfile({phone:v});drawPages()},{ltr:true,max:24,allowEmpty:true,ph:'+972 50-123-4567',help:'השאירו ריק כדי להסיר את המספר מהפרופיל.'}),
@@ -2727,7 +2857,7 @@ const A={
   exportCur:()=>{if(!CUR){toast('פתחו קודם צ׳אט');return}copy(exportChat(CUR))},
   clearAll:()=>askConfirm('לנקות את כל הצ׳אטים?','ההודעות יוסתרו אצלך בלבד.','ניקוי',()=>{Object.keys(CH).forEach(k=>{pref(k).cleared=Date.now();ST.reads[k]={...(CH[k].sent||{})}});saveState();if(CUR)drawMsgs();refresh();toast('הצ׳אטים נוקו')}),
   clearChatId:el=>askConfirm('לנקות את הצ׳אט?','ההודעות יוסתרו אצלך בלבד.','ניקוי',()=>clearChat(el.dataset.c,false)),
-  testNotif:()=>{const L=$('#layers');$('.banner',L)?.remove();const d=document.createElement('div');d.className='banner';d.innerHTML=`${meAv(40)}<div class="rm"><b>ChatUP</b><span>זו התראת בדיקה 🔔</span></div>`;L.appendChild(d);setTimeout(()=>d.remove(),3500);beep();vibrate()},
+  testNotif:()=>{const L=$('#layers');$('.banner',L)?.remove();const d=document.createElement('div');d.className='banner';d.innerHTML=`${meAv(40)}<div class="rm"><b>SpicyyChat</b><span>זו התראת בדיקה 🔔</span></div>`;L.appendChild(d);setTimeout(()=>d.remove(),3500);beep();vibrate()},
   copyT:el=>copy(el.dataset.t),
   editContact:el=>{const u=el.dataset.uid;askText('שם באנשי הקשר',ST.contacts[u]?.name||prof(u).name||'',v=>{ST.contacts[u]={...(ST.contacts[u]||{added:Date.now()}),name:v};saveState();drawPages();refresh();if(CUR)drawHead()},{max:40,help:'השם הזה מוצג רק אצלך.'})},
   saveContact:el=>{const u=el.dataset.uid;ST.contacts[u]={name:'',added:Date.now()};saveState();drawPages();toast('נשמר/ה באנשי הקשר')},
@@ -2773,7 +2903,7 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('input',e=>{if(e.target.id==='q'){Q=e.target.value;drawChatList()}});
 document.addEventListener('change',e=>{
   const t=e.target;
-  if(t.dataset.set==='notif.system'&&t.checked){if(!('Notification' in window)){t.checked=false;toast('הדפדפן הזה לא תומך בהתראות. באייפון צריך קודם להתקין את ChatUP למסך הבית.');return}Notification.requestPermission().then(p=>{if(p!=='granted'){t.checked=false;setP('notif.system',false);saveState();toast('ההתראות חסומות. אפשר לאשר אותן בהגדרות הדפדפן.')}else{setP('notif.system',true);saveState();toast('התראות מערכת הופעלו')}});return}
+  if(t.dataset.set==='notif.system'&&t.checked){if(!('Notification' in window)){t.checked=false;toast('הדפדפן הזה לא תומך בהתראות. באייפון צריך קודם להתקין את SpicyyChat למסך הבית.');return}Notification.requestPermission().then(p=>{if(p!=='granted'){t.checked=false;setP('notif.system',false);saveState();toast('ההתראות חסומות. אפשר לאשר אותן בהגדרות הדפדפן.')}else{setP('notif.system',true);saveState();toast('התראות מערכת הופעלו')}});return}
   if(t.dataset.set){setP(t.dataset.set,t.checked);saveState();applySettings();if(t.dataset.set==='privacy.lastSeen')writeProfile({showLast:t.checked});if(CUR)drawMsgs();return}
   if(t.dataset.rset){let v=t.value;if(t.dataset.rset==='privacy.defaultTimer')v=+v;setP(t.dataset.rset,v);saveState();applySettings();if(CUR)buildChat();setTimeout(pop,180);return}
   if(t.dataset.chatset){const cid=t.dataset.c,k=t.dataset.chatset,pr=pref(cid);
@@ -2851,14 +2981,14 @@ const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r({c
 function dbProblem(code){
   gate('none');$('#gate')?.remove();
   const T={
-    'permission-denied':['כללי האבטחה חוסמים את הגישה','ב־Firebase: Firestore Database ← Rules. ודאו שהדבקתם את הכללים של ChatUP במקום מה שהיה שם, ולחצו Publish. אחרי דקה רעננו את הדף.'],
+    'permission-denied':['כללי האבטחה חוסמים את הגישה','ב־Firebase: Firestore Database ← Rules. ודאו שהדבקתם את הכללים של SpicyyChat במקום מה שהיה שם, ולחצו Publish. אחרי דקה רעננו את הדף.'],
     'not-found':['בסיס הנתונים לא נמצא','ב־Firebase: Firestore Database. אם מופיע כפתור Create database, צרו אותו (מזהה (default), production mode). אם יצרתם בסיס נתונים עם שם אחר, צרו גם אחד עם המזהה (default).'],
     'timeout':['אין תשובה מבסיס הנתונים','בדרך כלל זה אומר שבסיס הנתונים עוד לא נוצר, או שנוצר עם מזהה שאינו (default). בדקו ב־Firebase ← Firestore Database. אם הכול תקין, בדקו את החיבור לאינטרנט ורעננו.'],
     'unavailable':['אין תשובה מבסיס הנתונים','בדקו את החיבור לאינטרנט. אם הוא תקין, ודאו ב־Firebase ← Firestore Database שבסיס הנתונים נוצר.'],
   };
   const [t,d]=T[code]||['לא הצלחנו להתחבר לשרת','קוד השגיאה: '+code+'. שלחו אותו למי שהקים את האפליקציה.'];
   const el=document.createElement('div');el.className='gate';el.id='gate';
-  el.innerHTML=`<div class="onbc"><div class="logo">Chat<b>UP</b></div><h3 style="margin:8px 0">${esc(t)}</h3><p>${esc(d)}</p><p class="small" dir="ltr">${esc(String(code))}</p><div class="btns"><button class="btn" onclick="location.reload()">ניסיון חוזר</button><button class="btn ghost" id="gout">יציאה מהחשבון</button></div></div>`;
+  el.innerHTML=`<div class="onbc"><div class="logo">Spicyy<b>Chat</b></div><h3 style="margin:8px 0">${esc(t)}</h3><p>${esc(d)}</p><p class="small" dir="ltr">${esc(String(code))}</p><div class="btns"><button class="btn" onclick="location.reload()">ניסיון חוזר</button><button class="btn ghost" id="gout">יציאה מהחשבון</button></div></div>`;
   $('#layers').appendChild(el);$('#gout',el).onclick=()=>fauth.signOut().then(()=>location.reload());
 }
 async function afterLogin(){

@@ -1,5 +1,5 @@
-/* ChatUP service worker: newest files first, offline fallback, and notifications when the app is closed */
-const CACHE='chatup-v7';
+/* SpicyyChat service worker: newest files first, offline fallback, and notifications when the app is closed */
+const CACHE='chatup-v8';
 const SHELL=['./','./index.html','./config.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL.map(u=>new Request(u,{cache:'reload'})))).catch(()=>{}).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
@@ -13,7 +13,7 @@ self.addEventListener('push',e=>{
   e.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{
     if(d.t==='msg'&&list.some(c=>c.focused&&c.visibilityState==='visible'))return;
     const call=d.t==='call';
-    return self.registration.showNotification(d.title||'ChatUP',{
+    return self.registration.showNotification(d.title||'SpicyyChat',{
       body:d.body||'',tag:call?String(d.id):String(d.cid||'chatup'),renotify:true,
       icon:'./icon-192.png',badge:'./icon-192.png',lang:'he',dir:'rtl',
       vibrate:call?[600,300,600,300,600,300,600]:[120,60,120],
