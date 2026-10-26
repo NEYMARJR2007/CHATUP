@@ -580,6 +580,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .crfoot .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35)}
 .pvimg{flex:1;display:grid;place-items:center;padding:0 0 40px;min-height:0}.pvimg img{width:min(100vw,560px);max-height:100%;aspect-ratio:1;object-fit:cover}
 .avtap{padding:0;border-radius:34%;display:block}
+.steps{list-style:none;margin:0;padding:4px 16px 8px;display:flex;flex-direction:column;gap:12px}.steps li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.5}.stn{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
 .phopts{display:flex;justify-content:space-around;gap:8px;padding:8px 4px 4px}
 .phopt{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13.5px;font-weight:600;min-width:64px}
 .phic{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--accent);background:var(--panel2)}
@@ -1384,7 +1385,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 6.1</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 6.2</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1426,7 +1427,7 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 6.1 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 6.2 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -1733,16 +1734,20 @@ function hydrateMedia(root=document){
 }
 
 /* ================= presence (online + typing) ================= */
-let presT=0,myTyping=null,tyStop=0;
+let presT=0,presC=0,presSig='',PRES={},myTyping=null,tyStop=0;const PRES_TTL=75000;
 function presWrite(){if(!ME||!db)return;const d={t:Date.now(),on:!document.hidden,typing:myTyping||null,inCall:!!CALL};qw('presence/'+ME,()=>db.doc('presence/'+ME).set(d))}
 function startPresence(){
-  db.collection('presence').onSnapshot(s=>{
+  const compute=force=>{
     const on=new Set(),ty={},now=Date.now();
-    s.docs.forEach(d=>{const p=d.data();if(d.id===ME)return;if(p.on&&now-p.t<95000){on.add(d.id);if(p.typing&&now-p.t<20000)(ty[p.typing]=ty[p.typing]||new Set()).add(d.id)}});
+    for(const id in PRES){const p=PRES[id];if(id===ME)continue;if(p.on&&now-p.t<PRES_TTL){on.add(id);if(p.typing&&now-p.t<20000)(ty[p.typing]=ty[p.typing]||new Set()).add(id)}}
+    const sig=[...on].sort().join()+'|'+JSON.stringify(Object.fromEntries(Object.entries(ty).map(([k,v])=>[k,[...v].sort()])));
+    if(!force&&sig===presSig)return;presSig=sig;
     online=on;for(const k in typing)delete typing[k];Object.assign(typing,ty);ROOM_ON=true;
     if(CUR){drawHead();if(MS[CUR]?.loaded)drawMsgs()}refresh();
-  },dbErr);
-  presWrite();clearInterval(presT);presT=setInterval(()=>{if(!document.hidden)presWrite()},60000);
+  };
+  db.collection('presence').onSnapshot(s=>{const n={};s.docs.forEach(d=>{n[d.id]=d.data()});PRES=n;compute(true)},dbErr);
+  clearInterval(presC);presC=setInterval(()=>compute(false),10000);
+  presWrite();clearInterval(presT);presT=setInterval(()=>{if(!document.hidden)presWrite()},30000);
 }
 function setTyping(cid){
   clearTimeout(tyStop);
@@ -2631,7 +2636,7 @@ function pgTone(kind){
   <div class="srow tonerow"><label class="tonel"><input type="radio" class="radio" name="tone" data-tone="${kind}" value="custom" ${cur==='custom'?'checked':''}><span class="stx"><b>צליל מהקבצים שלי</b><small id="custName">${esc(Sound.names[kind]||'שיר או צליל מהטלפון')}</small></span></label><button class="ib" data-a="toneFile" data-k="${kind}" aria-label="בחירת קובץ">${ic('file',18)}</button>${cur==='custom'?`<button class="ib" data-a="tonePrev" data-k="${kind}" data-id="custom" aria-label="השמעה">${ic('play',18)}</button>`:''}</div>
   <div class="plabel">צלילים של SpicyyChat</div>
   ${list.map(t=>row(t[0],t[1])).join('')}
-  <p class="ptext">${ic('info',13)} הצליל שבוחרים כאן מושמע כשהאפליקציה פתוחה או ברקע. כשהאפליקציה סגורה לגמרי, הטלפון משמיע את צליל ההתראות הרגיל שלו.</p>`};
+  <p class="ptext">${ic('info',13)} הצליל שבוחרים כאן מושמע כשהאפליקציה פתוחה או ברקע.</p>${GO('bell','צליל כשהאפליקציה סגורה','רוצים לשמוע את הצליל הזה גם כשהאפליקציה סגורה? לחצו כאן','closedsound')}`};
 }
 document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset||!t.dataset.tone)return;const kind=t.dataset.tone,v=t.value;
   if(v==='custom'){Sound.getCustom(kind).then(c=>{if(!c){toneFile(kind);return}S().sounds=S().sounds||{};S().sounds[kind]='custom';saveState();if(kind==='call'){Sound.ringStart('custom');setTimeout(()=>Sound.ringStop(),4000)}else Sound.play(kind,'custom')});return}
@@ -3438,6 +3443,88 @@ A7=function(){return{...__A7(),
   phVis:()=>{closeSheet(true);photoVisSheet()},
   viewAv:el=>viewAvatar(el.dataset.uid),
 }};
+
+/* ================= go offline the moment the app leaves the screen ================= */
+/* Firestore's own connection can freeze with the page, so we also send a small direct request
+   (fetch with keepalive survives the page going to the background). */
+let ID_TOK=null,ID_TOK_T=0;
+function refreshTok(){try{const u=fauth&&fauth.currentUser;if(!u||!u.getIdToken)return;u.getIdToken().then(t=>{ID_TOK=t;ID_TOK_T=Date.now()}).catch(()=>{})}catch(e){}}
+function restPatch(path,fields){
+  if(!ID_TOK||Date.now()-ID_TOK_T>50*60000||!CFG.firebase||!CFG.firebase.projectId)return;
+  const qs=Object.keys(fields).map(k=>'updateMask.fieldPaths='+encodeURIComponent(k)).join('&');
+  const toVal=v=>typeof v==='boolean'?{booleanValue:v}:Number.isInteger(v)?{integerValue:String(v)}:v==null?{nullValue:null}:{stringValue:String(v)};
+  const body={fields:Object.fromEntries(Object.entries(fields).map(([k,v])=>[k,toVal(v)]))};
+  const url=`https://firestore.googleapis.com/v1/projects/${CFG.firebase.projectId}/databases/(default)/documents/${path}?${qs}`,o={method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+ID_TOK},body:JSON.stringify(body)};
+  const plain=()=>{try{fetch(url,o).catch(()=>{})}catch(e){}};
+  try{fetch(url,{...o,keepalive:true}).catch(plain)}catch(e){plain()}
+}
+function goOfflineNow(){
+  if(!READY||!ME)return;const now=Date.now();
+  restPatch('presence/'+ME,{on:false,t:now,typing:null});
+  try{if(pv().lastSeenVis==='all')restPatch('profiles/'+ME,{lastSeen:now})}catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)goOfflineNow();else refreshTok()});
+window.addEventListener('pagehide',goOfflineNow);
+document.addEventListener('freeze',goOfflineNow);
+const __start9=start;
+start=function(){__start9();refreshTok();setInterval(refreshTok,20*60000)};
+
+/* ================= use my SpicyyChat sounds when the app is closed ================= */
+/* A closed web app can't play its own sounds: Android plays the sound set for the app's
+   notifications. So we let people save the chosen tone as a sound file and pick it there. */
+async function renderTone(notes,secs){
+  const SR=44100,ac=new OfflineAudioContext(1,Math.ceil(SR*secs),SR);
+  for(const n of notes){
+    const [p,st,du,wave,vol,mod]=n;const f=p>200?p:N(p);
+    const o=ac.createOscillator(),g=ac.createGain();o.type=wave||'sine';o.frequency.setValueAtTime(f,st);
+    if(mod==='up')o.frequency.exponentialRampToValueAtTime(f*1.6,st+du);
+    if(mod==='down')o.frequency.exponentialRampToValueAtTime(f*.4,st+du);
+    if(mod==='vib'){const l=ac.createOscillator(),lg=ac.createGain();l.frequency.value=38;lg.gain.value=f*.06;l.connect(lg).connect(o.frequency);l.start(st);l.stop(st+du+.05)}
+    g.gain.setValueAtTime(0,st);g.gain.linearRampToValueAtTime(Math.min(.9,(vol||.4)*1.6),st+.012);g.gain.exponentialRampToValueAtTime(.0001,st+du);
+    o.connect(g).connect(ac.destination);o.start(st);o.stop(st+du+.05);
+  }
+  return ac.startRendering();
+}
+function wavBlob(buf){
+  const d=buf.getChannelData(0),n=d.length,ab=new ArrayBuffer(44+n*2),v=new DataView(ab);
+  let peak=0;for(let i=0;i<n;i++)peak=Math.max(peak,Math.abs(d[i]));const gain=peak>0?Math.min(4,.95/peak):1;
+  const w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};
+  w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,buf.sampleRate,true);v.setUint32(28,buf.sampleRate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+  for(let i=0;i<n;i++){const s=Math.max(-1,Math.min(1,d[i]*gain));v.setInt16(44+i*2,s<0?s*0x8000:s*0x7fff,true)}
+  return new Blob([ab],{type:'audio/wav'});
+}
+function saveBlob(blob,name){const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}
+async function toneBlob(kind){
+  const id=Sound.cfg()[kind];
+  if(id==='none')return null;
+  if(id==='custom'){const c=await Sound.getCustom(kind);return c?{blob:c.blob,name:c.name||('SpicyyChat-'+kind)}:null}
+  const ring=kind==='call',t=(ring?TONES_RING:TONES_MSG).find(x=>x[0]===id)||(ring?TONES_RING:TONES_MSG)[0];
+  let notes=t[2],end=Math.max(...notes.map(n=>n[1]+n[2]))+.3;
+  if(ring){const per=t[3]||2.4;notes=[0,1,2].flatMap(r=>t[2].map(n=>[n[0],n[1]+r*per,...n.slice(2)]));end=per*2+end}
+  const buf=await renderTone(notes,end);
+  return{blob:wavBlob(buf),name:`SpicyyChat-${ring?'ringtone':'message'}-${id}.wav`};
+}
+async function downloadTone(kind){
+  try{const r=await toneBlob(kind);if(!r){toast('לא נבחר צליל. בחרו צליל קודם.');return}saveBlob(r.blob,r.name);toast('הצליל נשמר בתיקיית ההורדות: '+r.name)}
+  catch(e){console.warn(e);toast('לא הצלחנו לשמור את הצליל')}
+}
+function pgClosedSound(){
+  const step=(n,t)=>`<li><span class="stn">${n}</span><span>${t}</span></li>`;
+  return{title:'צליל כשהאפליקציה סגורה',body:`<div class="hero">${ic('bell',52)}<p>כשהאפליקציה סגורה, הטלפון עצמו משמיע את ההתראה, ולכן נשמע הצליל הרגיל של סמסונג. אפשר לשמור את הצליל של SpicyyChat בטלפון ולבחור אותו פעם אחת בהגדרות של אנדרואיד.</p></div>
+  <div class="plabel">1. שמירת הצליל בטלפון</div>
+  ${R('download','שמירת צליל ההודעות',esc(toneName('msg')),'dlTone','data-k="msg"')}
+  ${R('download','שמירת הרינגטון לשיחות',esc(toneName('call')),'dlTone','data-k="call"')}
+  <div class="plabel">2. בחירת הצליל בהגדרות של הטלפון</div>
+  <ol class="steps">${step(1,'פותחים את <b>הגדרות</b> של הטלפון ← <b>אפליקציות</b> ← <b>SpicyyChat</b>.')}${step(2,'נכנסים ל<b>התראות</b> ← <b>קטגוריות התראות</b> (או לוחצים על סוג ההתראה).')}${step(3,'לוחצים על <b>צליל</b>, ואז על <b>+</b> או ״הוספה מהטלפון״.')}${step(4,'בוחרים מתיקיית <b>הורדות</b> את הקובץ שמתחיל ב־SpicyyChat.')}</ol>
+  <p class="ptext">${ic('info',13)} עושים את זה פעם אחת. אם תחליפו צליל ב־SpicyyChat, צריך לשמור אותו מחדש ולבחור אותו שוב בהגדרות הטלפון. כשהאפליקציה פתוחה, תמיד נשמע הצליל שבחרתם באפליקציה.</p>`};
+}
+PAGES.closedsound=pgClosedSound;
+const __pgn9=pgNotif;
+pgNotif=function(){const r=__pgn9();const i=r.body.indexOf('data-arg="call"');if(i>0){const e=r.body.indexOf('</button>',i)+9;r.body=r.body.slice(0,e)+GO('bell','צליל כשהאפליקציה סגורה','איך לשמוע את הצליל שלכם גם כשהאפליקציה סגורה','closedsound')+r.body.slice(e)}return r};
+PAGES.notif=()=>pgNotif();
+const __A9=A7;
+A7=function(){return{...__A9(),dlTone:el=>downloadTone(el.dataset.k)}};
 
 /* ================= event wiring ================= */
 const A={
