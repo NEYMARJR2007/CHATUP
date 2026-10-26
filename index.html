@@ -572,6 +572,21 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 #reqbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--panel2);border-top:1px solid var(--line);font-size:13px}#reqbar span{flex:1;display:flex;align-items:center;gap:6px;min-width:0}
 .lockbtns{display:flex;flex-direction:column;gap:10px;width:min(280px,100%)}.lockbtns .btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px}
 .nofx [data-a="callFx"]{display:none}
+.crop,.pview{position:fixed;inset:0;z-index:96;background:#000;color:#fff;display:flex;flex-direction:column}
+.crhead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 8px;padding-top:max(10px,env(safe-area-inset-top))}.crhead b{font-size:16px}.crhead .ib{color:#fff}
+.crstage{flex:1;position:relative;touch-action:none;overflow:hidden;min-height:0}.crstage canvas{position:absolute;inset:0;display:block;cursor:grab}
+.crfoot{padding:8px 16px max(16px,env(safe-area-inset-bottom))}.crhint{text-align:center;font-size:12.5px;opacity:.7;margin:0 0 8px}
+.crzoom{display:flex;align-items:center;gap:10px;opacity:.95}.crzoom input{flex:1;accent-color:#8571FF}
+.crfoot .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35)}
+.pvimg{flex:1;display:grid;place-items:center;padding:0 0 40px;min-height:0}.pvimg img{width:min(100vw,560px);max-height:100%;aspect-ratio:1;object-fit:cover}
+.avtap{padding:0;border-radius:34%;display:block}
+.phopts{display:flex;justify-content:space-around;gap:8px;padding:8px 4px 4px}
+.phopt{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13.5px;font-weight:600;min-width:64px}
+.phic{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--accent);background:var(--panel2)}
+.phopt.danger .phic{color:var(--danger)}.phvis{text-align:center;padding:6px 0 10px}
+.emprev{display:grid;place-items:center;padding:6px 0 4px}
+.emgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;padding:0 12px}.emb{font-size:26px;height:46px;border-radius:12px;background:var(--panel2)}.emb.on{outline:2px solid var(--accent)}
+.bggrid{display:flex;flex-wrap:wrap;gap:10px;padding:0 16px 8px}.bgb{width:34px;height:34px;border-radius:50%}.bgb.on{outline:3px solid var(--ink);outline-offset:2px}
 .who-tag{font-size:11px;font-weight:800;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 6px}
 </style>
 </head>
@@ -1369,7 +1384,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 6.0</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 6.1</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1411,7 +1426,7 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 6.0 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 6.1 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -1444,7 +1459,7 @@ async function createGroup(name,desc,photo,members,extra={}){
 function groupNameSheet(members,comm){
   let photo=null;
   openSheet(comm?'קבוצה חדשה בקהילה':'קבוצה חדשה',`<form id="gnf"><div class="hero" style="padding-top:4px"><button type="button" class="avedit" id="gph" aria-label="תמונת קבוצה"><span class="av" id="gpav" style="width:84px;height:84px;background:var(--accent-soft);color:var(--accent)">${ic('camera',30)}</span></button></div><div class="field"><label for="gn">שם הקבוצה</label><input class="inp" id="gn" maxlength="60" required></div><div class="field"><label for="gd">תיאור (לא חובה)</label><input class="inp" id="gd" maxlength="300"></div><p class="ptext">משתתפים: ${['את/ה',...members.map(pname)].map(esc).join(', ')}</p><div class="btns"><button class="btn full">יצירת הקבוצה</button></div></form>`,d=>{
-    $('#gph',d).addEventListener('click',()=>pickFile('image/*',f=>readImage(f,240,.75,u=>{photo=u;$('#gpav',d).innerHTML=`<img src="${u}" alt="">`})));
+    $('#gph',d).addEventListener('click',()=>pickFile('image/*',f=>cropPhoto(f,u=>{photo=u;$('#gpav',d).innerHTML=`<img src="${u}" alt="">`})));
     $('#gnf',d).addEventListener('submit',async e=>{e.preventDefault();const name=$('#gn',d).value.trim();if(!name)return;closeSheet(true);
       const id=await createGroup(name,$('#gd',d).value.trim(),photo,members,comm?{comm:comm.id}:{});
       if(comm){const groups=[...(comm.groups||[]),id];qw('comms/'+comm.id,()=>db.doc('comms/'+comm.id).update({groups}))}
@@ -1660,7 +1675,7 @@ async function onboarding(){
   <p class="small">${ic('lock',12)} השם ושם המשתמש גלויים למשתמשי SpicyyChat כדי שחברים יוכלו למצוא אותך. את שאר הפרטים אפשר להסתיר בהגדרות הפרטיות.</p><div class="btns"><button class="btn ghost full" type="button" id="oblo">יציאה מהחשבון</button></div></div>`;
   $('#layers').appendChild(el);let photo=null;
   $('#oblo',el).addEventListener('click',()=>fauth.signOut().then(()=>location.reload()));
-  $('#obph',el).addEventListener('click',()=>pickFile('image/*',f=>readImage(f,200,.75,u=>{photo=u;$('#obav',el).innerHTML=`<img src="${u}" alt="">`})));
+  $('#obph',el).addEventListener('click',()=>pickFile('image/*',f=>cropPhoto(f,u=>{photo=u;$('#obav',el).innerHTML=`<img src="${u}" alt="">`})));
   $('#obf',el).addEventListener('submit',async e=>{e.preventDefault();
     const name=$('#obn',el).value.trim(),un=$('#obu',el).value.trim().replace(/^@/,'').toLowerCase(),ph=$('#obp',el).value.trim();
     if(!name){$('#obn',el).focus();return}
@@ -3304,6 +3319,126 @@ start=function(){
   setTimeout(bdayCheck,2500);setInterval(bdayCheck,30*60000);
 };
 
+/* ================= profile photo: WhatsApp-style picker, crop & zoom, emoji avatar, full view ================= */
+const CROP_OUT=384;
+function cropPhoto(file,cb,o={}){
+  if(!file||!String(file.type||'').startsWith('image/')){toast('הקובץ שנבחר אינו תמונה');return}
+  const url=URL.createObjectURL(file);const img=new Image();
+  img.onload=()=>openCropper(img,u=>{URL.revokeObjectURL(url);cb(u)},()=>URL.revokeObjectURL(url),o);
+  img.onerror=()=>{URL.revokeObjectURL(url);toast('לא הצלחנו לפתוח את התמונה')};
+  img.src=url;
+}
+function roundRectPath(ctx,x,y,w,h,r){ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function openCropper(img,done,cancel,o={}){
+  closeSheet(true);$('#crop')?.remove();
+  const el=document.createElement('div');el.id='crop';el.className='crop';
+  el.innerHTML=`<div class="crhead"><button class="ib" data-cr="x" aria-label="ביטול">${ic('x')}</button><b>${esc(o.title||'הזזה ושינוי גודל')}</b><button class="ib" data-cr="rot" aria-label="סיבוב">${ic('refresh')}</button></div>
+  <div class="crstage"><canvas></canvas></div>
+  <div class="crfoot"><p class="crhint">גררו כדי להזיז · צבטו עם שתי אצבעות או השתמשו בפס כדי להגדיל</p>
+  <div class="crzoom"><span>${ic('image',16)}</span><input type="range" min="1" max="5" step="0.01" value="1" aria-label="הגדלה"><span>${ic('image',24)}</span></div>
+  <div class="btns"><button class="btn ghost" data-cr="x">ביטול</button><button class="btn" data-cr="ok">סיום</button></div></div>`;
+  $('#layers').appendChild(el);
+  const stage=$('.crstage',el),cv=$('canvas',el),ctx=cv.getContext('2d'),zr=$('input[type=range]',el);
+  const st={x:0,y:0,z:1,r:0};let W=0,H=0,D=0,dpr=1,raf=0;
+  const dims=()=>st.r%180?[img.height,img.width]:[img.width,img.height];
+  const scale=()=>{const [w,h]=dims();return D/Math.min(w,h)*st.z};
+  const clamp=()=>{const [w,h]=dims(),s=scale();const mx=Math.max(0,(w*s-D)/2),my=Math.max(0,(h*s-D)/2);st.x=Math.min(mx,Math.max(-mx,st.x));st.y=Math.min(my,Math.max(-my,st.y))};
+  const drawImg=(c,k)=>{c.save();c.translate(st.x*k,st.y*k);c.rotate(st.r*Math.PI/180);const s=scale()*k;c.scale(s,s);c.drawImage(img,-img.width/2,-img.height/2);c.restore()};
+  function draw(){
+    raf=0;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+    ctx.save();ctx.translate(W/2,H/2);drawImg(ctx,1);ctx.restore();
+    const x0=(W-D)/2,y0=(H-D)/2,rr=D*.34;
+    ctx.beginPath();ctx.rect(0,0,W,H);roundRectPath(ctx,x0,y0,D,D,rr);ctx.fillStyle='rgba(0,0,0,.62)';ctx.fill('evenodd');
+    ctx.beginPath();roundRectPath(ctx,x0,y0,D,D,rr);ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=2;ctx.stroke();
+  }
+  const req=()=>{if(!raf)raf=requestAnimationFrame(draw)};
+  function size(){const r=stage.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(3,window.devicePixelRatio||1);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);cv.style.width=W+'px';cv.style.height=H+'px';D=Math.max(120,Math.min(W,H)-40);clamp();req()}
+  const setZ=(z,cx=0,cy=0)=>{const old=st.z;st.z=Math.min(5,Math.max(1,z));const k=st.z/old;st.x=cx+(st.x-cx)*k;st.y=cy+(st.y-cy)*k;zr.value=st.z;clamp();req()};
+  const ptr=new Map();let last=null;
+  const rel=e=>{const r=stage.getBoundingClientRect();return[e.clientX-r.left-W/2,e.clientY-r.top-H/2]};
+  const pinch=()=>{const [a,b]=[...ptr.values()];return{d:Math.hypot(a[0]-b[0],a[1]-b[1]),m:[(a[0]+b[0])/2,(a[1]+b[1])/2]}};
+  stage.addEventListener('pointerdown',e=>{stage.setPointerCapture(e.pointerId);ptr.set(e.pointerId,rel(e));last=ptr.size===2?pinch():null;e.preventDefault()});
+  stage.addEventListener('pointermove',e=>{
+    if(!ptr.has(e.pointerId))return;const prev=ptr.get(e.pointerId),cur=rel(e);ptr.set(e.pointerId,cur);
+    if(ptr.size===1){st.x+=cur[0]-prev[0];st.y+=cur[1]-prev[1];clamp();req()}
+    else if(ptr.size===2){const p=pinch();if(last&&last.d>0){st.x+=p.m[0]-last.m[0];st.y+=p.m[1]-last.m[1];setZ(st.z*p.d/last.d,p.m[0],p.m[1])}last=p}
+  });
+  const up=e=>{ptr.delete(e.pointerId);last=ptr.size===2?pinch():null};
+  stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+  stage.addEventListener('wheel',e=>{e.preventDefault();const [cx,cy]=rel(e);setZ(st.z*Math.exp(-e.deltaY*.0015),cx,cy)},{passive:false});
+  stage.addEventListener('dblclick',e=>{const [cx,cy]=rel(e);setZ(st.z>1.5?1:2.2,cx,cy)});
+  zr.addEventListener('input',()=>setZ(+zr.value));
+  const ro=new ResizeObserver(size);ro.observe(stage);
+  const close=()=>{ro.disconnect();el.remove()};
+  el._cancel=()=>{close();cancel&&cancel()};
+  el.addEventListener('click',e=>{const b=e.target.closest('[data-cr]');if(!b)return;const k=b.dataset.cr;
+    if(k==='x')el._cancel();
+    else if(k==='rot'){st.r=(st.r+270)%360;const t=st.x;st.x=st.y;st.y=-t;clamp();req()}
+    else if(k==='ok'){
+      const out=document.createElement('canvas');out.width=out.height=CROP_OUT;const c=out.getContext('2d');
+      c.fillStyle='#fff';c.fillRect(0,0,CROP_OUT,CROP_OUT);c.imageSmoothingQuality='high';
+      c.translate(CROP_OUT/2,CROP_OUT/2);drawImg(c,CROP_OUT/D);
+      let u=out.toDataURL('image/jpeg',.84);if(u.length>160000)u=out.toDataURL('image/jpeg',.7);
+      close();done(u);
+    }
+  });
+  size();
+}
+/* back button closes the cropper / photo viewer */
+const __nl8=navLayers;
+navLayers=function(){const L=__nl8();if(!L.length&&($('#lockscr')||$('#onb')||$('#auth')||$('#gate'))&&!$('#crop'))return L;if($('#pview'))L.push('pview');if($('#crop'))L.push('crop');return L};
+const __ctl8=closeTopLayer;
+closeTopLayer=function(k){if(k==='crop'){const c=$('#crop');c&&c._cancel?c._cancel():c&&c.remove();return}if(k==='pview'){$('#pview')?.remove();return}return __ctl8(k)};
+
+/* WhatsApp-style "profile photo" sheet */
+function photoSheet(){
+  const has=!!(FULL||prof(ME)).photo;
+  const opt=(icon,label,a,cls='')=>`<button class="phopt ${cls}" data-a="${a}"><span class="phic">${ic(icon,24)}</span><span>${label}</span></button>`;
+  openSheet('תמונת פרופיל',`<div class="phopts">${opt('camera','מצלמה','phCam')}${opt('image','גלריה','phGal')}${opt('smile','אווטאר','phEmoji')}${has?opt('trash','הסרה','phDel','danger'):''}</div><div class="phvis"><button class="vischip" data-a="phVis">${ic('eye',14)} מי רואה את התמונה: ${esc(visLabel('photo'))}</button></div>`);
+}
+function setMyPhoto(u){writeProfile({photo:u});drawPages();drawNav();if(CUR)drawHead();toast('תמונת הפרופיל עודכנה');setTimeout(photoVisSheet,350)}
+function pickMyPhoto(capture){pickFile('image/*',f=>cropPhoto(f,setMyPhoto,{title:'תמונת פרופיל'}),capture?'user':undefined)}
+
+/* emoji avatar maker */
+const AV_EMOJI=['😎','🤩','😄','🥳','😇','🤠','🦁','🐯','🐼','🦊','🐶','🐱','🐵','🦄','🐸','🐙','⚽','🏀','🎮','🎧','🎸','🌶️','🔥','⭐','🌈','🌸','🍕','🚀','👑','💜'];
+const AV_BG=['#5B3FF5','#E11D48','#F59E0B','#10B981','#0EA5E9','#8B5CF6','#111827','#F472B6','#84CC16','#14B8A6'];
+function emojiAvatarSheet(){
+  let em=AV_EMOJI[0],bg=AV_BG[0];
+  const render=size=>{const cv=document.createElement('canvas');cv.width=cv.height=size;const c=cv.getContext('2d');const g=c.createLinearGradient(0,0,size,size);g.addColorStop(0,bg);g.addColorStop(1,shade(bg,-28));c.fillStyle=g;c.fillRect(0,0,size,size);c.textAlign='center';c.textBaseline='middle';c.font=`${Math.round(size*.56)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.fillText(em,size/2,size*.54);return cv};
+  openSheet('אווטאר',`<div class="emprev"></div><div class="plabel">אימוג׳י</div><div class="emgrid">${AV_EMOJI.map((e,i)=>`<button class="emb ${i?'':'on'}" data-em="${e}">${e}</button>`).join('')}</div><div class="plabel">צבע רקע</div><div class="bggrid">${AV_BG.map((c,i)=>`<button class="bgb ${i?'':'on'}" data-bg="${c}" style="background:${c}" aria-label="צבע ${i+1}"></button>`).join('')}</div><div class="btns"><button class="btn ghost" data-a="closeSheet">ביטול</button><button class="btn" id="emok">שימוש באווטאר</button></div>`,d=>{
+    const prev=$('.emprev',d);const upd=()=>{prev.innerHTML='';const cv=render(240);cv.style.cssText='width:120px;height:120px;border-radius:34%';prev.appendChild(cv)};upd();
+    d.addEventListener('click',e=>{const a=e.target.closest('[data-em]'),b=e.target.closest('[data-bg]');
+      if(a){em=a.dataset.em;$$('.emb',d).forEach(x=>x.classList.toggle('on',x===a));upd()}
+      if(b){bg=b.dataset.bg;$$('.bgb',d).forEach(x=>x.classList.toggle('on',x===b));upd()}});
+    $('#emok',d).addEventListener('click',()=>{const u=render(CROP_OUT).toDataURL('image/jpeg',.88);closeSheet(true);setMyPhoto(u)});
+  });
+}
+function shade(hex,p){const n=parseInt(hex.slice(1),16);const f=v=>Math.max(0,Math.min(255,Math.round(v+(p/100)*255)));return '#'+[f(n>>16),f((n>>8)&255),f(n&255)].map(v=>v.toString(16).padStart(2,'0')).join('')}
+
+/* full-screen profile photo view */
+function viewAvatar(u){
+  const p=u===ME?(FULL||prof(ME)):prof(u);if(!p.photo){if(u===ME)photoSheet();return}
+  $('#pview')?.remove();const el=document.createElement('div');el.id='pview';el.className='pview';
+  el.innerHTML=`<div class="crhead"><button class="ib" data-pv="x" aria-label="סגירה">${ic('back')}</button><b>${esc(u===ME?'תמונת פרופיל':pname(u))}</b>${u===ME?`<button class="ib" data-pv="edit" aria-label="עריכה">${ic('edit')}</button>`:'<span style="width:40px"></span>'}</div><div class="pvimg"><img src="${esc(p.photo)}" alt=""></div>`;
+  el.addEventListener('click',e=>{const b=e.target.closest('[data-pv]');if(!b)return;el.remove();if(b.dataset.pv==='edit')photoSheet()});
+  $('#layers').appendChild(el);
+}
+const __pgp8=pgProfile;
+pgProfile=function(){const r=__pgp8();r.body=r.body.replace(`<div class="avedit">${meAv(132)}`,`<div class="avedit"><button class="avtap" data-a="viewAv" data-uid="${ME}" aria-label="הצגת התמונה">${meAv(132)}</button>`);return r};
+const __pci8=pgContactInfo;
+pgContactInfo=function(u){const r=__pci8(u);if(!r||!P[u]||!prof(u).photo)return r;const a=av(pobj(u),120);r.body=r.body.replace(a,`<button class="avtap" data-a="viewAv" data-uid="${u}" aria-label="הצגת התמונה">${a}</button>`);return r};
+
+const __A7=A7;
+A7=function(){return{...__A7(),
+  meAvatar:()=>photoSheet(),
+  phCam:()=>{closeSheet(true);pickMyPhoto(true)},
+  phGal:()=>{closeSheet(true);pickMyPhoto(false)},
+  phEmoji:()=>{closeSheet(true);emojiAvatarSheet()},
+  phDel:()=>{closeSheet(true);askConfirm('להסיר את תמונת הפרופיל?','','הסרה',()=>{writeProfile({photo:null});drawPages();drawNav();toast('התמונה הוסרה')})},
+  phVis:()=>{closeSheet(true);photoVisSheet()},
+  viewAv:el=>viewAvatar(el.dataset.uid),
+}};
+
 /* ================= event wiring ================= */
 const A={
   noop:()=>{},
@@ -3447,7 +3582,7 @@ const A={
   disappear:el=>disappearSheet(CH[el.dataset.c]),
   editGroup:el=>{const c=CH[el.dataset.c];askText('שם הקבוצה',c.name,v=>{qw('chats/'+c.id,()=>db.doc('chats/'+c.id).update({name:v}));sendMsg(c.id,{type:'system',ev:'renamed',name:v})},{max:60})},
   editDesc:el=>{const c=CH[el.dataset.c];askText('תיאור הקבוצה',c.desc||'',v=>{qw('chats/'+c.id,()=>db.doc('chats/'+c.id).update({desc:v}));sendMsg(c.id,{type:'system',ev:'desc'})},{multi:true,max:500,allowEmpty:true})},
-  groupPhoto:el=>{const c=CH[el.dataset.c];pickFile('image/*',f=>readImage(f,240,.75,u=>{qw('chats/'+c.id,()=>db.doc('chats/'+c.id).update({photo:u}));sendMsg(c.id,{type:'system',ev:'photo'})}))},
+  groupPhoto:el=>{const c=CH[el.dataset.c];pickFile('image/*',f=>cropPhoto(f,u=>{qw('chats/'+c.id,()=>db.doc('chats/'+c.id).update({photo:u}));sendMsg(c.id,{type:'system',ev:'photo'})}))},
   addMember:el=>{const c=CH[el.dataset.c];peoplePicker('הוספת משתתף',u=>{const members=[...c.members,u];qw('chats/'+c.id,()=>db.doc('chats/'+c.id).update({members}));sendMsg(c.id,{type:'system',ev:'added',target:u});toast(pname(u)+' נוסף/ה')},c.members)},
   groupLink:el=>{const url=location.href.split('#')[0]+'#'+el.dataset.c;copy(url)},
   memberMenu:el=>{const c=CH[el.dataset.c],u=el.dataset.uid;if(u===ME){goPage('profile');return}const admin=isAdmin(c);const it=[{label:'שליחת הודעה ל'+esc(pshort(u)),icon:'chat',fn:()=>dm(u)},{label:'פרטי איש הקשר',icon:'info',fn:()=>goPage('contactinfo',u)}];
