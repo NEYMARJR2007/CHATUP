@@ -580,6 +580,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .crfoot .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35)}
 .pvimg{flex:1;display:grid;place-items:center;padding:0 0 40px;min-height:0}.pvimg img{width:min(100vw,560px);max-height:100%;aspect-ratio:1;object-fit:cover}
 .avtap{padding:0;border-radius:34%;display:block}
+.phhero{width:64px;height:64px;margin:14px auto 8px;border-radius:22px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}.phh{margin:4px 0 6px;font-size:19px;text-align:center;width:100%}.phf{text-align:start}.phrow{display:flex;gap:8px;direction:ltr}.phcc{display:grid;place-items:center;padding:0 12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);font-weight:700}.phrow .inp{flex:1;min-width:0}.otp{text-align:center;font-size:28px;letter-spacing:12px;font-weight:800}
 .steps{list-style:none;margin:0;padding:4px 16px 8px;display:flex;flex-direction:column;gap:12px}.steps li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.5}.stn{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
 .phopts{display:flex;justify-content:space-around;gap:8px;padding:8px 4px 4px}
 .phopt{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13.5px;font-weight:600;min-width:64px}
@@ -1385,7 +1386,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 6.3</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 7.0</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1427,7 +1428,7 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 6.3 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 7.0 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -3527,6 +3528,152 @@ PAGES.notif=()=>pgNotif();
 const __A9=A7;
 A7=function(){return{...__A9(),dlTone:el=>downloadTone(el.dataset.k)}};
 
+/* ================= sign in with phone number only (SMS code) ================= */
+Object.assign(AUTH_ERR,{
+  'auth/invalid-phone-number':'מספר הטלפון לא תקין. בדקו את המספר ונסו שוב.',
+  'auth/missing-phone-number':'הקלידו מספר טלפון',
+  'auth/invalid-verification-code':'הקוד שגוי. בדקו אותו ונסו שוב.',
+  'auth/missing-verification-code':'הקלידו את הקוד שקיבלתם ב־SMS',
+  'auth/code-expired':'תוקף הקוד פג. שלחו קוד חדש.',
+  'auth/session-expired':'תוקף הקוד פג. שלחו קוד חדש.',
+  'auth/too-many-requests':'יותר מדי ניסיונות מהמכשיר הזה. נסו שוב בעוד כמה שעות.',
+  'auth/quota-exceeded':'הגענו למכסת ה־SMS להיום. נסו שוב מחר.',
+  'auth/credential-already-in-use':'המספר הזה כבר מחובר לחשבון אחר ב־SpicyyChat.',
+  'auth/account-exists-with-different-credential':'המספר הזה כבר מחובר לחשבון אחר ב־SpicyyChat.',
+  'auth/provider-already-linked':'לחשבון הזה כבר מחובר מספר טלפון.',
+  'auth/operation-not-allowed':'הכניסה עם מספר טלפון עוד לא הופעלה ב־Firebase (Authentication ← Sign-in method ← Phone).',
+  'auth/billing-not-enabled':'כדי לשלוח SMS צריך לשדרג את Firebase לתוכנית Blaze.',
+  'auth/captcha-check-failed':'בדיקת האבטחה נכשלה. רעננו את הדף ונסו שוב.',
+  'auth/unauthorized-domain':'הכתובת של האפליקציה לא מאושרת ב־Firebase (Authentication ← Settings ← Authorized domains).',
+  'auth/network-request-failed':'אין חיבור לאינטרנט. בדקו את החיבור ונסו שוב.',
+  'auth/requires-recent-login':'מטעמי אבטחה צריך להיכנס מחדש עם קוד SMS ואז לנסות שוב.',
+});
+const COUNTRIES=[['972','ישראל 🇮🇱'],['1','ארה״ב / קנדה 🇺🇸'],['44','בריטניה 🇬🇧'],['33','צרפת 🇫🇷'],['49','גרמניה 🇩🇪'],['7','רוסיה 🇷🇺'],['380','אוקראינה 🇺🇦'],['251','אתיופיה 🇪🇹'],['54','ארגנטינה 🇦🇷'],['55','ברזיל 🇧🇷'],['39','איטליה 🇮🇹'],['34','ספרד 🇪🇸'],['31','הולנד 🇳🇱'],['971','איחוד האמירויות 🇦🇪'],['962','ירדן 🇯🇴'],['970','פלסטין 🇵🇸'],['20','מצרים 🇪🇬'],['90','טורקיה 🇹🇷'],['61','אוסטרליה 🇦🇺']];
+function toE164(cc,num){
+  const raw=String(num||'').trim();let d=digits(raw);if(!d)return '';
+  if(raw.startsWith('+'))return '+'+d;if(d.startsWith('00'))return '+'+d.slice(2);
+  if(d.startsWith(cc)&&d.length>cc.length+8)return '+'+d;
+  if(d.startsWith('0'))d=d.slice(1);return '+'+cc+d;
+}
+function prettyPhone(e){
+  e=String(e||'');const m=/^\+972(\d{2})(\d{3})(\d{4})$/.exec(e);if(m)return `+972 ${m[1]}-${m[2]}-${m[3]}`;
+  const u=/^\+1(\d{3})(\d{3})(\d{4})$/.exec(e);if(u)return `+1 ${u[1]}-${u[2]}-${u[3]}`;return e;
+}
+const hasPhoneAuth=()=>{const u=fauth&&fauth.currentUser;return !!(u&&(u.phoneNumber||(u.providerData||[]).some(p=>p&&p.providerId==='phone')))};
+
+let RCV=null;
+function recaptcha(){
+  if(RCV)return RCV;
+  $('#rcbox')?.remove();const c=document.createElement('div');c.id='rcbox';document.body.appendChild(c);
+  RCV=new firebase.auth.RecaptchaVerifier(c,{size:'invisible'});return RCV;
+}
+function resetRecaptcha(){try{RCV&&RCV.clear()}catch(e){}RCV=null;$('#rcbox')?.remove()}
+async function sendSmsCode(e164){
+  try{return await new firebase.auth.PhoneAuthProvider(fauth).verifyPhoneNumber(e164,recaptcha())}
+  catch(e){resetRecaptcha();throw e}
+}
+
+/* phone + code form. o: {title, sub, btn, onCred:async(cred,e164)=>{}, foot} */
+function phoneForm(host,o){
+  let step='num',cc='972',num='',e164='',vid=null,timer=0,left=0,busy=false;
+  const draw=()=>{
+    clearInterval(timer);
+    host.innerHTML=step==='num'?`<p class="tag">${o.sub||'הקלידו את מספר הטלפון שלכם. נשלח אליכם קוד ב־SMS.'}</p>
+      <form id="phf" class="phf"><div class="field"><label for="phc">מדינה</label><select class="inp" id="phc">${COUNTRIES.map(([c,n])=>`<option value="${c}" ${c===cc?'selected':''}>${n} (+${c})</option>`).join('')}</select></div>
+      <div class="field"><label for="phn">מספר טלפון</label><div class="phrow"><span class="phcc" dir="ltr">+${cc}</span><input class="inp" id="phn" type="tel" dir="ltr" inputmode="tel" autocomplete="tel-national" placeholder="050-123-4567" value="${esc(num)}" required></div></div>
+      <div class="btns"><button class="btn full" id="phgo">${o.btn||'שליחת קוד'}</button></div></form>${o.foot||''}`
+    :`<p class="tag">שלחנו קוד בן 6 ספרות ב־SMS למספר<br><b dir="ltr">${esc(prettyPhone(e164))}</b></p>
+      <form id="pcf" class="phf"><div class="field"><input class="inp otp" id="pco" type="text" dir="ltr" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="------" aria-label="הקוד מה־SMS" required></div>
+      <div class="btns"><button class="btn full" id="pcgo">אישור</button></div></form>
+      <p class="small"><button class="lnk" type="button" id="pcre" disabled>שליחה מחדש</button> · <button class="lnk" type="button" id="pcback">שינוי המספר</button></p>${o.foot||''}`;
+    if(step==='num'){
+      const sel=$('#phc',host),inp=$('#phn',host);
+      sel.onchange=()=>{cc=sel.value;$('.phcc',host).textContent='+'+cc};
+      $('#phf',host).onsubmit=async e=>{e.preventDefault();if(busy)return;num=inp.value;e164=toE164(cc,num);
+        if(!/^\+\d{8,15}$/.test(e164)){toast('מספר הטלפון לא תקין');inp.focus();return}
+        const b=$('#phgo',host);busy=true;b.disabled=true;b.textContent='שולח קוד…';
+        try{vid=await sendSmsCode(e164);step='code';left=60;draw()}catch(err){console.warn(err);authErr(err);b.disabled=false;b.textContent=o.btn||'שליחת קוד'}finally{busy=false}};
+      setTimeout(()=>inp.focus(),60);
+    }else{
+      const inp=$('#pco',host),re=$('#pcre',host);
+      const tick=()=>{left--;if(left<=0){clearInterval(timer);re.disabled=false;re.textContent='שליחה מחדש'}else re.textContent=`שליחה מחדש (${left})`};tick();timer=setInterval(tick,1000);
+      re.onclick=async()=>{re.disabled=true;try{vid=await sendSmsCode(e164);toast('נשלח קוד חדש');left=60;tick();clearInterval(timer);timer=setInterval(tick,1000)}catch(err){authErr(err);re.disabled=false}};
+      $('#pcback',host).onclick=()=>{step='num';draw()};
+      const submit=async()=>{const code=digits(inp.value);if(code.length!==6||busy)return;busy=true;const b=$('#pcgo',host);b.disabled=true;b.textContent='מאמת…';
+        try{const cred=firebase.auth.PhoneAuthProvider.credential(vid,code);await o.onCred(cred,e164);clearInterval(timer)}
+        catch(err){console.warn(err);authErr(err);inp.value='';inp.focus();b.disabled=false;b.textContent='אישור'}finally{busy=false}};
+      inp.addEventListener('input',()=>{inp.value=digits(inp.value).slice(0,6);if(inp.value.length===6)submit()});
+      $('#pcf',host).onsubmit=e=>{e.preventDefault();submit()};
+      setTimeout(()=>inp.focus(),60);
+    }
+  };
+  draw();
+  return{stop:()=>clearInterval(timer)};
+}
+
+/* login screen: phone only */
+authScreen=function(){
+  gate('none');$('#auth')?.remove();
+  const el=document.createElement('div');el.className='onb';el.id='auth';
+  el.innerHTML=`<div class="onbc"><div class="logo">Spicyy<b>Chat</b></div><div class="phhero">${ic('phone',34)}</div><h3 class="phh">כניסה עם מספר טלפון</h3><div id="phhost"></div></div>`;
+  $('#layers').appendChild(el);
+  phoneForm($('#phhost',el),{sub:'הקלידו את מספר הטלפון שלכם. נשלח אליכם קוד ב־SMS. אם כבר יש לכם חשבון, תיכנסו אליו.',
+    foot:`<p class="small">${ic('lock',12)} המספר משמש רק לכניסה ולמציאת חברים. מי רואה אותו נקבע בהגדרות הפרטיות.</p>`,
+    onCred:async cred=>{await fauth.signInWithCredential(cred);resetRecaptcha()}});
+};
+
+/* accounts made before: verify a phone once and link it, so the chats stay */
+function phoneLinkGate(){
+  return new Promise(res=>{
+    gate('none');$('#plink')?.remove();
+    const el=document.createElement('div');el.className='onb';el.id='plink';
+    el.innerHTML=`<div class="onbc"><div class="logo">Spicyy<b>Chat</b></div><div class="phhero">${ic('phone',34)}</div><h3 class="phh">אימות מספר טלפון</h3><p class="tag" style="margin-bottom:6px">מעכשיו נכנסים ל־SpicyyChat רק עם מספר טלפון. אמתו את המספר שלכם פעם אחת. החשבון, הצ׳אטים והאנשים שלכם יישארו בדיוק כמו שהם.</p><div id="plhost"></div><div class="btns"><button class="btn ghost full" type="button" id="plout">יציאה מהחשבון</button></div></div>`;
+    $('#layers').appendChild(el);
+    $('#plout',el).onclick=()=>fauth.signOut().then(()=>location.reload());
+    const old=digits(prof(ME).phone);const f=phoneForm($('#plhost',el),{sub:old?'בדקו שזה המספר שלכם ולחצו על שליחת קוד.':'',btn:'שליחת קוד',
+      onCred:async(cred,e164)=>{await fauth.currentUser.linkWithCredential(cred);resetRecaptcha();
+        if(FULL){FULL.phone=prettyPhone(e164)}if(P[ME])P[ME]={...P[ME],phone:prettyPhone(e164)};
+        f&&f.stop();el.remove();toast('המספר אומת. מעכשיו נכנסים עם הטלפון');res(true)}});
+    if(old){const i=$('#phn',el);if(i){const p=prof(ME).phone;i.value=String(p).replace(/^\+972\s?/,'0')}}
+  });
+}
+
+/* new profile: the verified number is filled in */
+const __onb10=onboarding;
+onboarding=async function(){
+  await __onb10();
+  const ph=fauth&&fauth.currentUser&&fauth.currentUser.phoneNumber,i=$('#obp');
+  if(i&&ph){i.value=prettyPhone(ph);i.readOnly=true;const l=$('label[for="obp"]');if(l)l.textContent='מספר הטלפון שלך ✓ מאומת'}
+};
+const __start10=start;
+start=function(){
+  __start10();
+  const ph=fauth&&fauth.currentUser&&fauth.currentUser.phoneNumber;
+  if(ph&&FULL&&phoneKey(FULL.phone)!==phoneKey(ph))setTimeout(()=>writeProfile({phone:prettyPhone(ph)}),1500);
+};
+
+/* change number: verify the new one */
+function changePhoneSheet(){
+  const go=()=>{
+    openSheet('שינוי מספר טלפון','<div id="cphost"></div>',d=>{
+      phoneForm($('#cphost',d),{sub:'הקלידו את המספר החדש. נשלח אליו קוד ב־SMS. החשבון והצ׳אטים יישארו.',btn:'שליחת קוד',
+        onCred:async(cred,e164)=>{await fauth.currentUser.updatePhoneNumber(cred);resetRecaptcha();closeSheet(true);writeProfile({phone:prettyPhone(e164)});drawPages();toast('מספר הטלפון עודכן')}});
+    },()=>resetRecaptcha());
+  };
+  const two=S().account.twoStep;
+  if(two)askText('קוד אימות דו־שלבי','',v=>{if(v===two)go();else toast('קוד שגוי')},{type:'password',ltr:true,max:6});else go();
+}
+pgAccount=function(){
+  const a=S().account,ph=(fauth&&fauth.currentUser&&fauth.currentUser.phoneNumber)||(FULL||prof(ME)).phone;
+  return{title:'חשבון',body:`${R('phone','מספר הטלפון של החשבון',ph?`<span dir="ltr">${esc(prettyPhone(ph))}</span>`:'לא מאומת','mePhone')}
+  ${TG('התראות אבטחה','הצגת התראה כשמישהו חדש מצטרף לצ׳אט','account.securityNotif','shield')}
+  ${GO('key','אימות דו־שלבי',a.twoStep?'מופעל':'כבוי','twostep')}
+  ${R('trash','מחיקת החשבון','','go','data-p="delacc"','danger')}`};
+};
+PAGES.account=()=>pgAccount();
+const __A10=A7;
+A7=function(){return{...__A10(),mePhone:()=>changePhoneSheet()}};
+
 /* ================= event wiring ================= */
 const A={
   noop:()=>{},
@@ -3801,6 +3948,7 @@ async function afterLogin(){
   applySettings();
   try{const p=await db.doc('profiles/'+ME).get();if(p.exists)P[ME]=p.data()}catch(e){}
   await loadFull();
+  if(!hasPhoneAuth()){gate('none');await phoneLinkGate()}
   for(const f of [subscribeAll,startPresence,listenIncoming,subscribeLog,registerSW]){try{f()}catch(e){console.error(f.name,e)}}
   gate('none');
   if(!P[ME]){drawNav();drawSide();$('#main').innerHTML=emptyMain();onboarding()}
