@@ -692,6 +692,35 @@ body.incall #app{padding-top:calc(36px + env(safe-area-inset-top,0px))}
 .ccall{display:flex;align-items:center;gap:6px;width:100%;padding:10px 16px 12px;color:var(--accent);font-weight:700;font-size:14px}
 .chero .av{border-radius:30%!important}
 .cempty svg{color:var(--accent);margin-bottom:6px}
+/* ---- camera ---- */
+.camx{position:fixed;inset:0;z-index:97;background:#000;color:#fff;display:flex;flex-direction:column}
+.camv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.camv.mir{transform:scaleX(-1)}
+.camtop{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top,0px)) 10px 10px;background:linear-gradient(180deg,rgba(0,0,0,.5),transparent)}.camtop .ib{color:#fff}.camtop b{font-size:16px}
+.camtime{background:#ff3b30;padding:4px 10px;border-radius:999px;font-weight:800;font-variant-numeric:tabular-nums}
+.cambot{position:relative;z-index:2;margin-top:auto;padding:12px 16px calc(20px + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,rgba(0,0,0,.6),transparent);display:flex;flex-direction:column;align-items:center;gap:12px}
+.cammode{display:flex;gap:6px;background:rgba(0,0,0,.45);padding:4px;border-radius:999px}.cammode button{color:#fff;padding:6px 14px;border-radius:999px;font-weight:700;font-size:14px}.cammode button.on{background:#fff;color:#111}
+.camrow{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:360px}
+.camgal,.camflip{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;color:#fff}
+.camshot{width:78px;height:78px;border-radius:50%;border:5px solid #fff;display:grid;place-items:center;touch-action:none}.camshot i{width:60px;height:60px;border-radius:50%;background:#fff;transition:all .2s}
+.camx.vmode .camshot i{background:#ff3b30}.camx.recording .camshot i{background:#ff3b30;width:30px;height:30px;border-radius:8px}.camx.recording .camshot{border-color:#ff3b30;transform:scale(1.12)}
+.camhint{margin:0;font-size:12.5px;opacity:.8}
+.newshort{background:var(--panel2);border:2px dashed var(--accent);color:var(--accent);display:grid;place-items:center}.newshort:after{display:none}.newshort .shcap{color:var(--accent);bottom:22px}
+.nsic{width:56px;height:56px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;margin-bottom:24px}
+/* ---- blue tick ---- */
+.vtick{display:inline-flex;vertical-align:-2px;margin-inline-start:4px;color:#1D9BF0}.vtick svg{stroke:none}
+/* ---- full-screen channel / community ---- */
+#pages.wide{inset-inline-end:0;width:auto}
+.xhead{gap:2px}.xwho{display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-align:start;padding:2px 4px;border-radius:12px}
+.xwho .rm{display:flex;flex-direction:column;min-width:0}.xwho b{font-size:16.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xwho small{color:var(--muted);font-size:12.5px}
+.pbody.chbody{padding-bottom:0;display:flex;flex-direction:column}
+.chwall{flex:1;min-height:100%;padding:8px 0 16px;overflow:visible!important}
+.chintro{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;margin:14px auto 10px;padding:16px 18px;max-width:320px;border-radius:20px;background:var(--panel);box-shadow:var(--bshadow)}
+.chintro b{font-size:17px;margin-top:6px}.chintro small{color:var(--muted)}.chintro p{margin:6px 0 0;font-size:14px;color:var(--ink)}
+.chfoot{flex:none;border-top:1px solid var(--line);background:var(--panel);padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))}
+.chfoot .chcomp{padding:0;position:static}.chfoot .btn{height:46px;display:flex;align-items:center;justify-content:center;gap:6px}
+.chfol{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13.5px}.chfol span{display:flex;align-items:center;gap:6px}
+.cmbody{padding-bottom:30px}
+.chwall .chpost{align-self:flex-start;margin-inline-start:12px;margin-inline-end:auto}
 .who-tag{font-size:11px;font-weight:800;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 6px}
 </style>
 </head>
@@ -1489,7 +1518,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 8.0</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 8.1</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1531,7 +1560,7 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 8.0 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 8.1 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -4267,6 +4296,223 @@ A7=function(){return{...__A14(),
     {label:'שינוי תיאור',icon:'info',fn:()=>askText('תיאור הקהילה',cm.desc||'',v=>{cm.desc=v;qw('comms/'+id,()=>db.doc('comms/'+id).update({desc:v}));drawPages()},{max:500,multi:true,allowEmpty:true})},
     {label:'קישור הזמנה',icon:'link',fn:()=>A.commInvite({dataset:{arg:id}})}]))},
 }};
+
+/* ================= v8.1: in-app camera, full-screen channels & communities, blue ticks, speaker ================= */
+IC.speaker='<path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/>';
+IC.ear='<path d="M6 8.5a6 6 0 0 1 12 0c0 3-2 4.5-3 6s-1 4-4 4a3 3 0 0 1-3-3"/><path d="M9 9a3 3 0 0 1 6 0c0 1.5-1.5 2-1.5 3.5"/>';
+IC.bolt='<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>';
+IC.vcheck='<path d="M12 1.8l2.4 1.9 3-.4 1.1 2.9 2.9 1.1-.4 3 1.9 2.4-1.9 2.4.4 3-2.9 1.1-1.1 2.9-3-.4L12 22.2l-2.4-1.9-3 .4-1.1-2.9-2.9-1.1.4-3L1.1 12l1.9-2.4-.4-3 2.9-1.1 1.1-2.9 3 .4z" fill="currentColor" stroke="none"/><path d="M7.8 12.3l2.8 2.8 5.6-5.6" stroke="#fff" stroke-width="2.4"/>';
+
+/* ---------------- 1. camera inside the app (photo with a tap, video while holding) ---------------- */
+let CAMX=null;
+async function openCam(onFile,{title='',allowVideo=true}={}){
+  if(CAMX)return;
+  const el=document.createElement('div');el.id='camx';el.className='camx';$('#layers').appendChild(el);
+  const st=CAMX={el,stream:null,facing:'environment',rec:null,chunks:[],t0:0,timer:0,mode:'photo',onFile,mic:null};
+  el.innerHTML=`<video class="camv" autoplay playsinline muted></video><div class="camtop"><button class="ib" data-cam="x" aria-label="סגירה">${ic('x',26)}</button><b>${esc(title)}</b><span class="camtime" hidden>0:00</span></div>
+  <div class="cambot">${allowVideo?`<div class="cammode"><button data-cam="m-photo" class="on">תמונה</button><button data-cam="m-video">וידאו</button></div>`:''}
+  <div class="camrow"><button class="camgal" data-cam="gal" aria-label="גלריה">${ic('image',26)}</button><button class="camshot" data-cam="shot" aria-label="צילום"><i></i></button><button class="camflip" data-cam="flip" aria-label="החלפת מצלמה">${ic('refresh',26)}</button></div>
+  <p class="camhint">${allowVideo?'הקשה לתמונה · החזקה לסרטון':'הקשה לצילום'}</p></div>`;
+  const v=$('.camv',el);
+  const start=async()=>{try{st.stream&&st.stream.getTracks().forEach(t=>t.stop())}catch(e){}
+    try{st.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:st.facing,width:{ideal:1280},height:{ideal:1280}},audio:false});v.srcObject=st.stream;v.classList.toggle('mir',st.facing==='user')}
+    catch(e){toast(e&&e.name==='NotAllowedError'?'צריך לאשר גישה למצלמה':'לא הצלחנו לפתוח את המצלמה');}};
+  await start();
+  const close=()=>{clearInterval(st.timer);try{st.stream&&st.stream.getTracks().forEach(t=>t.stop())}catch(e){}try{st.mic&&st.mic.getTracks().forEach(t=>t.stop())}catch(e){}el.remove();CAMX=null};
+  st.close=close;
+  const photo=()=>{if(!v.videoWidth)return;const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;const x=c.getContext('2d');if(st.facing==='user'){x.translate(c.width,0);x.scale(-1,1)}x.drawImage(v,0,0);
+    c.toBlob(b=>{if(!b)return;close();onFile(new File([b],'photo.jpg',{type:'image/jpeg'}))},'image/jpeg',.9)};
+  const recStart=async()=>{if(st.rec||!window.MediaRecorder)return;
+    try{st.mic=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}catch(e){st.mic=null}
+    const tracks=[...st.stream.getVideoTracks(),...(st.mic?st.mic.getAudioTracks():[])];
+    const types=['video/mp4;codecs=avc1,mp4a.40.2','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+    const mimeType=types.find(t=>MediaRecorder.isTypeSupported(t))||'';
+    st.chunks=[];st.rec=new MediaRecorder(new MediaStream(tracks),{mimeType,videoBitsPerSecond:1800000});
+    st.rec.ondataavailable=e=>{if(e.data&&e.data.size)st.chunks.push(e.data)};
+    st.rec.onstop=()=>{const b=new Blob(st.chunks,{type:(mimeType||'video/webm').split(';')[0]});close();if(b.size)onFile(new File([b],'video.'+(b.type.includes('mp4')?'mp4':'webm'),{type:b.type}))};
+    st.rec.start(500);st.t0=Date.now();el.classList.add('recording');const tm=$('.camtime',el);tm.hidden=false;
+    st.timer=setInterval(()=>{const s=Math.floor((Date.now()-st.t0)/1000);tm.textContent=fmtDur(s);if(s>=60)recStop()},250)};
+  const recStop=()=>{if(st.rec&&st.rec.state!=='inactive'){clearInterval(st.timer);st.rec.stop()}};
+  const shot=$('.camshot',el);let hold=0,held=false;
+  shot.addEventListener('pointerdown',e=>{e.preventDefault();held=false;if(st.mode==='video')return;if(allowVideo)hold=setTimeout(()=>{held=true;recStart()},350)});
+  shot.addEventListener('pointerup',()=>{clearTimeout(hold);if(st.mode==='video'){if(st.rec)recStop();else recStart();return}if(held)recStop();else photo()});
+  shot.addEventListener('pointerleave',()=>{clearTimeout(hold);if(held&&st.mode!=='video')recStop()});
+  el.addEventListener('click',e=>{const b=e.target.closest('[data-cam]');if(!b)return;const k=b.dataset.cam;
+    if(k==='x')close();
+    else if(k==='flip'){if(st.rec)return;st.facing=st.facing==='user'?'environment':'user';start()}
+    else if(k==='gal'){pickFile(allowVideo?'image/*,video/*':'image/*',f=>{close();onFile(f)})}
+    else if(k==='m-photo'||k==='m-video'){if(st.rec)return;st.mode=k.slice(2);$$('.cammode button',el).forEach(x=>x.classList.toggle('on',x===b));el.classList.toggle('vmode',st.mode==='video');$('.camhint',el).textContent=st.mode==='video'?'הקשה להתחלה ולעצירה · עד דקה':'הקשה לתמונה · החזקה לסרטון'}});
+}
+const __nl15=navLayers;
+navLayers=function(){const L=__nl15();if($('#camx'))L.push('camx');return L};
+const __ctl15=closeTopLayer;
+closeTopLayer=function(k){if(k==='camx'){CAMX&&CAMX.close();return}return __ctl15(k)};
+statusCam=function(){openCam(f=>{if(String(f.type).startsWith('video/'))statusVideo(f);else statusPhoto(f)},{title:'סטטוס'})};
+
+/* channel attachment through the camera, and "new short" */
+async function chAttachFlow(file,cb){
+  if(String(file.type).startsWith('video/')){const r=await uploadVideo(file,{maxSec:90},'מעלה סרטון');if(r)cb({vid:r.url,thumb:r.thumb,dur:r.dur})}
+  else storeImage(file,u=>cb({img:u}));
+}
+function postToChannel(id,post){
+  const ch=CHN[id];if(!ch)return;const p={id:rid(10),t:Date.now(),...post};
+  const posts=[...(ch.posts||[]),p].slice(-80);while(posts.length>1&&JSON.stringify(posts).length>800000)posts.shift();
+  ch.posts=posts;qw('channels/'+id,()=>db.doc('channels/'+id).update({posts:clone(posts)}));
+}
+function newShort(){
+  const mine=Object.entries(CHN).filter(([id,c])=>c.owner===ME);
+  if(!mine.length){askConfirm('צריך ערוץ כדי לפרסם שורטים','שורטים מתפרסמים בערוץ שלך, וכל מי שעוקב רואה אותם. ליצור ערוץ עכשיו?','יצירת ערוץ',()=>goPage('newchannel'),false);return}
+  const go=id=>openCam(async f=>{
+    const after=att=>{askText('כיתוב לשורט','',t=>{postToChannel(id,{text:t,...att});toast('השורט פורסם');if(TAB==='updates')drawSide();drawPages()},{ok:'פרסום',allowEmpty:true,max:300,ph:'מה רואים בסרטון? (לא חובה)'})};
+    chAttachFlow(f,after)},{title:'שורט חדש'});
+  if(mine.length===1)go(mine[0][0]);else sheetList('באיזה ערוץ לפרסם?',mine.map(([id,c])=>({label:esc(c.name),icon:'megaphone',fn:()=>{closeSheet(true);go(id)}})));
+}
+
+/* ---------------- 3. blue ticks (only the app admin can give them) ---------------- */
+let VER={u:{},c:{}},ADMIN=null;
+const isVer=uid=>!!(VER.u&&VER.u[uid]);
+const isVerCh=id=>!!(VER.c&&VER.c[id]);
+const isAdminMe=()=>!!ME&&ADMIN===ME;
+const vtick=(on,size=15)=>on?`<span class="vtick" title="חשבון מאומת" aria-label="חשבון מאומת">${ic('vcheck',size)}</span>`:'';
+function subscribeConfig(){
+  db.doc('config/verified').onSnapshot(s=>{const d=s.exists?s.data():{};VER={u:d.u||{},c:d.c||{}};refresh();if(CUR)drawHead();if(stack.length)drawPages()},e=>console.warn('verified',e));
+  db.doc('config/admin').onSnapshot(s=>{ADMIN=s.exists?(s.data().uid||null):null;if(stack.length)drawPages()},e=>console.warn('admin',e));
+}
+function setVerified(kind,id,on){
+  if(!isAdminMe())return;VER[kind]={...(VER[kind]||{}),[id]:on};
+  qw('config/verified',()=>db.doc('config/verified').update({[kind]:{[id]:on}}));
+  refresh();if(stack.length)drawPages();toast(on?'הווי הכחול נוסף ✓':'הווי הכחול הוסר');
+}
+const addTick=(html,on)=>on?html.replace(/(<span class="rn">)([\s\S]*?)(<\/span>)/,`$1$2${vtick(true,14)}$3`):html;
+const __cr15=chatRow;
+chatRow=function(c){const h=__cr15(c);if(c&&c.type==='direct'){const o=otherOf(c);return addTick(h,o&&o!==ME&&isVer(o))}return h};
+const __pr15=personRow;
+personRow=function(uid,act){return addTick(__pr15(uid,act),isVer(uid))};
+const __dh15=drawHead;
+drawHead=function(){__dh15();const c=CH[CUR];if(!c||c.type!=='direct')return;const o=otherOf(c);if(o&&o!==ME&&isVer(o)){const b=$('#chead .chwho b');if(b&&!$('.vtick',b))b.insertAdjacentHTML('beforeend',vtick(true,15))}};
+const __pci15=pgContactInfo;
+pgContactInfo=function(u){const r=__pci15(u);if(!r||!P[u])return r;
+  if(isVer(u))r.body=r.body.replace(`<h3>${esc(pname(u))}</h3>`,`<h3>${esc(pname(u))}${vtick(true,20)}</h3>`);
+  if(isAdminMe()&&u!==ME)r.body+=`<div class="gap"></div><div class="plabel">ניהול האפליקציה</div><label class="srow"><span class="sic">${ic('vcheck')}</span><span class="stx"><b>וי כחול</b><small>רק את/ה, כמנהל/ת האפליקציה, רואה את האפשרות הזו</small></span><input type="checkbox" class="sw" data-ver="u" data-id="${u}" ${isVer(u)?'checked':''}></label>`;
+  return r};
+const __pgp15=pgProfile;
+pgProfile=function(){const r=__pgp15();if(isAdminMe())r.body+=`<label class="srow"><span class="sic">${ic('vcheck')}</span><span class="stx"><b>וי כחול לחשבון שלי</b><small>מנהל/ת האפליקציה</small></span><input type="checkbox" class="sw" data-ver="u" data-id="${ME}" ${isVer(ME)?'checked':''}></label>`;return r};
+document.addEventListener('change',e=>{const t=e.target;if(t&&t.dataset&&t.dataset.ver)setVerified(t.dataset.ver,t.dataset.id,t.checked)});
+/* becoming the admin: tap the version line 7 times in Settings > Help > App info (only works while there is no admin yet) */
+let adminTaps=0,adminT=0;
+const __pai15=pgAppInfo;
+pgAppInfo=function(){const r=__pai15();r.body=r.body.replace('<p>גרסה','<p data-a="adminTap">גרסה');
+  if(isAdminMe())r.body+=`<p class="ptext" style="text-align:center">${ic('vcheck',14)} את/ה מנהל/ת האפליקציה. אפשר לתת וי כחול מתוך פרטי איש קשר או מידע על ערוץ.</p>`;return r};
+PAGES.appinfo=()=>pgAppInfo();
+function adminTap(){
+  clearTimeout(adminT);adminT=setTimeout(()=>adminTaps=0,2500);adminTaps++;
+  if(adminTaps<7)return;adminTaps=0;
+  if(ADMIN){toast(isAdminMe()?'את/ה כבר מנהל/ת האפליקציה':'לאפליקציה כבר יש מנהל/ת');return}
+  askConfirm('להפוך למנהל/ת האפליקציה?','רק למנהל/ת תהיה אפשרות לתת וי כחול. אפשר להגדיר מנהל/ת רק פעם אחת.','אישור',()=>{db.doc('config/admin').set({uid:ME,t:Date.now()}).then(()=>{ADMIN=ME;toast('את/ה מנהל/ת האפליקציה ✓');drawPages()}).catch(e=>{dbErr(e);toast('צריך קודם להדביק את כללי האבטחה החדשים ב־Firebase')})},false);
+}
+
+/* ---------------- 2. channels & communities: full screen like a chat ---------------- */
+drawPages=function(){
+  const el=$('#pages');
+  if(!stack.length){el.hidden=true;el.innerHTML='';el.dataset.key='';el.classList.remove('wide');return}
+  const top=stack[stack.length-1];const same=el.dataset.key===top.key;const prevScroll=same?($('.pbody',el)?.scrollTop||0):0;const wasBottom=same&&(()=>{const b=$('.pbody',el);return b&&b.scrollHeight-b.scrollTop-b.clientHeight<80})();
+  const p=top.render();if(!p){pop();return}
+  el.hidden=false;el.dataset.key=top.key;el.classList.toggle('wide',!!p.full);
+  if(p.full){
+    el.innerHTML=`<div class="page xfull" style="${same?'animation:none':''}"><header class="phead xhead"><button class="ib" data-a="back" aria-label="חזרה">${ic('back')}</button>${p.head}${p.actions||''}</header><div class="pbody ${p.bodyCls||''}" ${p.bodyAttr||''}>${p.body}</div>${p.foot||''}</div>`;
+    const b=$('.pbody',el);if(p.toBottom&&(!same||wasBottom))b.scrollTop=b.scrollHeight;else if(prevScroll)b.scrollTop=prevScroll;
+  }else{
+    el.innerHTML=`<div class="page" style="${same?'animation:none':''}"><header class="phead"><button class="ib" data-a="back" aria-label="חזרה">${ic('back')}</button><h2>${p.title}</h2>${p.actions||''}</header><div class="pbody">${p.body}</div></div>`;
+    const b=$('.pbody',el);if(prevScroll)b.scrollTop=prevScroll;
+  }
+  p.after&&p.after(el);
+};
+const chName=(id,ch)=>`${esc(ch.name)}${vtick(isVerCh(id),15)}`;
+pgChannel=function(id){
+  const ch=CHN[id];if(!ch)return null;const mine=ch.owner===ME,f=!!ST.follows[id];
+  ST.chSeen=ST.chSeen||{};const lastT=(ch.posts||[]).at(-1)?.t||0;if(lastT>(ST.chSeen[id]||0)){ST.chSeen[id]=lastT;saveState()}
+  let lastDay='';
+  const posts=(ch.posts||[]).map(p=>{const d=dayLabel(p.t);const sep=d!==lastDay?`<div class="daysep">${d}</div>`:'';lastDay=d;return sep+chPostHTML(id,ch,p)}).join('');
+  const intro=`<div class="chintro">${chAv(ch,64)}<b>${chName(id,ch)}</b><small>ערוץ · ${chFollowers(ch)} עוקבים</small>${ch.desc?`<p>${linkify(esc(ch.desc))}</p>`:''}</div>`;
+  const foot=mine?`<div class="chfoot"><form id="cpf" class="crow chcomp"><button type="button" class="ib" id="cpcam" aria-label="מצלמה">${ic('camera')}</button><button type="button" class="ib" id="cpatt" aria-label="גלריה">${ic('clip')}</button><div class="cfield"><input class="inp" id="cpt" placeholder="עדכון לערוץ" style="border:0;background:none"></div><button class="sendbtn" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></form><div id="cpprev"></div></div>`
+    :f?`<div class="chfoot chfol"><span>${ic('check',16)} את/ה עוקב/ת אחרי הערוץ</span><button class="lnk" data-a="go" data-p="chinfo" data-arg="${id}">מידע על הערוץ</button></div>`:`<div class="chfoot"><button class="btn full" data-a="follow" data-ch="${id}">${ic('plus',18)} מעקב</button></div>`;
+  return{full:true,toBottom:true,title:esc(ch.name),head:`<button class="xwho" data-a="go" data-p="chinfo" data-arg="${id}">${chAv(ch,40)}<span class="rm"><b>${chName(id,ch)}</b><small>${chFollowers(ch)} עוקבים</small></span></button>`,
+    actions:`<button class="ib" data-a="go" data-p="chinfo" data-arg="${id}" aria-label="מידע על הערוץ">${ic('more')}</button>`,
+    bodyCls:'chbody',body:`<div ${wallAttr(S().wallpaper).replace('class="msgs','class="msgs chwall')}>${intro}${posts||'<div class="sys">עוד אין עדכונים בערוץ</div>'}</div>`,foot,
+    after:el=>{const fm=$('#cpf',el);if(!fm)return;let att=null;
+      const showPrev=()=>{const p=$('#cpprev',el);if(!p)return;p.innerHTML=att?`<div class="cpprev">${att.thumb||att.img?`<img src="${esc(att.thumb||att.img)}" alt="">`:''}<span>${att.vid?'סרטון מוכן לפרסום':'תמונה מוכנה לפרסום'}</span><button class="ib" type="button" id="cpx" aria-label="הסרה">${ic('x',16)}</button></div>`:'';const x=$('#cpx',p);if(x)x.onclick=()=>{att=null;showPrev()}};
+      $('#cpcam',el).addEventListener('click',()=>openCam(file=>chAttachFlow(file,a=>{att=a;showPrev()}),{title:ch.name}));
+      $('#cpatt',el).addEventListener('click',()=>pickFile('image/*,video/*',file=>chAttachFlow(file,a=>{att=a;showPrev()})));
+      fm.addEventListener('submit',e=>{e.preventDefault();const t=$('#cpt',el).value.trim();if(!t&&!att)return;postToChannel(id,{text:t,...(att||{})});att=null;drawPages();if(TAB==='updates')drawSide()});
+    }};
+};
+function pgChInfo(id){
+  const ch=CHN[id];if(!ch)return null;const mine=ch.owner===ME,f=!!ST.follows[id];
+  return{title:'מידע על הערוץ',body:`<div class="chhero">${chAv(ch,110)}<h3>${chName(id,ch)}</h3><p>ערוץ · ${chFollowers(ch)} עוקבים</p>${ch.desc?`<p class="chdesc">${linkify(esc(ch.desc))}</p>`:''}
+    <div class="chacts">${mine?'':`<button class="btn ${f?'ghost':''}" data-a="follow" data-ch="${id}">${f?ic('check',16)+' במעקב':ic('plus',16)+' מעקב'}</button>`}<button class="btn ghost" data-a="chShareCh" data-ch="${id}">${ic('share',16)} שיתוף</button></div></div>
+    <div class="gap"></div>${R('user','נוצר על ידי',esc(mine?'את/ה':pname(ch.owner)),'noop')}${R('calendar','נוצר',ch.created?dayLabel(ch.created):'','noop')}
+    ${mine?`<div class="gap"></div>${R('camera','תמונת הערוץ','','chEdit','data-ch="'+id+'" data-k="photo"')}${R('edit','שם הערוץ',esc(ch.name),'chEdit','data-ch="'+id+'" data-k="name"')}${R('info','תיאור',esc(ch.desc||'הוספה'),'chEdit','data-ch="'+id+'" data-k="desc"')}${R('trash','מחיקת הערוץ','','chEdit','data-ch="'+id+'" data-k="del"','danger')}`:''}
+    ${isAdminMe()?`<div class="gap"></div><div class="plabel">ניהול האפליקציה</div><label class="srow"><span class="sic">${ic('vcheck')}</span><span class="stx"><b>וי כחול לערוץ</b><small>רק את/ה רואה את האפשרות הזו</small></span><input type="checkbox" class="sw" data-ver="c" data-id="${id}" ${isVerCh(id)?'checked':''}></label>`:''}
+    ${!mine&&f?`<div class="gap"></div>${R('logout','הפסקת המעקב','','follow','data-ch="'+id+'"','danger')}`:''}`};
+}
+const __pgcm15=pgCommunity;
+pgCommunity=function(id){
+  const r=__pgcm15(id);if(!r)return r;const cm=COMM[id];
+  return{...r,full:true,head:`<div class="xwho">${cmAv(cm,40)}<span class="rm"><b>${esc(cm.name)}</b><small>קהילה · ${cm.members.length} חברים</small></span></div>`,bodyCls:'cmbody'};
+};
+const __gp15=goPage;
+goPage=function(p,arg){if(p==='chinfo')return push(()=>pgChInfo(arg),'chi_'+arg,true);return __gp15(p,arg)};
+
+/* ---------------- 4. calls: speaker / earpiece, and less echo ---------------- */
+async function applySpeaker(C,announce){
+  const ra=$('#ra');if(!ra||!C)return;const on=C.speaker!==false;
+  let routed=false;
+  if(typeof ra.setSinkId==='function'){
+    try{
+      const outs=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='audiooutput');
+      const pick=on?outs.find(d=>/speaker|רמקול|loud/i.test(d.label)):outs.find(d=>/earpiece|receiver|handset|phone|אוזני/i.test(d.label));
+      if(pick){await ra.setSinkId(pick.deviceId);routed=true}else if(on&&outs.length){await ra.setSinkId('default');routed=true}
+    }catch(e){}
+  }
+  ra.volume=on||routed?1:.3;
+  if(announce&&!on&&!routed)toast('בטלפון הזה אי אפשר להעביר את הקול לאוזנייה מהדפדפן, אז הקול הונמך. אוזניות או בלוטות׳ יעבדו כרגיל.');
+}
+const __bcm15=bindCallMedia;
+bindCallMedia=function(){__bcm15();const C=CALL;if(C)applySpeaker(C,false)};
+const __rc15=renderCall;
+renderCall=function(){
+  __rc15();const C=CALL;if(!C||C.state==='ringing-in')return;
+  const row=$('#call .cbtns');if(!row)return;const on=C.speaker!==false;
+  const mute=row.querySelector('[data-k="mute"]');const w=mute&&mute.closest('.cbtnw');
+  const html=`<div class="cbtnw"><button class="cb ${on?'on':''}" data-a="callSpeaker" aria-label="${on?'כיבוי רמקול':'הפעלת רמקול'}">${ic(on?'speaker':'ear')}</button><span>${on?'רמקול':'אוזן'}</span></div>`;
+  if(w)w.insertAdjacentHTML('afterend',html);
+};
+/* the tone player keeps running during calls and can disturb echo cancelling on phones: pause it once the call connects */
+const __rcs15=renderCallStatus;
+renderCallStatus=function(){__rcs15();const C=CALL;if(C&&C.state==='live'&&!C._actx){C._actx=1;try{if(audioCtx&&audioCtx.state==='running')audioCtx.suspend()}catch(e){}}};
+
+const __A15=A7;
+A7=function(){return{...__A15(),
+  newShort:()=>newShort(),
+  adminTap:()=>adminTap(),
+  callSpeaker:()=>{const C=CALL;if(!C)return;C.speaker=C.speaker===false;renderCall();applySpeaker(C,true)},
+  chEdit:el=>{const id=el.dataset.ch,ch=CHN[id],k=el.dataset.k;if(!ch)return;
+    if(k==='photo')pickFile('image/*',f=>cropPhoto(f,u=>{ch.photo=u;qw('channels/'+id,()=>db.doc('channels/'+id).update({photo:u}));drawPages();if(TAB==='updates')drawSide()}));
+    else if(k==='name')askText('שם הערוץ',ch.name,v=>{ch.name=v;qw('channels/'+id,()=>db.doc('channels/'+id).update({name:v}));drawPages();if(TAB==='updates')drawSide()},{max:60});
+    else if(k==='desc')askText('תיאור הערוץ',ch.desc||'',v=>{ch.desc=v;qw('channels/'+id,()=>db.doc('channels/'+id).update({desc:v}));drawPages()},{max:300,multi:true,allowEmpty:true});
+    else if(k==='del')askConfirm('למחוק את הערוץ?','כל העדכונים יימחקו לכל העוקבים.','מחיקה',()=>{qw('channels/'+id,()=>db.doc('channels/'+id).delete());delete CHN[id];closeAllPages();drawSide();toast('הערוץ נמחק')})},
+}};
+/* "new short" card in the Updates tab */
+const __vu15=viewUpdates;
+viewUpdates=function(){
+  let h=__vu15();
+  const card=`<button class="short newshort" data-a="newShort"><span class="nsic">${ic('camera',26)}</span><span class="shcap" style="justify-content:center">שורט חדש</span></button>`;
+  if(h.includes('<div class="shorts">'))h=h.replace('<div class="shorts">','<div class="shorts">'+card);
+  else h=h.replace('<div class="usec"><b>ערוצים</b>',`<div class="usec"><b>${ic('flame',18)} שורטים</b></div><div class="shorts">${card}</div><div class="usec"><b>ערוצים</b>`);
+  return h.replace(/(data-a="go" data-p="channel" data-arg="([^"]+)"[^>]*>[\s\S]*?<span class="rn">)([^<]*)(<\/span>)/g,(m,a,id,name,c)=>a+name+vtick(isVerCh(id),13)+c);
+};
+const __st15=start;
+start=function(){__st15();try{subscribeConfig()}catch(e){console.warn(e)}};
 
 /* ================= event wiring ================= */
 const A={
