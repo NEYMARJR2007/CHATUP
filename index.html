@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SpicyyChat</title>
-<meta name="theme-color" content="#5B3FF5">
+<meta name="theme-color" content="#E8590C">
 <meta name="description" content="SpicyyChat: הודעות, שיחות קול ווידאו, קבוצות וסטטוסים">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -19,10 +19,10 @@
 <style>
 /* Layout: rail + chat list + conversation on desktop; one screen with bottom tabs on phones. Squircle avatars, violet ink bubbles, sun-yellow read ticks. */
 :root{
-  --bg:#F1F0F7; --panel:#FFFFFF; --panel2:#F6F5FB; --hover:#F1EFFA; --ink:#17152B; --muted:#6B6886; --line:#E4E2EF;
-  --accent:#5B3FF5; --accent-ink:#FFFFFF; --accent-soft:#ECE8FE;
-  --out:#5B3FF5; --out-ink:#FFFFFF; --out-muted:rgba(255,255,255,.74); --in:#FFFFFF; --in-ink:#17152B;
-  --wall:#E8E6F3; --wall-dot:rgba(91,63,245,.10); --read:#FFD34D; --read-list:#5B3FF5;
+  --bg:#F6F2EF; --panel:#FFFFFF; --panel2:#FBF7F4; --hover:#F8EEE7; --ink:#21140D; --muted:#7A675C; --line:#EDE2DA;
+  --accent:#E8590C; --accent-ink:#FFFFFF; --accent-soft:#FFEADB;
+  --out:#FFD9BF; --out-ink:#2A1405; --out-muted:rgba(42,20,5,.58); --in:#FFFFFF; --in-ink:#21140D;
+  --wall:#F2E8E1; --wall-dot:rgba(232,89,12,.11); --read:#0284C7; --read-list:#E8590C;
   --ok:#14935F; --danger:#D93D44; --warn:#D9840F; --scrim:rgba(18,16,36,.45);
   --shadow:0 1px 1px rgba(23,21,43,.05),0 8px 28px rgba(23,21,43,.10);
   --bshadow:0 1px 1px rgba(23,21,43,.07);
@@ -32,16 +32,16 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#121212; --panel:#1C1C1E; --panel2:#242426; --hover:#2C2C2F; --ink:#EDEDEF; --muted:#A1A1A6; --line:#333336;
-  --accent:#8571FF; --accent-ink:#FFFFFF; --accent-soft:#2D2A3E;
-  --out:#5B3FF5; --out-ink:#FFFFFF; --out-muted:rgba(255,255,255,.72); --in:#2A2A2D; --in-ink:#EDEDEF;
+  --accent:#FF8A3D; --accent-ink:#1F0E02; --accent-soft:#3A2416;
+  --out:#A3360B; --out-ink:#FFF4EC; --out-muted:rgba(255,244,236,.72); --in:#2A2A2D; --in-ink:#EDEDEF;
   --wall:#161618; --wall-dot:rgba(255,255,255,.06); --read:#FFD34D; --read-list:#FFD34D;
   --ok:#3CC48A; --danger:#F06A70; --warn:#F0A93A; --scrim:rgba(0,0,0,.6);
   --shadow:0 1px 1px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.45); --bshadow:0 1px 1px rgba(0,0,0,.35);
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#121212; --panel:#1C1C1E; --panel2:#242426; --hover:#2C2C2F; --ink:#EDEDEF; --muted:#A1A1A6; --line:#333336;
-  --accent:#8571FF; --accent-ink:#FFFFFF; --accent-soft:#2D2A3E;
-  --out:#5B3FF5; --out-ink:#FFFFFF; --out-muted:rgba(255,255,255,.72); --in:#2A2A2D; --in-ink:#EDEDEF;
+  --accent:#FF8A3D; --accent-ink:#1F0E02; --accent-soft:#3A2416;
+  --out:#A3360B; --out-ink:#FFF4EC; --out-muted:rgba(255,244,236,.72); --in:#2A2A2D; --in-ink:#EDEDEF;
   --wall:#161618; --wall-dot:rgba(255,255,255,.06); --read:#FFD34D; --read-list:#FFD34D;
   --ok:#3CC48A; --danger:#F06A70; --warn:#F0A93A; --scrim:rgba(0,0,0,.6);
   --shadow:0 1px 1px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.45); --bshadow:0 1px 1px rgba(0,0,0,.35);
@@ -117,7 +117,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stro
 .rflags svg.i{width:16px;height:16px}
 .badge{min-width:21px;height:21px;padding:0 6px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:800;display:grid;place-items:center;font-variant-numeric:tabular-nums}
 .badge.dim{background:var(--muted)}
-.vbadge{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#fff;flex:none}
+.vbadge{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--accent);color:var(--accent-ink);flex:none}
 .vbadge svg.i{width:11px;height:11px;stroke-width:3}
 .av{border-radius:34%;display:grid;place-items:center;color:#fff;font-weight:700;flex:none;overflow:hidden;position:relative;letter-spacing:.5px}
 .av img{width:100%;height:100%;object-fit:cover}
@@ -315,7 +315,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stro
 .hbtn{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:78px;padding:10px 8px;border:1px solid var(--line);border-radius:16px;color:var(--accent);font-size:13px;font-weight:700}
 .hbtn:hover{background:var(--hover)}
 .avedit{position:relative}
-.avedit .cam{position:absolute;bottom:-4px;inset-inline-end:-4px;width:40px;height:40px;border-radius:14px;background:var(--accent);color:#fff;display:grid;place-items:center;border:3px solid var(--panel)}
+.avedit .cam{position:absolute;bottom:-4px;inset-inline-end:-4px;width:40px;height:40px;border-radius:14px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;border:3px solid var(--panel)}
 .media{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px 16px 12px}
 .media img,.media .mph{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;background:var(--panel2);max-width:100%}
 .field{display:flex;flex-direction:column;gap:6px;padding:8px 16px}
@@ -355,7 +355,7 @@ textarea.inp{height:auto;min-height:90px;padding:10px 14px;resize:vertical}
 .story .sav .av{border:2px solid #000}
 .story.add{background:var(--panel2);color:var(--ink);border:1px solid var(--line)}
 .story.add::after{display:none}
-.story .plus{position:absolute;top:56px;inset-inline-start:50%;transform:translateX(50%);width:34px;height:34px;border-radius:12px;background:var(--accent);color:#fff;display:grid;place-items:center}
+.story .plus{position:absolute;top:56px;inset-inline-start:50%;transform:translateX(50%);width:34px;height:34px;border-radius:12px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center}
 .flw{height:32px;padding:0 14px;border-radius:10px;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:13px;flex:none}
 .flw.on{background:var(--panel2);color:var(--muted)}
 .chcards{display:flex;gap:10px;overflow-x:auto;padding:4px 16px 14px;scrollbar-width:none}
@@ -428,11 +428,11 @@ textarea.inp{height:auto;min-height:90px;padding:10px 14px;resize:vertical}
 .vfoot{display:flex;gap:8px;padding:10px 12px;align-items:center}
 .vfoot input{flex:1;min-width:0;height:46px;border-radius:23px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;padding:0 18px;outline:0}
 .vfoot input::placeholder{color:rgba(255,255,255,.6)}
-.vfoot .sendbtn{background:#5B3FF5;color:#fff}
+.vfoot .sendbtn{background:#E8590C;color:#fff}
 .vfoot .views{flex:1;display:flex;align-items:center;gap:6px;justify-content:center;color:rgba(255,255,255,.85)}
 .tcomp textarea{width:100%;height:100%;background:transparent;border:0;outline:0;resize:none;color:#fff;font-size:clamp(24px,6vw,40px);font-weight:700;text-align:center;padding:30% 24px 0}
 .tcomp textarea::placeholder{color:rgba(255,255,255,.65)}
-.call{position:fixed;inset:0;z-index:82;color:#fff;display:flex;flex-direction:column;align-items:center;padding:calc(30px + env(safe-area-inset-top,0px)) 16px calc(30px + env(safe-area-inset-bottom,0px));background:radial-gradient(circle at 50% 25%,var(--cc,#5B3FF5) 0%,#0b0a18 72%)}
+.call{position:fixed;inset:0;z-index:82;color:#fff;display:flex;flex-direction:column;align-items:center;padding:calc(30px + env(safe-area-inset-top,0px)) 16px calc(30px + env(safe-area-inset-bottom,0px));background:radial-gradient(circle at 50% 25%,var(--cc,#E8590C) 0%,#0b0a18 72%)}
 .call .clabel{font-size:13px;opacity:.75;display:flex;align-items:center;gap:6px}
 .call h2{font-size:30px;margin:18px 0 4px;font-weight:800;text-align:center}
 .call .cstat{opacity:.85;font-variant-numeric:tabular-nums;font-size:16px}
@@ -542,7 +542,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .bs-retro{--out:#9bbc0f;--out-ink:#0f380f;--out-muted:#306230;--in:#c4cfa1;--in-ink:#0f380f;--in-meta:#306230}
 .bs-retro .bub{border-radius:0!important;box-shadow:0 -4px 0 #0f380f,0 4px 0 #0f380f,-4px 0 0 #0f380f,4px 0 0 #0f380f;margin:4px;font-family:ui-monospace,"Courier New",monospace;font-weight:700}
 .bs-retro .tk.read{color:#0f380f}
-.bs-glass{--out:rgba(91,63,245,.42);--out-ink:#fff;--out-muted:rgba(255,255,255,.85);--in:rgba(0,0,0,.30);--in-ink:#fff;--in-meta:rgba(255,255,255,.8)}
+.bs-glass{--out:rgba(232,89,12,.42);--out-ink:#fff;--out-muted:rgba(255,255,255,.85);--in:rgba(0,0,0,.30);--in-ink:#fff;--in-meta:rgba(255,255,255,.8)}
 .bs-glass .bub{backdrop-filter:blur(14px) saturate(1.5);-webkit-backdrop-filter:blur(14px) saturate(1.5);border:1px solid rgba(255,255,255,.35);text-shadow:0 1px 2px rgba(0,0,0,.4)}
 .bs-gold{--out:linear-gradient(135deg,#f9e29c,#d4a017 55%,#b8860b);--out-ink:#2b1d00;--out-muted:#5c4300;--in:#141414;--in-ink:#f5e6b8;--in-meta:#c9a24a}
 .bs-gold .in .bub{border:1px solid #d4a017}.bs-gold .tk.read{color:#7c2d12}
@@ -576,12 +576,12 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .crhead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 8px;padding-top:max(10px,env(safe-area-inset-top))}.crhead b{font-size:16px}.crhead .ib{color:#fff}
 .crstage{flex:1;position:relative;touch-action:none;overflow:hidden;min-height:0}.crstage canvas{position:absolute;inset:0;display:block;cursor:grab}
 .crfoot{padding:8px 16px max(16px,env(safe-area-inset-bottom))}.crhint{text-align:center;font-size:12.5px;opacity:.7;margin:0 0 8px}
-.crzoom{display:flex;align-items:center;gap:10px;opacity:.95}.crzoom input{flex:1;accent-color:#8571FF}
+.crzoom{display:flex;align-items:center;gap:10px;opacity:.95}.crzoom input{flex:1;accent-color:#FF8A3D}
 .crfoot .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35)}
 .pvimg{flex:1;display:grid;place-items:center;padding:0 0 40px;min-height:0}.pvimg img{width:min(100vw,560px);max-height:100%;aspect-ratio:1;object-fit:cover}
 .avtap{padding:0;border-radius:34%;display:block}
 .phhero{width:64px;height:64px;margin:14px auto 8px;border-radius:22px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}.phh{margin:4px 0 6px;font-size:19px;text-align:center;width:100%}.phf{text-align:start}.phrow{display:flex;gap:8px;direction:ltr}.phcc{display:grid;place-items:center;padding:0 12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);font-weight:700}.phrow .inp{flex:1;min-width:0}.otp{text-align:center;font-size:28px;letter-spacing:12px;font-weight:800}.altlog{display:flex;align-items:center;gap:10px;margin:14px 16px 4px;color:var(--muted);font-size:13px}.altlog:before,.altlog:after{content:"";flex:1;height:1px;background:var(--line)}.altbtns{flex-direction:column;gap:8px}.altbtns .btn{flex:none;min-height:46px;width:100%}
-.steps{list-style:none;margin:0;padding:4px 16px 8px;display:flex;flex-direction:column;gap:12px}.steps li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.5}.stn{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.steps{list-style:none;margin:0;padding:4px 16px 8px;display:flex;flex-direction:column;gap:12px}.steps li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.5}.stn{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
 .phopts{display:flex;justify-content:space-around;gap:8px;padding:8px 4px 4px}
 .phopt{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13.5px;font-weight:600;min-width:64px}
 .phic{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--accent);background:var(--panel2)}
@@ -589,6 +589,109 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .emprev{display:grid;place-items:center;padding:6px 0 4px}
 .emgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;padding:0 12px}.emb{font-size:26px;height:46px;border-radius:12px;background:var(--panel2)}.emb.on{outline:2px solid var(--accent)}
 .bggrid{display:flex;flex-wrap:wrap;gap:10px;padding:0 16px 8px}.bgb{width:34px;height:34px;border-radius:50%}.bgb.on{outline:3px solid var(--ink);outline-offset:2px}
+/* ---- call screen v2 ---- */
+.call2{background:#0b0b0d;padding:0;justify-content:space-between;overflow:hidden;user-select:none;-webkit-user-select:none}
+.call2.min{display:none}
+.call2 .cbg{position:absolute;inset:-60px;background-size:cover;background-position:center;filter:blur(40px) saturate(1.35) brightness(.55);transform:scale(1.1)}
+.call2 .cbg.grad{background:radial-gradient(circle at 25% 20%,var(--cc) 0%,transparent 55%),radial-gradient(circle at 80% 85%,var(--accent) 0%,transparent 55%),#0b0b0d;filter:blur(24px) brightness(.85);animation:cbgmove 14s ease-in-out infinite alternate}
+@keyframes cbgmove{to{transform:scale(1.3) rotate(10deg)}}
+.call2 .cshade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,0) 28%,rgba(0,0,0,0) 58%,rgba(0,0,0,.72))}
+.call2 .rv{z-index:1}.call2 .rv.mir{transform:scaleX(-1)}
+.call2.isvid .cshade{z-index:2}
+.call2 .ctop2{position:relative;z-index:6;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:calc(12px + env(safe-area-inset-top,0px)) 14px 0;transition:opacity .3s,transform .3s}
+.cmin{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;color:#fff;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);flex:none}
+.cenc{font-size:12.5px;opacity:.85;display:flex;gap:5px;align-items:center}
+.cvname{display:flex;flex-direction:column;align-items:center;text-shadow:0 1px 8px rgba(0,0,0,.6)}.cvname b{font-size:18px}.cvname .cstat{font-size:13.5px;opacity:.9}
+.kq{display:flex;align-items:flex-end;gap:3px;width:42px;justify-content:center;height:16px;flex:none}.kq i{width:4px;background:rgba(255,255,255,.3);border-radius:2px}.kq i:nth-child(1){height:6px}.kq i:nth-child(2){height:10px}.kq i:nth-child(3){height:15px}
+.kq.q3 i,.kq.q2 i:nth-child(-n+2){background:#fff}.kq.q1 i:nth-child(1){background:#ffb020}.kq.q0 i:nth-child(1){background:#ff453a}
+.call2 .cmid{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;margin-top:7vh;text-align:center;padding:0 16px;flex:1}
+.call2 .cmid.kvid{margin-top:12px;flex:1}
+.cav2{position:relative}.cav2 .av{box-shadow:0 14px 50px rgba(0,0,0,.45)}
+.cav2.ring:before,.cav2.ring:after{content:"";position:absolute;inset:-12px;border-radius:38%;border:2px solid rgba(255,255,255,.4);animation:cpulse 2.2s infinite}.cav2.ring:after{animation-delay:1.1s}
+@keyframes cpulse{from{transform:scale(.92);opacity:1}to{transform:scale(1.4);opacity:0}}
+.call2 h2{font-size:31px;margin:24px 0 6px;font-weight:800;text-shadow:0 2px 14px rgba(0,0,0,.5)}
+.call2 .cmid .cstat{font-size:16.5px;opacity:.92;font-variant-numeric:tabular-nums}
+.cchip{margin-top:12px;display:inline-flex;gap:6px;align-items:center;padding:7px 13px;border-radius:999px;background:rgba(0,0,0,.5);font-size:13px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.call2 .lv2{position:absolute;z-index:7;width:112px;height:162px;object-fit:cover;border-radius:22px;border:2px solid rgba(255,255,255,.55);box-shadow:0 10px 30px rgba(0,0,0,.5);background:#1b1b1f;touch-action:none;transition:top .25s,bottom .25s,left .25s,right .25s}
+.lv2.mir{transform:scaleX(-1)}
+.lv2.pos-tr{top:calc(72px + env(safe-area-inset-top,0px));right:14px}.lv2.pos-tl{top:calc(72px + env(safe-area-inset-top,0px));left:14px}
+.lv2.pos-br{bottom:calc(150px + env(safe-area-inset-bottom,0px));right:14px}.lv2.pos-bl{bottom:calc(150px + env(safe-area-inset-bottom,0px));left:14px}
+.call2 .kbar{position:relative;z-index:6;width:100%;padding:0 10px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:10px;transition:opacity .3s,transform .3s}
+.call2.hideui .kbar{opacity:0;transform:translateY(30px);pointer-events:none}.call2.hideui .ctop2{opacity:0;transform:translateY(-30px);pointer-events:none}
+.cbtns{display:flex;justify-content:center;gap:6px;padding:12px 10px 10px;border-radius:30px;background:rgba(30,30,32,.74);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);max-width:100%;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.cbtnw{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;min-width:52px;color:rgba(255,255,255,.9)}
+.cb{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.15);color:#fff;transition:transform .15s,background .2s}
+.cb:active{transform:scale(.9)}.cb.on{background:#fff;color:#111}.cb.red{background:#ff3b30}.cb.green{background:#30d158}.cb.glass{background:rgba(255,255,255,.18)}
+.cb.kbig{width:72px;height:72px}.cb.kbig svg{width:30px;height:30px}
+.cb.pulse{animation:cansw 1.5s infinite}@keyframes cansw{0%{box-shadow:0 0 0 0 rgba(48,209,88,.65)}100%{box-shadow:0 0 0 24px rgba(48,209,88,0)}}
+.kin{width:100%;display:flex;flex-direction:column;align-items:center;gap:20px;padding:0 16px calc(28px + env(safe-area-inset-bottom,0px));position:relative;z-index:6}
+.cinrow{display:flex;justify-content:space-around;width:100%;max-width:380px}.cinrow .cbtnw{font-size:13.5px;gap:8px}
+.cqr{padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font-size:14px;display:flex;gap:6px;align-items:center;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.kreact{display:flex;gap:2px;padding:6px 8px;border-radius:999px;background:rgba(30,30,32,.85);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);max-width:100%;overflow-x:auto}
+.kreact button{font-size:27px;width:42px;height:42px;border-radius:50%;flex:none}.kreact button:active{transform:scale(1.3)}
+.freact{position:fixed;z-index:120;bottom:160px;font-size:48px;pointer-events:none;animation:freact 2.6s ease-out forwards;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))}
+@keyframes freact{0%{transform:translateY(0) scale(.5);opacity:0}15%{opacity:1;transform:translateY(-30px) scale(1.2)}100%{transform:translateY(-55vh) scale(1);opacity:0}}
+#callbar{position:fixed;top:0;left:0;right:0;z-index:81;min-height:calc(36px + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);background:#1fa855;color:#fff;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:8px;animation:cbarpulse 2s infinite}
+@keyframes cbarpulse{50%{background:#17914a}}
+body.incall #app{padding-top:calc(36px + env(safe-area-inset-top,0px))}
+.call2 .fxpanel{max-width:100%}
+.call2 .cmid.kvid{justify-content:flex-end;padding-bottom:14px}
+/* ---- updates / channels / shorts ---- */
+.usec{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px}.usec b{font-size:18px;display:flex;align-items:center;gap:6px}.usec b svg{color:var(--accent)}
+.usub{padding:14px 16px 6px;color:var(--muted);font-weight:700;font-size:14px}
+.story .splay,.short .splay{position:absolute;z-index:2;top:8px;inset-inline-end:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.55);display:grid;place-items:center;color:#fff}
+.story:not(.seen):not(.add){box-shadow:0 0 0 2.5px var(--accent)}
+.shorts{display:flex;gap:10px;overflow-x:auto;padding:4px 16px 10px;scrollbar-width:none}
+.short{flex:none;width:118px;height:200px;border-radius:18px;position:relative;overflow:hidden;background:linear-gradient(160deg,var(--accent),#2a1405);color:#fff;text-align:start}
+.short img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.short:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.75))}
+.shcap{position:absolute;z-index:2;bottom:8px;inset-inline:8px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700}.shcap span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.chcards2{display:flex;gap:10px;overflow-x:auto;padding:4px 16px 12px;scrollbar-width:none}
+.chcard2{flex:none;width:146px;border-radius:20px;padding:14px 10px 12px;display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line)}
+.cc2in{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center}.cc2in b{font-size:14.5px;max-width:126px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.cc2in small{color:var(--muted);font-size:12px}
+.chcard2 .btn{height:34px;padding:0 18px;font-size:13.5px;width:100%}
+.chhero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:18px 16px 16px;gap:4px}
+.chhero h3{font-size:22px;margin:10px 0 0}.chhero p{margin:0;color:var(--muted)}.chdesc{color:var(--ink)!important;max-width:60ch;margin-top:6px!important}
+.chacts{display:flex;gap:10px;margin-top:12px}.chacts .btn{height:38px;padding:0 18px;display:flex;align-items:center;gap:6px}
+.chpost{margin:6px 12px;max-width:min(92%,460px);margin-inline-end:auto;background:var(--in);color:var(--in-ink);border-radius:18px;border-start-start-radius:6px;padding:6px;box-shadow:var(--bshadow)}
+.chpost .imgw img{width:100%;border-radius:13px;display:block}
+.chtxt{padding:6px 8px 0;font-size:var(--msg-fs);line-height:1.45;white-space:pre-wrap;word-break:break-word}
+.chmeta{text-align:end;font-size:11.5px;color:var(--muted);padding:2px 8px 4px}
+.chrx{display:flex;flex-wrap:wrap;gap:6px;padding:2px 4px 4px}
+.rxchip{display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);font-size:15px}.rxchip small{font-size:12px;color:var(--muted);font-weight:700}.rxchip.on{border-color:var(--accent);background:var(--accent-soft)}
+.rxadd{width:30px;height:28px;border-radius:999px;display:grid;place-items:center;color:var(--muted);background:var(--panel2)}
+.chvid{position:relative;display:block;width:100%;min-height:180px;max-height:420px;border-radius:13px;overflow:hidden;background:#000}
+.chvid img{width:100%;max-height:420px;object-fit:cover;display:block}
+.splay.big{top:50%;left:50%;inset-inline-end:auto;transform:translate(-50%,-50%);width:58px;height:58px}
+.kvdur{position:absolute;bottom:8px;inset-inline-start:8px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;padding:2px 7px;border-radius:8px}
+.chcomp{padding:10px 12px;position:sticky;bottom:0;background:var(--panel)}
+.cpprev{display:flex;align-items:center;gap:10px;margin:0 12px 10px;padding:8px;border-radius:14px;background:var(--panel2)}.cpprev img{width:46px;height:46px;border-radius:10px;object-fit:cover}.cpprev span{flex:1;font-size:14px}
+.vprog{padding:8px 20px 20px}.vpbar{height:8px;border-radius:99px;background:var(--panel2);overflow:hidden}.vpbar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.svmute{position:absolute;bottom:14px;inset-inline-end:14px;width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;display:grid;place-items:center;z-index:3}
+#svbody video{max-width:100%;max-height:100%;object-fit:contain}
+.shortsv{background:#000}
+.shtop{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:calc(8px + env(safe-area-inset-top,0px)) 8px 8px;background:linear-gradient(180deg,rgba(0,0,0,.55),transparent)}.shtop .ib{color:#fff}.shtop b{display:flex;gap:6px;align-items:center;font-size:17px}
+.shfeed{flex:1;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
+.shitem{position:relative;height:100%;min-height:100%;scroll-snap-align:start;scroll-snap-stop:always;display:grid;place-items:center;background:#000}
+.shitem video{width:100%;height:100%;object-fit:contain}
+.shside{position:absolute;z-index:3;inset-inline-start:10px;bottom:120px;display:flex;flex-direction:column;gap:18px}
+.shside button{display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff;font-size:26px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}.shside small{font-size:12px;font-weight:700}
+.shinfo{position:absolute;z-index:3;inset-inline:14px 70px;bottom:calc(26px + env(safe-area-inset-bottom,0px));color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.7)}
+.shch{display:inline-flex;align-items:center;gap:8px;color:#fff;font-size:15px}.shinfo p{margin:8px 0 0;font-size:14.5px;line-height:1.4}
+.shfol{margin-inline-start:8px;padding:4px 12px;border-radius:10px;border:1.5px solid #fff;color:#fff;font-weight:700;font-size:13px}
+/* ---- communities ---- */
+.cnew{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;text-align:start}
+.cnewic{position:relative;width:54px;height:54px;border-radius:18px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.cnewp{position:absolute;bottom:-4px;inset-inline-end:-4px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;border:2px solid var(--panel)}
+.cnew .rm,.cchead .rm{display:flex;flex-direction:column;flex:1;min-width:0}.cnew b,.cchead b{font-size:16.5px}.cnew small,.cchead small{color:var(--muted);font-size:13px}
+.kcard{margin:6px 12px 12px;border-radius:22px;background:var(--panel2);border:1px solid var(--line);overflow:hidden}
+.cchead{display:flex;align-items:center;gap:12px;width:100%;padding:14px 14px 10px;text-align:start;border-bottom:1px solid var(--line)}
+.cchead .av{border-radius:30%!important}
+.kcard .row.cmpt{padding-block:8px}
+.annav{background:var(--accent-soft)!important;color:var(--accent);border-radius:30%!important}
+.ccall{display:flex;align-items:center;gap:6px;width:100%;padding:10px 16px 12px;color:var(--accent);font-weight:700;font-size:14px}
+.chero .av{border-radius:30%!important}
+.cempty svg{color:var(--accent);margin-bottom:6px}
 .who-tag{font-size:11px;font-weight:800;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 6px}
 </style>
 </head>
@@ -626,7 +729,7 @@ const fmtSize=b=>b<1024?b+' B':b<1048576?(b/1024).toFixed(0)+' KB':(b/1048576).t
 const initials=n=>{const p=String(n||'?').replace(/^[~@]\s*/,'').trim().split(/\s+/);return (p[0]?.[0]||'?')+(p[1]?.[0]||'')};
 const linkify=s=>s.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');
 const isEmojiOnly=s=>{try{return /\p{Extended_Pictographic}/u.test(s)&&/^(\p{Extended_Pictographic}|\p{Emoji_Component}|‍|️|\s)+$/u.test(s)&&[...s.replace(/\s/g,'')].length<=6}catch(e){return false}};
-const COLORS=['#5B3FF5','#D93D44','#14935F','#D9840F','#0B8FB3','#C2410C','#9333EA','#0F766E','#BE185D','#4D7C0F'];
+const COLORS=['#E8590C','#D93D44','#14935F','#D9840F','#0B8FB3','#C2410C','#9333EA','#0F766E','#BE185D','#4D7C0F'];
 const colorFor=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))>>>0;return COLORS[h%COLORS.length]};
 const clone=o=>JSON.parse(JSON.stringify(o||{}));
 const digits=s=>String(s||'').replace(/\D/g,'');
@@ -933,7 +1036,7 @@ function drawChatList(){
   if(F==='all'&&locked.length)h+=`<button class="arow" data-a="openLocked"><span class="aic">${ic('lock')}</span>צ׳אטים נעולים<span class="cnt">${locked.length}</span></button>`;
   if(F==='all'&&arch.length){const u=arch.filter(c=>unreadOf(c)).length;h+=`<button class="arow" data-a="go" data-p="archived"><span class="aic">${ic('archive')}</span>בארכיון<span class="cnt">${u||arch.length}</span></button>`}
   if(F==='all')h+=reqRow();
-  let L=all.filter(c=>!pref(c.id).archived&&!pref(c.id).locked&&!isRequest(c));
+  let L=all.filter(c=>!pref(c.id).archived&&!pref(c.id).locked&&!isRequest(c)&&!pref(c.id).hiddenChat);
   if(F==='unread')L=L.filter(c=>unreadOf(c)||pref(c.id).markUnread);
   if(F==='fav')L=L.filter(c=>pref(c.id).fav);
   if(F==='groups')L=L.filter(c=>c.type==='group');
@@ -1283,7 +1386,7 @@ function imageCaption(file){
       $('#capf',d).addEventListener('submit',e=>{e.preventDefault();const t=$('#cap',d).value.trim();const cid=CUR,rp=replyTo;closeSheet(true);storeImage(file,url=>sendMsg(cid,{type:'image',img:url,text:t||undefined,reply:rp||undefined}));replyTo=null;drawBar()});setTimeout(()=>$('#cap',d).focus(),60)});
   });
 }
-const ATT=[['vmsg','הודעת וידאו','video','#0F766E'],['video','סרטון','image','#C2410C'],['doc','קובץ','file','#5B3FF5'],['photo','גלריה','image','#BE185D'],['camera','מצלמה','camera','#D93D44'],['location','מיקום','location','#14935F'],['contact','איש קשר','contact','#0B8FB3'],['poll','סקר','poll','#D9840F'],['event','אירוע','calendar','#9333EA']];
+const ATT=[['vmsg','הודעת וידאו','video','#0F766E'],['video','סרטון','image','#C2410C'],['doc','קובץ','file','#E8590C'],['photo','גלריה','image','#BE185D'],['camera','מצלמה','camera','#D93D44'],['location','מיקום','location','#14935F'],['contact','איש קשר','contact','#0B8FB3'],['poll','סקר','poll','#D9840F'],['event','אירוע','calendar','#9333EA']];
 function attachSheet(){openSheet('',`<div class="atgrid">${ATT.map(([k,l,i,col])=>`<button class="att" data-a="att" data-k="${k}"><span style="background:${col}">${ic(i,26)}</span>${l}</button>`).join('')}</div>`)}
 function doAttach(k){
   closeSheet(true);const cid=CUR;if(!cid){toast('פתחו קודם צ׳אט עם החבר/ה');return}
@@ -1386,7 +1489,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 7.1</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 8.0</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1428,12 +1531,12 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 7.1 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 8.0 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
 function pgLinked(){return{title:'מכשירים מקושרים',body:`<div class="hero">${ic('laptop',60)}<p>SpicyyChat עובדת בכל מכשיר שבו נכנסים לאותו חשבון: טלפון, מחשב וטאבלט. ההודעות מסונכרנות אוטומטית.</p></div><div class="srow"><span class="sic">${ic('laptop')}</span><span class="stx"><b>המכשיר הזה</b><small>פעיל עכשיו</small></span></div>`}}
-function qrSVG(seed){let h=0;for(const c of seed)h=(h*131+c.charCodeAt(0))>>>0;const rand=()=>(h=(h*1103515245+12345)>>>0)/4294967296;const N=25;let r='';const finder=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#17152B"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#5B3FF5"/>`;for(let y=0;y<N;y++)for(let x=0;x<N;x++){const inF=(x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9);if(!inF&&rand()>.52)r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#17152B"/>`}return `<svg viewBox="0 0 ${N} ${N}" shape-rendering="crispEdges">${r}${finder(0,0)}${finder(N-7,0)}${finder(0,N-7)}</svg>`}
+function qrSVG(seed){let h=0;for(const c of seed)h=(h*131+c.charCodeAt(0))>>>0;const rand=()=>(h=(h*1103515245+12345)>>>0)/4294967296;const N=25;let r='';const finder=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#17152B"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#E8590C"/>`;for(let y=0;y<N;y++)for(let x=0;x<N;x++){const inF=(x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9);if(!inF&&rand()>.52)r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#17152B"/>`}return `<svg viewBox="0 0 ${N} ${N}" shape-rendering="crispEdges">${r}${finder(0,0)}${finder(N-7,0)}${finder(0,N-7)}</svg>`}
 function pgQR(){const me=prof(ME);return{title:'הכרטיס שלי',body:`<div class="hero">${meAv(72)}<h3>${esc(me.name||'')}</h3><p dir="ltr">@${esc(me.username||'')}</p></div><div class="qr">${qrSVG(ME)}</div><p class="ptext" style="text-align:center">חברים ב־SpicyyChat יכולים למצוא אותך בחיפוש לפי @${esc(me.username||'')}.</p>`}}
 function pgArchived(){const L=sortChats(Object.values(CH).filter(c=>pref(c.id).archived&&!pref(c.id).locked));return{title:'בארכיון',body:`<p class="ptext">${S().keepArchived?'הצ׳אטים יישארו בארכיון גם כשתגיע הודעה חדשה.':'צ׳אטים יוצאו מהארכיון כשתגיע הודעה חדשה.'}</p>`+(L.length?L.map(chatRow).join(''):`<div class="empty"><b>אין צ׳אטים בארכיון</b></div>`)}}
 
@@ -1599,10 +1702,10 @@ function svLoop(){if(!SV)return;const now=performance.now();if(!SV.paused)SV.pos
 function svNext(){const items=liveStatus(SV.owners[SV.oi]);SV.pos=0;if(SV.ii<items.length-1)SV.ii++;else if(SV.oi<SV.owners.length-1){SV.oi++;SV.ii=0}else{closeSV();return}renderSV()}
 function svPrev(){SV.pos=0;if(SV.ii>0)SV.ii--;else if(SV.oi>0){SV.oi--;SV.ii=liveStatus(SV.owners[SV.oi]).length-1}renderSV()}
 function closeSV(){if(SV)cancelAnimationFrame(SV.raf);SV=null;$('#viewer')?.remove();if(TAB==='updates')drawSide();drawNav()}
-const SBG=['#5B3FF5','#D93D44','#14935F','#D9840F','#0B8FB3','#BE185D','#17152B'];
+const SBG=['#E8590C','#D93D44','#14935F','#D9840F','#0B8FB3','#BE185D','#17152B'];
 function statusText(){
   let bi=0;const el=document.createElement('div');el.className='viewer tcomp';el.id='viewer';el.style.background=SBG[0];
-  el.innerHTML=`<div class="vhead"><button class="ib" data-a="svClose" aria-label="סגירה">${ic('x')}</button><span style="flex:1"></span><button class="ib" id="sbgb" aria-label="החלפת צבע רקע">${ic('palette')}</button></div><div class="vbody"><textarea id="stt" maxlength="700" placeholder="כתבו סטטוס"></textarea></div><div class="vfoot"><span class="views" style="justify-content:flex-start">${ic('lock',14)} גלוי לכל המשתמשים ב־SpicyyChat · 24 שעות</span><button class="sendbtn" id="stsend" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></div>`;
+  el.innerHTML=`<div class="vhead"><button class="ib" data-a="svClose" aria-label="סגירה">${ic('x')}</button><span style="flex:1"></span><button class="ib" id="sbgb" aria-label="החלפת צבע רקע">${ic('palette')}</button></div><div class="vbody"><textarea id="stt" maxlength="700" placeholder="כתבו סטטוס"></textarea></div><div class="vfoot"><span class="views" style="justify-content:flex-start">${ic('lock',14)} ${esc(visLabel('status'))} · 24 שעות</span><button class="sendbtn" id="stsend" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></div>`;
   $('#layers').appendChild(el);const ta=$('#stt',el);ta.focus();
   $('#sbgb',el).addEventListener('click',()=>{bi=(bi+1)%SBG.length;el.style.background=SBG[bi]});
   $('#stsend',el).addEventListener('click',()=>{const t=ta.value.trim();if(!t){ta.focus();return}postStatus({type:'text',text:t,bg:SBG[bi]});el.remove()});
@@ -1823,7 +1926,7 @@ async function videoRecorder(cid){
 }
 
 /* ================= calls (WebRTC) ================= */
-const ICE=()=>({iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']},...(Array.isArray(CFG.turn)?CFG.turn:[])]});
+const ICE=()=>({iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun.cloudflare.com:3478']},...(Array.isArray(CFG.turn)?CFG.turn:[]),...(TURN_DYN||[])]});
 let CALL=null;
 function ringStart(){ringStop();Sound.ringStart();try{navigator.vibrate&&navigator.vibrate([600,300,600,300,600,300,600,300,600])}catch(e){}}
 function ringStop(){Sound.ringStop();try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}}
@@ -1860,9 +1963,8 @@ function newPC(C){
     if(t.kind==='video'){t.onunmute=()=>{if(CALL===C){C.remoteFlow=true;updRemoteVid(C)}};t.onmute=()=>{if(CALL===C){C.remoteFlow=false;updRemoteVid(C)}};C.remoteFlow=!t.muted}
     bindCallMedia();updRemoteVid(C)};
   pc.onconnectionstatechange=()=>{if(CALL!==C)return;const s=pc.connectionState;
-    if(s==='connected'){C.netWarn=false;if(C.state!=='live'){C.state='live';C.start=C.start||Date.now();clearTimeout(C.to);renderCall()}}
-    else if(s==='disconnected'){C.netWarn=true;renderCallStatus()}
-    else if(s==='failed'){toast('החיבור לשיחה נכשל. ברשתות סלולריות צריך שרת TURN (ראו מדריך ההתקנה).');endCall('failed')}};
+    if(s==='connected'){C.netWarn=false;netOk(C);if(C.state!=='live'){C.state='live';C.start=C.start||Date.now();clearTimeout(C.to);renderCall()}}
+    else if(s==='disconnected'||s==='failed')netTrouble(C,s)};
   return pc;
 }
 function updRemoteVid(C){const v=!!(C.peerCam&&C.remote.getVideoTracks().length);if(v!==C.remoteVid){C.remoteVid=v;if(v)C.video=true;renderCall()}}
@@ -1935,7 +2037,7 @@ async function answerCall(withVideo){
     await C.ref.update({answer:{type:ans.type,sdp:ans.sdp},state:'accepted',startedAt:Date.now(),cam:{[ME]:!!C.camOn}});
   }catch(e){console.warn(e);toast('לא הצלחנו לענות לשיחה');endCall('ended');return}
   C.unsubs.push(db.collection(`calls/${C.id}/a`).onSnapshot(s=>s.docChanges().forEach(ch=>{if(ch.type==='added')addRemoteCand(C,ch.doc.data())}),()=>{}));
-  C.to=setTimeout(()=>{if(CALL===C&&C.state!=='live'){toast('לא הצלחנו לחבר את השיחה. ייתכן שצריך שרת TURN.');endCall('failed')}},30000);
+  C.to=setTimeout(()=>{if(CALL===C&&C.state!=='live'){toast('לא הצלחנו לחבר את השיחה. בדקו את החיבור לאינטרנט ונסו שוב.');endCall('failed')}},45000);
   presWrite();
 }
 function killCall(C){if(CALL===C)CALL=null;ringStop();FX.stop(C);$('#call')?.remove()}
@@ -1959,7 +2061,7 @@ function endCall(reason,remote){
 function logCall(e){const {id,...d}=e;qw(`data/users/${ME}/state/log/${id}`,()=>db.doc(`data/users/${ME}/state/log/${id}`).set(d))}
 function subscribeLog(){db.collection(`data/users/${ME}/state/log`).orderBy('t','desc').limit(80).onSnapshot(s=>{LOG=s.docs.map(d=>({id:d.id,...d.data()}));if(TAB==='calls')drawSide();drawNav()},dbErr)}
 /* ---------- controls ---------- */
-function callToggleMute(){const C=CALL;if(!C)return;C.mute=!C.mute;C.local&&C.local.getAudioTracks().forEach(t=>t.enabled=!C.mute);renderCall()}
+function callToggleMute(){const C=CALL;if(!C)return;C.mute=!C.mute;C.local&&C.local.getAudioTracks().forEach(t=>t.enabled=!C.mute);if(C.ref)C.ref.update({mic:{[ME]:!C.mute}}).catch(()=>{});renderCall()}
 async function callToggleCam(){
   const C=CALL;if(!C||!C.pc)return;
   if(C.camOn){C.camOn=false;try{C.rawCam&&C.rawCam.stop()}catch(e){}C.rawCam=null;C.fxOpen=false;await setVideoOut(C);signalCam(C);renderCall();return}
@@ -3045,7 +3147,7 @@ function groupInviteNote(cid,L){
 }
 
 /* ----- calls: silence unknown callers, protect IP ----- */
-const hasTurn=()=>Array.isArray(CFG.turn)&&CFG.turn.some(t=>[].concat(t.urls||t.url||[]).some(u=>/^turns?:/.test(String(u))));
+const hasTurn=()=>[...(Array.isArray(CFG.turn)?CFG.turn:[]),...(TURN_DYN||[])].some(t=>[].concat(t.urls||t.url||[]).some(u=>/^turns?:/.test(String(u))));
 function iceCfg(){const c=ICE();if(pv().ipProtect&&hasTurn())c.iceTransportPolicy='relay';return c}
 const __inc7=incoming;
 incoming=function(id,d){
@@ -3407,7 +3509,7 @@ function pickMyPhoto(capture){pickFile('image/*',f=>cropPhoto(f,setMyPhoto,{titl
 
 /* emoji avatar maker */
 const AV_EMOJI=['😎','🤩','😄','🥳','😇','🤠','🦁','🐯','🐼','🦊','🐶','🐱','🐵','🦄','🐸','🐙','⚽','🏀','🎮','🎧','🎸','🌶️','🔥','⭐','🌈','🌸','🍕','🚀','👑','💜'];
-const AV_BG=['#5B3FF5','#E11D48','#F59E0B','#10B981','#0EA5E9','#8B5CF6','#111827','#F472B6','#84CC16','#14B8A6'];
+const AV_BG=['#E8590C','#E11D48','#F59E0B','#10B981','#0EA5E9','#8B5CF6','#111827','#F472B6','#84CC16','#14B8A6'];
 function emojiAvatarSheet(){
   let em=AV_EMOJI[0],bg=AV_BG[0];
   const render=size=>{const cv=document.createElement('canvas');cv.width=cv.height=size;const c=cv.getContext('2d');const g=c.createLinearGradient(0,0,size,size);g.addColorStop(0,bg);g.addColorStop(1,shade(bg,-28));c.fillStyle=g;c.fillRect(0,0,size,size);c.textAlign='center';c.textBaseline='middle';c.font=`${Math.round(size*.56)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.fillText(em,size/2,size*.54);return cv};
@@ -3684,6 +3786,487 @@ pgAccount=function(){
 PAGES.account=()=>pgAccount();
 const __A10=A7;
 A7=function(){return{...__A10(),mePhone:()=>changePhoneSheet()}};
+
+/* ================= calls v2: relay server (TURN), auto-reconnect, new call screen ================= */
+IC.chevdown='<path d="M6 9l6 6 6-6"/>';
+var TURN_DYN=null;
+let TURN_EXP=0,TURN_P=null;
+try{const j=JSON.parse(localStorage.getItem('spicyy-turn')||'null');if(j&&j.exp>Date.now()+3600e3&&Array.isArray(j.s)){TURN_DYN=j.s;TURN_EXP=j.exp}}catch(e){}
+function ensureTurn(){
+  if(TURN_DYN&&TURN_EXP>Date.now()+3600e3)return Promise.resolve(TURN_DYN);
+  if(TURN_P)return TURN_P;
+  if(!pushConfigured()||!fauth||!fauth.currentUser)return Promise.resolve(null);
+  TURN_P=(async()=>{
+    try{
+      const t=await fauth.currentUser.getIdToken();
+      const r=await fetch(pushUrl()+'/turn',{method:'POST',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:'{}'});
+      if(!r.ok)return null;const j=await r.json();
+      const L=(j.iceServers||[]).map(x=>({...x,urls:[].concat(x.urls||[]).filter(u=>!/:53(\?|$)/.test(String(u)))})).filter(x=>x.urls.length);
+      if(!L.some(x=>x.urls.some(u=>/^turns?:/.test(u))))return null;
+      TURN_DYN=L;TURN_EXP=Date.now()+Math.max(3600,(j.ttl||86400))*1000;
+      try{localStorage.setItem('spicyy-turn',JSON.stringify({s:L,exp:TURN_EXP}))}catch(e){}
+      return L;
+    }catch(e){console.warn('turn',e);return null}finally{TURN_P=null}
+  })();
+  return TURN_P;
+}
+const waitMax=(p,ms)=>Promise.race([p,new Promise(r=>setTimeout(r,ms))]);
+const __sc11=startCall;
+startCall=async function(uid,video){if(!CALL)await waitMax(ensureTurn(),2500);return __sc11(uid,video)};
+const __ac11=answerCall;
+answerCall=async function(w){ringStop();await waitMax(ensureTurn(),2500);return __ac11(w)};
+
+/* ----- reconnect when the network drops (the caller leads an ICE restart) ----- */
+function netOk(C){clearTimeout(C.rfail);clearTimeout(C.rt);C.rfail=0;C.restarting=false;C.recon=false}
+function netTrouble(C,s){
+  C.netWarn=true;C.recon=true;renderCallStatus();if(!C.pc)return;
+  if(s==='disconnected'){clearTimeout(C.rt);C.rt=setTimeout(()=>{if(CALL===C&&C.pc&&C.pc.connectionState!=='connected')iceRestart(C)},3500)}
+  else iceRestart(C);
+  if(!C.rfail)C.rfail=setTimeout(()=>{if(CALL===C&&C.pc&&C.pc.connectionState!=='connected'){toast('החיבור לשיחה נותק');endCall('failed')}},30000);
+}
+async function iceRestart(C){
+  if(!C.out||C.restarting||CALL!==C||!C.pc||(C.rn||0)>=5)return;
+  C.restarting=true;C.rn=(C.rn||0)+1;
+  try{
+    await waitMax(ensureTurn(),2000);try{C.pc.setConfiguration(iceCfg())}catch(e){}
+    const o=await C.pc.createOffer({iceRestart:true});await C.pc.setLocalDescription(o);
+    await C.ref.update({reoffer:{type:o.type,sdp:o.sdp,n:C.rn}});
+  }catch(e){console.warn('ice restart',e);C.restarting=false}
+}
+const __ocd11=onCallDoc;
+onCallDoc=function(C,d){
+  __ocd11(C,d);if(!d||CALL!==C)return;
+  const pm=!!(d.mic&&d.mic[C.peer]===false);if(pm!==!!C.peerMute){C.peerMute=pm;renderCall()}
+  if(!C.out&&d.reoffer&&C.pc&&d.reoffer.n>(C.lastRe||0)){
+    C.lastRe=d.reoffer.n;
+    (async()=>{try{try{C.pc.setConfiguration(iceCfg())}catch(e){}await C.pc.setRemoteDescription({type:d.reoffer.type,sdp:d.reoffer.sdp});const a=await C.pc.createAnswer();await C.pc.setLocalDescription(a);await C.ref.update({reanswer:{type:a.type,sdp:a.sdp,n:d.reoffer.n}})}catch(e){console.warn('re-answer',e)}})();
+  }
+  if(C.out&&d.reanswer&&C.pc&&d.reanswer.n===C.rn&&C.restarting&&C.pc.signalingState==='have-local-offer'){
+    C.pc.setRemoteDescription({type:d.reanswer.type,sdp:d.reanswer.sdp}).then(()=>{C.restarting=false}).catch(e=>{console.warn(e);C.restarting=false});
+  }
+  const rt=(d.react&&d.react.t)||0;if(C.reactSeen===undefined)C.reactSeen=rt;else if(rt&&rt!==C.reactSeen){C.reactSeen=rt;if(d.react.by!==ME)floatReact(d.react.e)}
+};
+
+/* ----- emoji reactions during the call ----- */
+const CALL_REACTS=['❤️','😂','😮','👍','🎉','🔥','👏','😢'];
+function floatReact(e){
+  const n=document.createElement('div');n.className='freact';n.textContent=e;
+  n.style.left=(15+Math.random()*60)+'%';$('#layers').appendChild(n);setTimeout(()=>n.remove(),2700);
+}
+
+/* ----- connection quality (signal bars) ----- */
+async function callQuality(C){
+  if(!C.pc||C.state!=='live')return;
+  try{
+    const st=await C.pc.getStats();let rtt=null,lost=0,recv=0;
+    st.forEach(r=>{if(r.type==='candidate-pair'&&r.nominated&&r.state==='succeeded'&&r.currentRoundTripTime!=null)rtt=r.currentRoundTripTime;if(r.type==='inbound-rtp'&&r.kind==='audio'){lost=r.packetsLost||0;recv=r.packetsReceived||0}});
+    const dl=lost-(C._lost||0),dr=recv-(C._recv||0);C._lost=lost;C._recv=recv;const loss=dr+dl>0?dl/(dr+dl):0;
+    let q=3;if((rtt&&rtt>.45)||loss>.08)q=1;else if((rtt&&rtt>.22)||loss>.03)q=2;if(C.netWarn)q=0;
+    if(q!==C.q){C.q=q;const e=$('#call .kq');if(e)e.className='kq q'+q}
+  }catch(e){}
+}
+
+/* ----- the call screen ----- */
+const cbtn=(a,icon,label,cls='',attrs='')=>`<div class="cbtnw"><button class="cb ${cls}" data-a="${a}" ${attrs} aria-label="${label}">${ic(icon)}</button><span>${label}</span></div>`;
+renderCall=function(){
+  const C=CALL;if(!C)return;let el=$('#call');
+  if(!el){el=document.createElement('div');el.id='call';$('#layers').appendChild(el)}
+  const p=pobj(C.peer),live=C.state==='live',ringIn=C.state==='ringing-in';
+  const rv=live&&C.remoteVid;
+  const bigLocal=C.camOn&&!ringIn&&(!live||(C.swap&&rv));
+  const showBig=bigLocal||rv;
+  C._big=bigLocal?'local':'remote';
+  C._pip=(live&&C.camOn)?(bigLocal?(rv?'remote':null):'local'):null;
+  const vidLayout=!!showBig;
+  el.className='call call2'+(C.min?' min':'')+(C.hideUi&&vidLayout&&live?' hideui':'')+(vidLayout?' isvid':'');
+  el.style.setProperty('--cc',p.color);
+  const bg=p.photo?`<div class="cbg" style="background-image:url(&quot;${esc(p.photo)}&quot;)"></div>`:`<div class="cbg grad"></div>`;
+  const mirBig=bigLocal&&C.facing==='user',mirPip=C._pip==='local'&&C.facing==='user';
+  const top=`<div class="ctop2"><button class="cmin" data-a="callMin" aria-label="מזעור השיחה">${ic('chevdown',22)}</button>
+    ${vidLayout?`<div class="cvname"><b>${esc(p.name)}</b><span class="cstat" id="cstat"></span></div>`:`<span class="cenc">${ic('lock',12)} מוצפנת מקצה לקצה</span>`}
+    <span class="kq q${C.q==null?3:C.q}" aria-label="איכות החיבור"><i></i><i></i><i></i></span></div>`;
+  const mid=vidLayout?(C.peerMute?`<div class="cmid kvid"><div class="cchip">${ic('micoff',14)} ${esc(pshort(C.peer))} השתיק/ה את המיקרופון</div></div>`:'')
+    :`<div class="cmid"><div class="cav2 ${live?'':'ring'}">${av(p,140)}</div><h2>${esc(p.name)}</h2><div class="cstat" id="cstat"></div>
+      ${live&&C.video&&!C.remoteVid?`<div class="cchip">${ic('videooff',14)} המצלמה של ${esc(pshort(C.peer))} כבויה</div>`:''}
+      ${C.peerMute?`<div class="cchip">${ic('micoff',14)} ${esc(pshort(C.peer))} השתיק/ה את המיקרופון</div>`:''}</div>`;
+  const bottom=ringIn?`<div class="kin"><div class="cinrow">${cbtn('callDecline','phoneoff','דחייה','red kbig')}${C.video?cbtn('callAnswerAudio','phone','מענה קולי','glass kbig'):''}${cbtn('callAnswer',C.video?'video':'phone','מענה','green kbig pulse')}</div><button class="cqr" data-a="callQuickReply">${ic('chat',16)} דחייה עם הודעה</button></div>`
+    :`<div class="kbar">${C.fxOpen&&C.camOn?FX.panel(C):''}${C.reactOpen?`<div class="kreact">${CALL_REACTS.map(e=>`<button data-a="callReactSend" data-e="${e}">${e}</button>`).join('')}</div>`:''}
+      <div class="cbtns">${cbtn('callT',C.camOn?'video':'videooff','מצלמה',C.camOn?'on':'','data-k="cam"')}${cbtn('callT',C.mute?'micoff':'mic',C.mute?'מושתק':'השתקה',C.mute?'on':'','data-k="mute"')}
+      ${C.camOn?cbtn('callFlip','refresh','החלפה'):''}${live?cbtn('callReact','smile','תגובה',C.reactOpen?'on':''):''}${C.camOn&&S().privacy.camFx!==false?cbtn('callFx','sparkle','אפקטים',C.fxOpen?'on':''):''}
+      ${cbtn('callEnd','phoneoff','ניתוק','red')}</div></div>`;
+  el.innerHTML=`${bg}<div class="cshade"></div><video id="rv" class="rv ${mirBig?'mir':''}" autoplay playsinline muted ${showBig?'':'hidden'}></video><audio id="ra" autoplay></audio>
+    ${top}${mid}${C._pip?`<video id="lv" class="lv2 pos-${C.pip||'tr'} ${mirPip?'mir':''}" autoplay playsinline muted></video>`:''}${bottom}`;
+  el.onclick=e=>{if(e.target.closest('button,#lv,.fxpanel,.kreact,.kin'))return;if(vidLayout&&live){C.hideUi=!C.hideUi;el.classList.toggle('hideui',C.hideUi);autoHide(C)}};
+  const lv=$('#lv',el);if(lv)pipDrag(C,lv);
+  bindCallMedia();renderCallStatus();autoHide(C);
+  clearInterval(C.iv);C.iv=setInterval(renderCallStatus,500);
+  document.body.classList.toggle('incall',!!C.min);
+};
+function autoHide(C){clearTimeout(C.hideT);if(C.state==='live'&&!C.hideUi)C.hideT=setTimeout(()=>{if(CALL===C&&C.state==='live'&&!C.fxOpen&&!C.reactOpen&&$('#call.isvid')){C.hideUi=true;$('#call')?.classList.add('hideui')}},6000)}
+function pipDrag(C,v){
+  let sx=0,sy=0,moved=false,id=null;
+  v.addEventListener('pointerdown',e=>{id=e.pointerId;v.setPointerCapture(id);sx=e.clientX;sy=e.clientY;moved=false;v.style.transition='none'});
+  v.addEventListener('pointermove',e=>{if(e.pointerId!==id)return;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.hypot(dx,dy)>8)moved=true;if(moved)v.style.transform=`translate(${dx}px,${dy}px)${v.classList.contains('mir')?' scaleX(-1)':''}`});
+  const up=e=>{if(e.pointerId!==id)return;id=null;v.style.transition='';
+    if(!moved){if(C.camOn&&C.remoteVid){C.swap=!C.swap;renderCall()}return}
+    const r=v.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    C.pip=(cy<innerHeight/2?'t':'b')+(cx<innerWidth/2?'l':'r');v.style.transform='';renderCall()};
+  v.addEventListener('pointerup',up);v.addEventListener('pointercancel',up);
+}
+bindCallMedia=function(){
+  const C=CALL;if(!C)return;const rv=$('#rv'),ra=$('#ra'),lv=$('#lv');
+  const big=C._big==='local'?C.preview:C.remote,small=C._pip==='remote'?C.remote:C._pip==='local'?C.preview:null;
+  if(rv&&big&&rv.srcObject!==big)rv.srcObject=big;
+  if(ra&&ra.srcObject!==C.remote)ra.srcObject=C.remote;
+  if(rv)rv.muted=true;
+  if(lv&&small&&lv.srcObject!==small)lv.srcObject=small;
+  [rv,ra,lv].forEach(x=>x&&x.play&&x.play().catch(()=>{}));
+};
+renderCallStatus=function(){
+  const C=CALL;if(!C)return;
+  const txt=C.recon&&C.answered?'מתחבר מחדש…':({calling:C.ready?'מצלצל…':'מחייג/ת…','ringing-in':C.video?'שיחת וידאו נכנסת':'שיחה קולית נכנסת',connecting:'מתחבר…',live:fmtDur((Date.now()-C.start)/1000)})[C.state]||'';
+  const s=$('#cstat');if(s&&s.textContent!==txt)s.textContent=txt;
+  if(C.min){let b=$('#callbar');if(!b){b=document.createElement('button');b.id='callbar';b.dataset.a='callMax';$('#layers').appendChild(b)}const t=`${ic(C.camOn||C.remoteVid?'video':'phone',16)} ${esc(pshort(C.peer))} · ${esc(txt)} · לחזרה לשיחה`;if(b.dataset.t!==t){b.dataset.t=t;b.innerHTML=t}}
+  else $('#callbar')?.remove();
+  if(C.out&&C.state==='calling'&&C.ready&&Date.now()-(C._rb||0)>3000){C._rb=Date.now();try{Sound.playNotes([[400,0,1,'sine',.06],[450,0,1,'sine',.05]])}catch(e){}}
+  if(C.state==='live'&&Date.now()-(C._qt||0)>2000){C._qt=Date.now();callQuality(C)}
+};
+const __ec11=endCall;
+endCall=function(...a){const r=__ec11(...a);$('#callbar')?.remove();document.body.classList.remove('incall');return r};
+function callMinimize(){const C=CALL;if(!C)return;C.min=true;C.fxOpen=false;C.reactOpen=false;renderCall()}
+function callRestore(){const C=CALL;if(!C)return;C.min=false;C.hideUi=false;renderCall()}
+/* back button: minimize instead of leaving the call open on top */
+const __nl11=navLayers;
+navLayers=function(){const L=__nl11();if(CALL&&CALL.min){const i=L.indexOf('call');if(i>=0)L.splice(i,1)}return L};
+const __ctl11=closeTopLayer;
+closeTopLayer=function(k){if(k==='call'){const C=CALL;if(!C)return;if(C.fxOpen||C.reactOpen){C.fxOpen=false;C.reactOpen=false;renderCall();return}if(C.state==='ringing-in'){toast('אפשר לענות או לדחות את השיחה');return}callMinimize();return}return __ctl11(k)};
+const QUICK_REPLIES=['אני לא יכול/ה לדבר עכשיו. מה קורה?','אחזור אליך בעוד כמה דקות.','אני בדרך.','אני בפגישה, אחזור אליך אחר כך.'];
+const __A11=A7;
+A7=function(){return{...__A11(),
+  callMin:()=>callMinimize(),callMax:()=>callRestore(),
+  callReact:()=>{const C=CALL;if(!C)return;C.reactOpen=!C.reactOpen;C.fxOpen=false;renderCall()},
+  callReactSend:el=>{const C=CALL;if(!C)return;const e=el.dataset.e;floatReact(e);C.reactOpen=false;renderCall();if(C.ref)C.ref.update({react:{by:ME,e,t:Date.now()}}).catch(()=>{})},
+  callQuickReply:()=>{const C=CALL;if(!C)return;const peer=C.peer;
+    sheetList('דחייה עם הודעה',[...QUICK_REPLIES.map(t=>({label:esc(t),icon:'chat',fn:()=>{closeSheet(true);endCall('declined');ensureDirect(peer).then(c=>{if(c)sendMsg(c.id,{type:'text',text:t})})}})),
+      {label:'כתיבת הודעה אחרת…',icon:'edit',fn:()=>{closeSheet(true);askText('הודעה','',t=>{endCall('declined');ensureDirect(peer).then(c=>{if(c)sendMsg(c.id,{type:'text',text:t})})},{ok:'דחייה ושליחה',max:300});const s2=$('#sheet');if(s2)s2.style.zIndex=88}}]);const s1=$('#sheet');if(s1)s1.style.zIndex=88},
+}};
+const __st11=start;
+start=function(){__st11();setTimeout(()=>ensureTurn(),4000)};
+
+/* ================= notifications that keep working when the app isn't opened for days ================= */
+/* 1) the service worker gets what it needs to renew the push address on its own
+   2) every time the app opens, this device's address is saved again and dead ones are removed
+   3) a "send me a test" button and a guide for Samsung battery settings */
+function swKvSet(k,v){return new Promise(res=>{try{const o=indexedDB.open('spicyy-sw',1);o.onupgradeneeded=()=>o.result.createObjectStore('kv');o.onsuccess=()=>{try{const t=o.result.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=()=>res(true);t.onerror=()=>res(false)}catch(e){res(false)}};o.onerror=()=>res(false)}catch(e){res(false)}})}
+function swAuthSave(){
+  try{const u=fauth&&fauth.currentUser;if(!u||!u.refreshToken||!CFG.firebase)return;
+    swKvSet('auth',{uid:u.uid,refresh:u.refreshToken,apiKey:CFG.firebase.apiKey,project:CFG.firebase.projectId,vapid:(CFG.push||{}).publicKey||''})}catch(e){}
+}
+async function pushPostJson(path,body){
+  if(!pushConfigured()||!fauth||!fauth.currentUser)return null;
+  try{const t=await fauth.currentUser.getIdToken();const r=await fetch(pushUrl()+path,{method:'POST',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify(body)});return r.ok?await r.json():{error:r.status}}catch(e){return {error:String(e)}}
+}
+async function dropDeadSubs(dead){
+  for(const id of dead||[]){try{await FDB.doc('pushsubs/'+ME).update({['subs.'+id]:firebase.firestore.FieldValue.delete()})}catch(e){}}
+}
+async function pushTest(){
+  if(pushState()!=='on'){const s=await pushSubscribe(true);if(s!=='on'){toast('קודם צריך לאשר התראות');drawPages();return}}
+  else{try{await pushSubscribe(false)}catch(e){}}
+  const r=await pushPostJson('/test',{delay:0});
+  if(r&&r.dead&&r.dead.length)await dropDeadSubs(r.dead);
+  if(!r||r.error){toast('השרת של ההתראות לא ענה. בדקו את החיבור ונסו שוב.');return}
+  if(!r.sent){toast('לא נמצא מכשיר רשום להתראות. נסו לכבות ולהדליק את ההתראות.');return}
+  await pushPostJson('/test',{delay:10});
+  openSheet('בדיקת התראות',`<div class="hero">${ic('bell',52)}<p><b>עכשיו צאו מהאפליקציה או נעלו את המסך.</b><br>תוך 10 שניות אמורה להגיע התראה: ״בדיקה: ההתראות עובדות״.</p></div><p class="ptext">אם ההתראה לא הגיעה, כנראה שהטלפון מכבה את האפליקציה כדי לחסוך בסוללה. בצעו את השלבים בעמוד ״התראות שתמיד מגיעות״.</p><div class="btns"><button class="btn full" data-a="closeSheet">הבנתי</button></div>`);
+}
+function pgPushHelp(){
+  const step=(n,t)=>`<li><span class="stn">${n}</span><span>${t}</span></li>`;
+  return{title:'התראות שתמיד מגיעות',body:`<div class="hero">${ic('bell',52)}<p>טלפונים של סמסונג (וגם אחרים) ״מרדימים״ אפליקציות שלא פותחים כמה זמן, ואז ההתראות לא מגיעות. עושים את זה פעם אחת:</p></div>
+  <div class="plabel">1. לא להרדים את SpicyyChat ואת Chrome</div>
+  <ol class="steps">${step(1,'<b>הגדרות</b> ← <b>טיפול בסוללה ובמכשיר</b> (או <b>סוללה</b>) ← <b>מגבלות שימוש ברקע</b>.')}${step(2,'מכבים את <b>״העברת אפליקציות לא בשימוש למצב שינה״</b>.')}${step(3,'אם <b>SpicyyChat</b> או <b>Chrome</b> מופיעות ב״אפליקציות במצב שינה״ או ״שינה עמוקה״, מוציאים אותן משם.')}${step(4,'נכנסים ל<b>אפליקציות שאף פעם לא נכנסות למצב שינה</b> ומוסיפים את <b>SpicyyChat</b> ואת <b>Chrome</b>.')}</ol>
+  <div class="plabel">2. סוללה ללא הגבלה</div>
+  <ol class="steps">${step(1,'<b>הגדרות</b> ← <b>אפליקציות</b> ← <b>Chrome</b> ← <b>סוללה</b> ← בוחרים <b>ללא הגבלה</b>.')}${step(2,'אותו דבר ל<b>SpicyyChat</b>.')}</ol>
+  <div class="plabel">3. לוודא שההתראות מותרות</div>
+  <ol class="steps">${step(1,'<b>הגדרות</b> ← <b>אפליקציות</b> ← <b>SpicyyChat</b> ← <b>התראות</b>: מופעל.')}${step(2,'באפליקציה: הגדרות ← התראות ← ״התראות כשהאפליקציה סגורה״ צריך להיות <b>פעיל</b>.')}</ol>
+  ${R('bell','שליחת התראת בדיקה','שולח התראה לטלפון שלך תוך 10 שניות','pushTest','','accent')}
+  <p class="ptext">${ic('info',13)} לא סוגרים את SpicyyChat בכפתור ״סגור הכול״ ולא עושים ״עצירה בכפייה״, כי אז אנדרואיד חוסם את ההתראות עד שפותחים שוב.</p>`};
+}
+PAGES.pushhelp=pgPushHelp;
+const __pgn12=pgNotif;
+pgNotif=function(){const r=__pgn12();const i=r.body.indexOf('data-a="pushToggle"');if(i>=0){const e=r.body.indexOf('</button>',i)+9;r.body=r.body.slice(0,e)+R('bell','שליחת התראת בדיקה','לבדוק שההתראות מגיעות כשהאפליקציה סגורה','pushTest')+GO('shield','התראות שתמיד מגיעות','הגדרות סוללה בטלפון, כדי שלא יפספסו הודעות ושיחות','pushhelp')+r.body.slice(e)}return r};
+PAGES.notif=()=>pgNotif();
+const __A12=A7;
+A7=function(){return{...__A12(),pushTest:()=>pushTest()}};
+const __st12=start;
+start=function(){
+  __st12();swAuthSave();
+  setTimeout(swAuthSave,4000);
+  try{fauth.onIdTokenChanged&&fauth.onIdTokenChanged(()=>swAuthSave())}catch(e){}
+};
+
+/* ================= videos: statuses, channel posts and a "Shorts" feed ================= */
+IC.playf='<path d="M7 4.5v15l12.5-7.5z" fill="currentColor" stroke="none"/>';
+IC.share='<path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/>';
+IC.vol='<path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/>';
+IC.volx='<path d="M11 5L6 9H2v6h4l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/>';
+IC.flame='<path d="M12 22c4.4 0 7-3 7-7 0-4-3-6-4-10-2 2-3 4-3 6-1-1-2-2-2-4-3 3-5 5.5-5 8.5C5 19 7.6 22 12 22z"/>';
+
+/* make a video small enough to upload: keeps short light files as they are,
+   otherwise re-records the first `maxSec` seconds at a lower bitrate */
+async function prepVideo(file,{maxSec=60,maxBytes=14*1048576,onProgress}={}){
+  const url=URL.createObjectURL(file);
+  const v=document.createElement('video');v.src=url;v.playsInline=true;v.preload='auto';v.muted=true;
+  try{
+    await new Promise((res,rej)=>{v.onloadedmetadata=res;v.onerror=()=>rej(new Error('format'));setTimeout(()=>rej(new Error('timeout')),15000)});
+    const dur=isFinite(v.duration)?v.duration:0;
+    await new Promise(r=>{v.onseeked=r;try{v.currentTime=Math.min(.6,dur/3||0)}catch(e){r()}setTimeout(r,2000)});
+    let thumb='';try{const w=320,h=Math.round(w*(v.videoHeight||16)/(v.videoWidth||9));const cv=document.createElement('canvas');cv.width=w;cv.height=Math.min(h,640);cv.getContext('2d').drawImage(v,0,0,cv.width,cv.height);thumb=cv.toDataURL('image/jpeg',.68)}catch(e){}
+    if(dur<=maxSec+.5&&file.size<=maxBytes)return{blob:file,dur:Math.round(dur),thumb};
+    if(!v.captureStream||!window.MediaRecorder)throw new Error(file.size>maxBytes?'big':'long');
+    const len=Math.min(dur||maxSec,maxSec);
+    const vb=Math.max(500000,Math.min(2500000,Math.floor(maxBytes*8*.82/len)-96000));
+    const ac=new (window.AudioContext||window.webkitAudioContext)();
+    v.muted=false;v.currentTime=0;await new Promise(r=>{v.onseeked=r;setTimeout(r,1000)});
+    const src=ac.createMediaElementSource(v),dest=ac.createMediaStreamDestination();src.connect(dest);
+    const vs=v.captureStream();const tracks=[...vs.getVideoTracks(),...dest.stream.getAudioTracks()];
+    const types=['video/mp4;codecs=avc1,mp4a.40.2','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+    const mimeType=types.find(t=>MediaRecorder.isTypeSupported(t))||'';
+    const rec=new MediaRecorder(new MediaStream(tracks),{mimeType,videoBitsPerSecond:vb,audioBitsPerSecond:96000});
+    const chunks=[];rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+    const done=new Promise(r=>rec.onstop=r);
+    rec.start(1000);await v.play();
+    await new Promise(r=>{const t=setInterval(()=>{onProgress&&onProgress(Math.min(1,v.currentTime/len));if(v.currentTime>=len||v.ended){clearInterval(t);r()}},250)});
+    v.pause();rec.stop();await done;try{ac.close()}catch(e){}
+    const blob=new Blob(chunks,{type:(mimeType||'video/webm').split(';')[0]});
+    if(blob.size>15*1048576)throw new Error('big');
+    return{blob,dur:Math.round(len),thumb};
+  }finally{URL.revokeObjectURL(url);v.removeAttribute('src')}
+}
+function videoErr(e){const m=String(e&&e.message||e);toast(m==='big'||m==='long'?'הסרטון ארוך או גדול מדי. נסו סרטון קצר יותר (עד דקה).':m==='format'?'לא הצלחנו לפתוח את הסרטון':'לא הצלחנו להכין את הסרטון')}
+function progressSheet(title){
+  openSheet(title,`<div class="vprog"><div class="vpbar"><i id="vpi"></i></div><p class="ptext" id="vpt">מכין את הסרטון…</p></div>`);
+  return{set:(f,t)=>{const i=$('#vpi');if(i)i.style.width=Math.round(f*100)+'%';const p=$('#vpt');if(p&&t)p.textContent=t},close:()=>closeSheet(true)};
+}
+async function uploadVideo(file,opt,title){
+  const ps=progressSheet(title||'מעלה סרטון');
+  try{
+    const r=await prepVideo(file,{...opt,onProgress:f=>ps.set(f*.6,'מכין את הסרטון… '+Math.round(f*100)+'%')});
+    ps.set(.7,'מעלה…');const url=await storeBlob(r.blob);ps.close();if(!url)return null;
+    return{url,thumb:r.thumb,dur:r.dur};
+  }catch(e){ps.close();console.warn(e);videoErr(e);return null}
+}
+
+/* ----- status: photo or video ----- */
+statusCam=function(){pickFile('image/*,video/*',f=>{if(String(f.type).startsWith('video/'))statusVideo(f);else statusPhoto(f)})};
+function statusPhoto(f){readImage(f,900,.8,preview=>{
+  openSheet('סטטוס חדש',`<div style="padding:0 16px"><img src="${preview}" alt="" style="width:100%;max-height:340px;object-fit:contain;border-radius:16px;background:#000"></div><form id="scf" class="crow" style="padding:12px 16px"><div class="cfield"><input class="inp" id="scc" placeholder="הוספת כיתוב…" style="border:0;background:none"></div><button class="sendbtn" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></form><p class="ptext" style="text-align:center">${ic('eye',13)} ${esc(visLabel('status'))} · 24 שעות</p>`,d=>$('#scf',d).addEventListener('submit',e=>{e.preventDefault();const cap=$('#scc',d).value.trim();closeSheet(true);storeImage(f,url=>postStatus({type:'image',img:url,cap}))}))})}
+function statusVideo(f){
+  const u=URL.createObjectURL(f);
+  openSheet('סטטוס וידאו',`<div style="padding:0 16px"><video src="${u}" controls playsinline style="width:100%;max-height:360px;border-radius:16px;background:#000"></video></div><form id="svcf" class="crow" style="padding:12px 16px"><div class="cfield"><input class="inp" id="svcc" placeholder="הוספת כיתוב…" style="border:0;background:none"></div><button class="sendbtn" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></form><p class="ptext" style="text-align:center">עד דקה · ${ic('eye',13)} ${esc(visLabel('status'))} · 24 שעות</p>`,d=>{
+    $('#svcf',d).addEventListener('submit',async e=>{e.preventDefault();const cap=$('#svcc',d).value.trim();closeSheet(true);URL.revokeObjectURL(u);
+      const r=await uploadVideo(f,{maxSec:60},'מעלה סטטוס');if(r)postStatus({type:'video',url:r.url,thumb:r.thumb,dur:r.dur,cap})})},()=>URL.revokeObjectURL(u));
+}
+const __sc13=storyCard;
+storyCard=function(u,list){
+  const L=list.map(s=>s.type==='video'?{...s,type:'image',img:s.thumb||''}:s);let h=__sc13(u,L);
+  if(list[list.length-1].type==='video')h=h.replace('<span class="sbg">','<span class="splay">'+ic('playf',14)+'</span><span class="sbg">');
+  return h;
+};
+const __rsv13=renderSV;
+renderSV=function(){
+  __rsv13();if(!SV)return;SV.vid=null;
+  const u=SV.owners[SV.oi],it=liveStatus(u)[SV.ii];if(!it||it.type!=='video')return;
+  const b=$('#svbody');if(!b)return;
+  b.innerHTML=`<video id="svv" playsinline autoplay ${msrc(it.url)} ${it.thumb?`poster="${esc(it.thumb)}"`:''}></video>${it.cap?`<div class="vcap">${esc(it.cap)}</div>`:''}<button class="svmute" data-a="svMute" aria-label="${SV.muted?'הפעלת קול':'השתקה'}">${ic(SV.muted?'volx':'vol',20)}</button>`;
+  hydrateMedia(b);const v=$('#svv');v.muted=!!SV.muted;SV.vid=v;v.onended=()=>{if(SV&&SV.vid===v)svNext()};
+  v.play().catch(()=>{v.muted=true;SV.muted=true;v.play().catch(()=>{})});
+};
+const __svl13=svLoop;
+svLoop=function(){
+  if(!SV)return;const v=SV.vid;
+  if(v){
+    if(SV.paused&&!v.paused)v.pause();else if(!SV.paused&&v.paused&&!v.ended&&v.readyState>2)v.play().catch(()=>{});
+    const d=v.duration;const bar=$('#svb');if(bar&&d&&isFinite(d))bar.style.width=Math.min(100,v.currentTime/d*100)+'%';
+    SV.pos=0;SV.last=performance.now();SV.raf=requestAnimationFrame(svLoop);return;
+  }
+  __svl13();
+};
+
+/* ----- channels ----- */
+const chFollowers=ch=>Object.values((ch.reacts&&ch.reacts._f)||{}).filter(Boolean).length;
+const chUnread=(id,ch)=>(ch.posts||[]).filter(p=>p.t>((ST.chSeen||{})[id]||0)&&ch.owner!==ME).length;
+const chAv=(ch,size)=>av({name:ch.name,color:ch.color,photo:ch.photo||null},size);
+function allShorts(){
+  const L=[];for(const [id,ch] of Object.entries(CHN))for(const p of ch.posts||[])if(p.vid)L.push({id,ch,p});
+  return L.sort((a,b)=>((ST.follows[b.id]?1:0)-(ST.follows[a.id]?1:0))||(b.p.t-a.p.t)).slice(0,40);
+}
+function chRow2(id,ch){
+  const last=(ch.posts||[]).at(-1),un=chUnread(id,ch);
+  const prev=last?(last.vid?`${ic('video',14)} ${esc(last.text||'סרטון')}`:last.img?`${ic('image',14)} ${esc(last.text||'תמונה')}`:esc(last.text||'')):esc(ch.desc||'');
+  return `<button class="row" data-a="go" data-p="channel" data-arg="${id}">${chAv(ch,50)}<span class="rm"><span class="rt"><span class="rn">${esc(ch.name)}</span><span class="rtime ${un?'hot':''}">${listTime(last?.t)}</span></span><span class="rb"><span class="rp"><span>${prev}</span></span>${un?`<span class="badge">${un}</span>`:''}</span></span></button>`;
+}
+viewUpdates=function(){
+  const mine=liveStatus(ME),owners=statusOwners();
+  const all=Object.entries(CHN);const followed=all.filter(([id,c])=>ST.follows[id]||c.owner===ME).sort((a,b)=>((b[1].posts||[]).at(-1)?.t||0)-((a[1].posts||[]).at(-1)?.t||0));
+  const others=all.filter(([id,c])=>!ST.follows[id]&&c.owner!==ME).sort((a,b)=>chFollowers(b[1])-chFollowers(a[1]));
+  const shorts=allShorts();
+  return `<div class="shead"><h1 class="htitle">עדכונים</h1><button class="ib" data-a="statusCam" aria-label="סטטוס עם תמונה או סרטון">${ic('camera')}</button><button class="ib" data-a="updMenu" aria-label="תפריט">${ic('more')}</button></div>
+  <div class="list">
+  <div class="usec"><b>סטטוס</b>${mine.length?`<button class="lnk" data-a="statusCam">הוספה</button>`:''}</div>
+  <div class="stories">${mine.length?storyCard(ME,mine):`<button class="story add" data-a="statusCam"><span class="sbg">${meAv(56)}</span><span class="plus">${ic('plus',20)}</span><span style="position:relative">הוספת סטטוס</span></button>`}${owners.map(u=>storyCard(u,liveStatus(u))).join('')}</div>
+  ${!owners.length?'<p class="ptext" style="margin-top:-6px">סטטוסים של חברים יופיעו כאן ונעלמים אחרי 24 שעות.</p>':''}
+  ${shorts.length?`<div class="usec"><b>${ic('flame',18)} שורטים</b><button class="lnk" data-a="shortsOpen" data-i="0">צפייה</button></div><div class="shorts">${shorts.slice(0,12).map((s,i)=>`<button class="short" data-a="shortsOpen" data-i="${i}">${s.p.thumb?`<img src="${esc(s.p.thumb)}" alt="">`:''}<span class="splay">${ic('playf',16)}</span><span class="shcap">${chAv(s.ch,22)}<span>${esc(s.ch.name)}</span></span></button>`).join('')}</div>`:''}
+  <div class="usec"><b>ערוצים</b><button class="lnk" data-a="go" data-p="discover">גילוי</button></div>
+  ${followed.length?followed.map(([id,c])=>chRow2(id,c)).join(''):'<p class="ptext">עקבו אחרי ערוצים כדי לקבל עדכונים, או צרו ערוץ משלכם.</p>'}
+  ${others.length?`<div class="usub">ערוצים שכדאי להכיר</div><div class="chcards2">${others.slice(0,12).map(([id,ch])=>`<div class="chcard2"><button data-a="go" data-p="channel" data-arg="${id}" class="cc2in">${chAv(ch,64)}<b>${esc(ch.name)}</b><small>${chFollowers(ch)} עוקבים</small></button><button class="btn" data-a="follow" data-ch="${id}">מעקב</button></div>`).join('')}</div>`:''}
+  <div class="btns" style="padding:6px 16px 90px"><button class="btn ghost full" data-a="go" data-p="newchannel">${ic('plus',18)} יצירת ערוץ</button></div>
+  </div>
+  <button class="fab sm" data-a="statusText" aria-label="סטטוס טקסט">${ic('edit',20)}</button>
+  <button class="fab" data-a="statusCam" aria-label="סטטוס עם תמונה או סרטון">${ic('camera',24)}</button>`;
+};
+function chPostHTML(id,ch,p){
+  const m=ch.reacts?.[p.id]||{};const r={};Object.values(m).forEach(e=>{if(e)r[e]=(r[e]||0)+1});const keys=Object.keys(r).sort((a,b)=>r[b]-r[a]);
+  const mineR=m[ME];
+  const media=p.vid?`<button class="chvid" data-a="shortsOpenP" data-ch="${id}" data-p="${p.id}">${p.thumb?`<img src="${esc(p.thumb)}" alt="">`:''}<span class="splay big">${ic('playf',26)}</span>${p.dur?`<span class="kvdur">${fmtDur(p.dur)}</span>`:''}</button>`:p.img?`<span class="imgw"><img src="${esc(p.img)}" alt="" loading="lazy"></span>`:'';
+  return `<div class="chpost">${media}${p.text?`<div class="chtxt">${linkify(esc(p.text))}</div>`:''}<div class="chmeta"><time>${fmtTime(p.t)}</time></div>
+    <div class="chrx">${keys.map(e=>`<button class="rxchip ${mineR===e?'on':''}" data-a="chReact1" data-ch="${id}" data-p="${p.id}" data-e="${e}">${e}<small>${r[e]}</small></button>`).join('')}<button class="rxadd" data-a="chReact" data-ch="${id}" data-p="${p.id}" aria-label="תגובה">${ic('smile',16)}</button><button class="rxadd" data-a="chShare" data-ch="${id}" data-p="${p.id}" aria-label="שיתוף">${ic('share',16)}</button></div></div>`;
+}
+pgChannel=function(id){
+  const ch=CHN[id];if(!ch)return null;const mine=ch.owner===ME,f=!!ST.follows[id];
+  ST.chSeen=ST.chSeen||{};const lastT=(ch.posts||[]).at(-1)?.t||0;if(lastT>(ST.chSeen[id]||0)){ST.chSeen[id]=lastT;saveState()}
+  let lastDay='';
+  const posts=(ch.posts||[]).map(p=>{const d=dayLabel(p.t);const sep=d!==lastDay?`<div class="daysep">${d}</div>`:'';lastDay=d;return sep+chPostHTML(id,ch,p)}).join('');
+  return{title:esc(ch.name),actions:mine?`<button class="ib" data-a="chMenu" data-ch="${id}" aria-label="ניהול הערוץ">${ic('more')}</button>`:'',body:`<div class="chhero">${chAv(ch,92)}<h3>${esc(ch.name)}</h3><p>ערוץ · ${chFollowers(ch)} עוקבים</p>${ch.desc?`<p class="chdesc">${linkify(esc(ch.desc))}</p>`:''}
+    <div class="chacts">${mine?`<span class="who-tag">הערוץ שלך</span>`:`<button class="btn ${f?'ghost':''}" data-a="follow" data-ch="${id}">${f?ic('check',16)+' במעקב':ic('plus',16)+' מעקב'}</button>`}<button class="btn ghost" data-a="chShareCh" data-ch="${id}">${ic('share',16)} שיתוף</button></div></div>
+  <div ${wallAttr(S().wallpaper)} style="min-height:260px;padding-bottom:12px">${posts||'<div class="sys">עוד אין עדכונים בערוץ</div>'}</div>
+  ${mine?`<form id="cpf" class="crow chcomp"><button type="button" class="ib" id="cpatt" aria-label="תמונה או סרטון">${ic('clip')}</button><div class="cfield"><input class="inp" id="cpt" placeholder="עדכון לערוץ" style="border:0;background:none"></div><button class="sendbtn" aria-label="פרסום"><span class="flip" style="display:grid">${ic('send')}</span></button></form><div id="cpprev"></div>`:`<p class="ptext" style="text-align:center">${ic('megaphone',13)} רק מנהל/ת הערוץ מפרסם/ת. אפשר להגיב באימוג׳י.</p>`}`,
+  after:el=>{const fm=$('#cpf',el);if(!fm)return;let att=null;
+    const showPrev=()=>{const p=$('#cpprev',el);if(!p)return;p.innerHTML=att?`<div class="cpprev">${att.thumb||att.img?`<img src="${esc(att.thumb||att.img)}" alt="">`:''}<span>${att.vid?'סרטון מוכן לפרסום':'תמונה מוכנה לפרסום'}</span><button class="ib" type="button" id="cpx" aria-label="הסרה">${ic('x',16)}</button></div>`:'';const x=$('#cpx',p);if(x)x.onclick=()=>{att=null;showPrev()}};
+    $('#cpatt',el).addEventListener('click',()=>pickFile('image/*,video/*',async file=>{
+      if(String(file.type).startsWith('video/')){const r=await uploadVideo(file,{maxSec:90},'מעלה סרטון לערוץ');if(r){att={vid:r.url,thumb:r.thumb,dur:r.dur};showPrev()}}
+      else storeImage(file,u=>{att={img:u};showPrev()})}));
+    fm.addEventListener('submit',e=>{e.preventDefault();const t=$('#cpt',el).value.trim();if(!t&&!att)return;
+      const post={id:rid(10),t:Date.now(),text:t,...(att||{})};
+      const posts=[...(ch.posts||[]),post].slice(-80);while(posts.length>1&&JSON.stringify(posts).length>800000)posts.shift();
+      ch.posts=posts;qw('channels/'+id,()=>db.doc('channels/'+id).update({posts:clone(posts)}));att=null;drawPages();if(TAB==='updates')drawSide();toast('פורסם בערוץ')});
+  }};
+};
+pgDiscover=function(){
+  const all=Object.entries(CHN).sort((a,b)=>chFollowers(b[1])-chFollowers(a[1]));
+  return{title:'גילוי ערוצים',body:all.map(([id,ch])=>`<div class="row"><button style="display:contents" data-a="go" data-p="channel" data-arg="${id}">${chAv(ch,50)}<span class="rm"><span class="rn">${esc(ch.name)}</span><span class="rp">${chFollowers(ch)} עוקבים${ch.desc?' · '+esc(ch.desc):''}</span></span></button>${ch.owner!==ME?`<button class="flw ${ST.follows[id]?'on':''}" data-a="follow" data-ch="${id}">${ST.follows[id]?'במעקב':'מעקב'}</button>`:''}</div>`).join('')||'<div class="empty"><b>עוד אין ערוצים</b>אפשר ליצור את הראשון!</div>'};
+};
+function setFollow(id,on){
+  if(on)ST.follows[id]=true;else delete ST.follows[id];saveState();
+  const ch=CHN[id];if(ch){ch.reacts=ch.reacts||{};ch.reacts._f={...(ch.reacts._f||{}),[ME]:on};qw('channels/'+id,()=>db.doc('channels/'+id).update({reacts:{_f:{[ME]:on}}}))}
+  if(on){ST.chSeen=ST.chSeen||{};ST.chSeen[id]=(ch?.posts||[]).at(-1)?.t||0}
+}
+
+/* ----- Shorts: full-screen vertical video feed ----- */
+let SH_LIST=[];
+function openShorts(list,start=0){
+  SH_LIST=list;if(!list.length)return;closeSheet(true);$('#viewer')?.remove();
+  const el=document.createElement('div');el.className='viewer shortsv';el.id='viewer';
+  el.innerHTML=`<div class="shtop"><button class="ib" data-a="svClose" aria-label="סגירה">${ic('back')}</button><b>${ic('flame',18)} שורטים</b><button class="ib" id="shmute" aria-label="קול">${ic('volx',20)}</button></div><div class="shfeed">${list.map((s,i)=>{const n=Object.values(s.ch.reacts?.[s.p.id]||{}).filter(Boolean).length,mineR=(s.ch.reacts?.[s.p.id]||{})[ME];return `<section class="shitem" data-i="${i}"><video playsinline loop muted preload="none" data-src="${esc(s.p.vid)}" ${s.p.thumb?`poster="${esc(s.p.thumb)}"`:''}></video>
+    <div class="shside"><button data-a="shLike" data-i="${i}" class="${mineR?'on':''}">${mineR?'❤️':ic('heart',26)}<small>${n||''}</small></button><button data-a="chShare" data-ch="${s.id}" data-p="${s.p.id}">${ic('share',24)}<small>שיתוף</small></button></div>
+    <div class="shinfo"><button data-a="go" data-p="channel" data-arg="${s.id}" class="shch">${chAv(s.ch,34)}<b>${esc(s.ch.name)}</b></button>${s.ch.owner!==ME&&!ST.follows[s.id]?`<button class="shfol" data-a="follow" data-ch="${s.id}">מעקב</button>`:''}${s.p.text?`<p>${esc(s.p.text)}</p>`:''}</div></section>`}).join('')}</div>`;
+  $('#layers').appendChild(el);
+  const feed=$('.shfeed',el);let muted=true;const mbtn=$('#shmute',el);
+  mbtn.onclick=()=>{muted=!muted;mbtn.innerHTML=ic(muted?'volx':'vol',20);$$('video',el).forEach(v=>v.muted=muted)};
+  const load=v=>{if(v.dataset.src&&!v.dataset.h){v.dataset.media=v.dataset.src.startsWith('media:')?v.dataset.src.slice(6):'';if(v.dataset.media)hydrateMedia(v.parentNode);else{v.src=v.dataset.src;v.dataset.h=1}}};
+  const io=new IntersectionObserver(es=>es.forEach(e=>{const v=$('video',e.target);const i=+e.target.dataset.i;
+    if(e.isIntersecting&&e.intersectionRatio>.6){load(v);const nx=$(`.shitem[data-i="${i+1}"] video`,el);if(nx)load(nx);v.muted=muted;v.play().catch(()=>{v.muted=true;v.play().catch(()=>{})})}else{try{v.pause()}catch(x){}}}),{root:feed,threshold:[0,.6,1]});
+  $$('.shitem',el).forEach(s=>{io.observe(s);s.addEventListener('click',e=>{if(e.target.closest('button'))return;const v=$('video',s);if(v.paused)v.play().catch(()=>{});else v.pause()})});
+  const it=$(`.shitem[data-i="${start}"]`,el);if(it)feed.scrollTop=it.offsetTop;
+}
+const __A13=A7;
+A7=function(){return{...__A13(),
+  statusCam:()=>statusCam(),
+  svMute:()=>{if(!SV)return;SV.muted=!SV.muted;if(SV.vid)SV.vid.muted=SV.muted;const b=$('#viewer .svmute');if(b)b.innerHTML=ic(SV.muted?'volx':'vol',20)},
+  shortsOpen:el=>openShorts(allShorts(),+el.dataset.i||0),
+  shortsOpenP:el=>{const L=allShorts();let i=L.findIndex(s=>s.id===el.dataset.ch&&s.p.id===el.dataset.p);if(i<0){const ch=CHN[el.dataset.ch],p=(ch?.posts||[]).find(x=>x.id===el.dataset.p);if(!p)return;L.unshift({id:el.dataset.ch,ch,p});i=0}openShorts(L,i)},
+  shLike:el=>{const s=SH_LIST[+el.dataset.i];if(!s)return;const cur=(s.ch.reacts?.[s.p.id]||{})[ME];const v=cur?'':'❤️';s.ch.reacts=s.ch.reacts||{};s.ch.reacts[s.p.id]={...(s.ch.reacts[s.p.id]||{}),[ME]:v};qw('channels/'+s.id,()=>db.doc('channels/'+s.id).update({reacts:{[s.p.id]:{[ME]:v}}}));const n=Object.values(s.ch.reacts[s.p.id]).filter(Boolean).length;el.classList.toggle('on',!!v);el.innerHTML=(v?'❤️':ic('heart',26))+`<small>${n||''}</small>`},
+  follow:el=>{const id=el.dataset.ch;const on=!ST.follows[id];setFollow(id,on);toast(on?'את/ה עוקב/ת אחרי הערוץ':'הפסקת לעקוב');if(stack.length)drawPages();if(TAB==='updates')drawSide();if(el.classList.contains('shfol'))el.remove()},
+  chReact1:el=>{const id=el.dataset.ch,pid=el.dataset.p,e=el.dataset.e;const cur=CHN[id]?.reacts?.[pid]?.[ME];const v=cur===e?'':e;CHN[id].reacts=CHN[id].reacts||{};CHN[id].reacts[pid]={...(CHN[id].reacts[pid]||{}),[ME]:v};qw('channels/'+id,()=>db.doc('channels/'+id).update({reacts:{[pid]:{[ME]:v}}}));drawPages()},
+  chShare:el=>{const ch=CHN[el.dataset.ch],p=(ch?.posts||[]).find(x=>x.id===el.dataset.p);const url=location.href.split('#')[0]+'#'+el.dataset.ch;const text=`${ch?ch.name:''}: ${p&&p.text?p.text:''}`.trim();if(navigator.share)navigator.share({title:ch?ch.name:'SpicyyChat',text,url}).catch(()=>{});else copy(text+' '+url)},
+  chShareCh:el=>{const ch=CHN[el.dataset.ch];const url=location.href.split('#')[0]+'#'+el.dataset.ch;if(navigator.share)navigator.share({title:ch?ch.name:'SpicyyChat',text:`הצטרפו לערוץ ${ch?ch.name:''} ב־SpicyyChat`,url}).catch(()=>{});else copy(url)},
+  chMenu:el=>{const id=el.dataset.ch,ch=CHN[id];if(!ch)return;sheetList(esc(ch.name),wrapClose([
+    {label:'תמונת הערוץ',icon:'camera',fn:()=>pickFile('image/*',f=>cropPhoto(f,u=>{ch.photo=u;qw('channels/'+id,()=>db.doc('channels/'+id).update({photo:u}));drawPages();if(TAB==='updates')drawSide()}))},
+    {label:'שינוי שם',icon:'edit',fn:()=>askText('שם הערוץ',ch.name,v=>{ch.name=v;qw('channels/'+id,()=>db.doc('channels/'+id).update({name:v}));drawPages()},{max:60})},
+    {label:'שינוי תיאור',icon:'info',fn:()=>askText('תיאור הערוץ',ch.desc||'',v=>{ch.desc=v;qw('channels/'+id,()=>db.doc('channels/'+id).update({desc:v}));drawPages()},{max:300,multi:true,allowEmpty:true})},
+    {label:'מחיקת הערוץ',icon:'trash',danger:true,fn:()=>askConfirm('למחוק את הערוץ?','כל העדכונים יימחקו לכל העוקבים.','מחיקה',()=>{qw('channels/'+id,()=>db.doc('channels/'+id).delete());delete CHN[id];closeAllPages();drawSide();toast('הערוץ נמחק')})}]))},
+}};
+
+/* ================= communities: WhatsApp-style tab and community page, invite links ================= */
+const cmAv=(cm,size)=>av({name:cm.name,color:cm.color,photo:cm.photo||null,kind:cm.photo?undefined:'community'},size);
+const annIcon=size=>`<span class="av annav" style="width:${size}px;height:${size}px">${ic('megaphone',Math.round(size*.5))}</span>`;
+function commGroupRow(g,cmp){
+  const un=unreadOf(g);const lm=g.last;const who=lm&&lm.by&&g.type==='group'&&lm.by!==ME?pshort(lm.by)+': ':'';
+  return `<button class="row ${cmp?'cmpt':''}" data-a="openChat" data-id="${g.id}">${g.announce?annIcon(cmp?40:46):avChat(g,cmp?40:46)}<span class="rm"><span class="rt"><span class="rn">${g.announce?'הכרזות':esc(g.name)}</span><span class="rtime ${un?'hot':''}">${listTime(lm?.t)}</span></span><span class="rb"><span class="rp"><span>${esc(lm?(who+(lm.text||'')):(g.announce?'הודעות מהמנהלים לכל חברי הקהילה':'קבוצה בקהילה'))}</span></span>${un?`<span class="badge">${un}</span>`:''}</span></span></button>`;
+}
+viewCommunities=function(){
+  const L=Object.entries(COMM).sort((a,b)=>{const t=cm=>Math.max(0,...(cm.groups||[]).map(g=>CH[g]?.last?.t||0));return t(b[1])-t(a[1])});
+  return `<div class="shead"><h1 class="htitle">קהילות</h1><button class="ib" data-a="go" data-p="newcomm" aria-label="קהילה חדשה">${ic('plus')}</button></div>
+  <div class="list">
+  <button class="cnew" data-a="go" data-p="newcomm"><span class="cnewic">${ic('users',28)}<span class="cnewp">${ic('plus',14)}</span></span><span class="rm"><b>קהילה חדשה</b><small>מאחדים כמה קבוצות במקום אחד</small></span></button>
+  ${L.map(([id,cm])=>{const groups=(cm.groups||[]).map(g=>CH[g]).filter(Boolean);const ann=groups.find(g=>g.announce),rest=groups.filter(g=>!g.announce);
+    return `<div class="kcard"><button class="cchead" data-a="go" data-p="community" data-arg="${id}">${cmAv(cm,48)}<span class="rm"><b>${esc(cm.name)}</b><small>${(cm.groups||[]).length} קבוצות · ${cm.members.length} חברים</small></span>${ic('chev')}</button>
+      ${ann?commGroupRow(ann,true):''}${rest.slice(0,3).map(g=>commGroupRow(g,true)).join('')}
+      <button class="ccall" data-a="go" data-p="community" data-arg="${id}">${ic('chev',14)} הצגת הכול</button></div>`}).join('')}
+  ${!L.length?`<div class="empty cempty">${ic('users',54)}<b>עוד אין קהילות</b>קהילה מחברת כמה קבוצות סביב נושא אחד: שכבה, שכונה, קבוצת כדורגל או עבודה. כולם מקבלים הכרזות במקום אחד.<div class="btns"><button class="btn" data-a="go" data-p="newcomm">יצירת קהילה</button></div></div>`:''}
+  </div>`;
+};
+const COMM_EXTRA={};
+function loadCommGroups(id){
+  const cm=COMM[id];if(!cm)return;const missing=(cm.groups||[]).filter(g=>!CH[g]&&!COMM_EXTRA[g]);
+  missing.forEach(g=>{COMM_EXTRA[g]={loading:true};db.doc('chats/'+g).get().then(s=>{COMM_EXTRA[g]=s.exists?{id:g,...s.data()}:{gone:true};drawPages()}).catch(()=>{COMM_EXTRA[g]={gone:true}})});
+}
+pgCommunity=function(id){
+  const cm=COMM[id];if(!cm)return null;loadCommGroups(id);
+  const mineG=(cm.groups||[]).map(g=>CH[g]).filter(Boolean);const ann=mineG.find(g=>g.announce),myG=mineG.filter(g=>!g.announce);
+  const other=(cm.groups||[]).filter(g=>!CH[g]).map(g=>COMM_EXTRA[g]).filter(x=>x&&x.id&&!x.announce);
+  const admin=(cm.admins||[]).includes(ME);
+  const act=(a,icon,label,attrs='')=>`<button class="hbtn" data-a="${a}" ${attrs}>${ic(icon)}${label}</button>`;
+  return{title:esc(cm.name),actions:admin?`<button class="ib" data-a="commMenu" data-arg="${id}" aria-label="ניהול הקהילה">${ic('more')}</button>`:'',body:`<div class="hero chero">${cmAv(cm,96)}<h3>${esc(cm.name)}</h3><p>קהילה · ${cm.members.length} חברים</p>${cm.desc?`<p class="chdesc">${linkify(esc(cm.desc))}</p>`:''}
+    <div class="acts">${ann?act('openChat','megaphone','הכרזות',`data-id="${ann.id}"`):''}${act('commInvite','link','הזמנה',`data-arg="${id}"`)}${admin?act('commGroup','plus','קבוצה',`data-arg="${id}"`):''}${admin?act('commAdd','userplus','הוספה',`data-arg="${id}"`):''}</div></div>
+  ${ann?`<div class="plabel">הכרזות</div>${commGroupRow(ann)}`:''}
+  <div class="plabel">הקבוצות שלך · ${myG.length}</div>${myG.map(g=>commGroupRow(g)).join('')||'<p class="ptext">עוד לא הצטרפת לקבוצות בקהילה.</p>'}
+  ${other.length?`<div class="plabel">קבוצות נוספות בקהילה</div>${other.map(g=>`<div class="row">${av({name:g.name,photo:g.photo,color:g.color||colorFor(g.id),kind:'group'},46)}<span class="rm"><span class="rn">${esc(g.name)}</span><span class="rp">${(g.members||[]).length} משתתפים</span></span><button class="flw" data-a="joinGroup" data-c="${g.id}">הצטרפות</button></div>`).join('')}`:''}
+  <div class="gap"></div><div class="plabel">${cm.members.length} חברים</div>${cm.members.slice(0,8).map(u=>personRow(u,'personInfo')).join('')}${cm.members.length>8?R('users','כל החברים',String(cm.members.length),'commMembers','data-arg="'+id+'"'):''}
+  <div class="gap"></div>${R('logout','יציאה מהקהילה','','leaveComm','data-arg="'+id+'"','danger')}`};
+};
+function pgCommMembers(id){const cm=COMM[id];if(!cm)return null;return{title:'חברי הקהילה',body:cm.members.map(u=>personRow(u,'personInfo')).join('')}}
+/* invite links: #k… opens a join sheet, #c… opens a channel */
+const __chj14=checkHashJoin;
+checkHashJoin=function(){
+  const h=(location.hash||'').slice(1);
+  if(READY&&/^k[a-z0-9]{6,}$/i.test(h)){
+    history.replaceState(null,'',location.pathname+location.search);
+    if(COMM[h]){goPage('community',h);return}
+    db.doc('comms/'+h).get().then(s=>{if(!s.exists){toast('הקהילה לא נמצאה');return}const d=s.data();
+      openSheet('הזמנה לקהילה',`<div class="joincard">${cmAv(d,80)}<h3>${esc(d.name)}</h3><p class="ptext">קהילה · ${d.members.length} חברים${d.desc?'<br>'+esc(d.desc):''}</p></div><div class="btns"><button class="btn ghost" data-a="closeSheet">לא עכשיו</button><button class="btn" data-a="joinComm" data-arg="${h}">הצטרפות לקהילה</button></div>`)}).catch(()=>{});
+    return;
+  }
+  if(READY&&/^c[a-z0-9]{6,}$/i.test(h)&&CHN[h]){history.replaceState(null,'',location.pathname+location.search);goPage('channel',h);return}
+  return __chj14();
+};
+Object.assign(PAGES,{});
+const __gp14=goPage;
+goPage=function(p,arg){if(p==='commMembers')return push(()=>pgCommMembers(arg),'cmm_'+arg,true);return __gp14(p,arg)};
+const __A14=A7;
+A7=function(){return{...__A14(),
+  commInvite:el=>{const id=el.dataset.arg,cm=COMM[id];const url=location.href.split('#')[0]+'#'+id;const text=`הצטרפו לקהילה ״${cm?cm.name:''}״ ב־SpicyyChat`;if(navigator.share)navigator.share({title:cm?cm.name:'SpicyyChat',text,url}).catch(()=>{});else copy(url)},
+  commMembers:el=>goPage('commMembers',el.dataset.arg),
+  joinComm:async el=>{const id=el.dataset.arg;closeSheet(true);try{const s=await db.doc('comms/'+id).get();if(!s.exists)return;const d=s.data();
+    if(!d.members.includes(ME)){const members=[...d.members,ME];await qw('comms/'+id,()=>db.doc('comms/'+id).update({members}));d.members=members}
+    COMM[id]={...d};
+    if(d.ann){const a=await db.doc('chats/'+d.ann).get();if(a.exists){const ad=a.data();if(!ad.members.includes(ME)){await qw('chats/'+d.ann,()=>db.doc('chats/'+d.ann).update({members:[...ad.members,ME]}));sendMsg(d.ann,{type:'system',ev:'joined'})}}}
+    toast('הצטרפת לקהילה');setTab('communities');goPage('community',id)}catch(e){dbErr(e)}},
+  commMenu:el=>{const id=el.dataset.arg,cm=COMM[id];if(!cm)return;sheetList(esc(cm.name),wrapClose([
+    {label:'תמונת הקהילה',icon:'camera',fn:()=>pickFile('image/*',f=>cropPhoto(f,u=>{cm.photo=u;qw('comms/'+id,()=>db.doc('comms/'+id).update({photo:u}));drawPages();drawSide()}))},
+    {label:'שינוי שם',icon:'edit',fn:()=>askText('שם הקהילה',cm.name,v=>{cm.name=v;qw('comms/'+id,()=>db.doc('comms/'+id).update({name:v}));drawPages();drawSide()},{max:60})},
+    {label:'שינוי תיאור',icon:'info',fn:()=>askText('תיאור הקהילה',cm.desc||'',v=>{cm.desc=v;qw('comms/'+id,()=>db.doc('comms/'+id).update({desc:v}));drawPages()},{max:500,multi:true,allowEmpty:true})},
+    {label:'קישור הזמנה',icon:'link',fn:()=>A.commInvite({dataset:{arg:id}})}]))},
+}};
 
 /* ================= event wiring ================= */
 const A={
