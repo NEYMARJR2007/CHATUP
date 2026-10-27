@@ -580,7 +580,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .crfoot .btn.ghost{color:#fff;border-color:rgba(255,255,255,.35)}
 .pvimg{flex:1;display:grid;place-items:center;padding:0 0 40px;min-height:0}.pvimg img{width:min(100vw,560px);max-height:100%;aspect-ratio:1;object-fit:cover}
 .avtap{padding:0;border-radius:34%;display:block}
-.phhero{width:64px;height:64px;margin:14px auto 8px;border-radius:22px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}.phh{margin:4px 0 6px;font-size:19px;text-align:center;width:100%}.phf{text-align:start}.phrow{display:flex;gap:8px;direction:ltr}.phcc{display:grid;place-items:center;padding:0 12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);font-weight:700}.phrow .inp{flex:1;min-width:0}.otp{text-align:center;font-size:28px;letter-spacing:12px;font-weight:800}
+.phhero{width:64px;height:64px;margin:14px auto 8px;border-radius:22px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}.phh{margin:4px 0 6px;font-size:19px;text-align:center;width:100%}.phf{text-align:start}.phrow{display:flex;gap:8px;direction:ltr}.phcc{display:grid;place-items:center;padding:0 12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);font-weight:700}.phrow .inp{flex:1;min-width:0}.otp{text-align:center;font-size:28px;letter-spacing:12px;font-weight:800}.altlog{display:flex;align-items:center;gap:10px;margin:14px 16px 4px;color:var(--muted);font-size:13px}.altlog:before,.altlog:after{content:"";flex:1;height:1px;background:var(--line)}.altbtns{flex-direction:column;gap:8px}.altbtns .btn{flex:none;min-height:46px;width:100%}
 .steps{list-style:none;margin:0;padding:4px 16px 8px;display:flex;flex-direction:column;gap:12px}.steps li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.5}.stn{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
 .phopts{display:flex;justify-content:space-around;gap:8px;padding:8px 4px 4px}
 .phopt{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13.5px;font-weight:600;min-width:64px}
@@ -1386,7 +1386,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 7.0</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 7.1</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1428,7 +1428,7 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 7.0 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 7.1 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -3611,15 +3611,23 @@ function phoneForm(host,o){
   return{stop:()=>clearInterval(timer)};
 }
 
-/* login screen: phone only */
+/* login screen: phone by default, Google and email/password still available */
+const __authOld=authScreen;
+async function googleLogin(){const p=new firebase.auth.GoogleAuthProvider();try{await fauth.signInWithPopup(p)}catch(e){if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment','auth/web-storage-unsupported'].includes(e.code))fauth.signInWithRedirect(p);else authErr(e)}}
+function emailLogin(){
+  resetRecaptcha();__authOld();const el=$('#auth');if(!el)return;
+  const add=()=>{const c=$('.onbc',el);if(c&&!$('#backph',c)){const p=document.createElement('div');p.className='btns';p.innerHTML=`<button class="btn ghost full" type="button" id="backph">${ic('phone',18)} כניסה עם מספר טלפון</button>`;c.appendChild(p);$('#backph',p).onclick=()=>authScreen()}};
+  add();new MutationObserver(add).observe(el,{childList:true});
+}
 authScreen=function(){
   gate('none');$('#auth')?.remove();
   const el=document.createElement('div');el.className='onb';el.id='auth';
   el.innerHTML=`<div class="onbc"><div class="logo">Spicyy<b>Chat</b></div><div class="phhero">${ic('phone',34)}</div><h3 class="phh">כניסה עם מספר טלפון</h3><div id="phhost"></div></div>`;
   $('#layers').appendChild(el);
   phoneForm($('#phhost',el),{sub:'הקלידו את מספר הטלפון שלכם. נשלח אליכם קוד ב־SMS. אם כבר יש לכם חשבון, תיכנסו אליו.',
-    foot:`<p class="small">${ic('lock',12)} המספר משמש רק לכניסה ולמציאת חברים. מי רואה אותו נקבע בהגדרות הפרטיות.</p>`,
+    foot:`<div class="altlog"><span>או</span></div><div class="btns altbtns"><button class="btn ghost full" type="button" data-alt="g">כניסה עם Google</button><button class="btn ghost full" type="button" data-alt="e">כניסה עם אימייל וסיסמה</button></div><p class="small">${ic('lock',12)} המספר משמש רק לכניסה ולמציאת חברים. מי רואה אותו נקבע בהגדרות הפרטיות.</p>`,
     onCred:async cred=>{await fauth.signInWithCredential(cred);resetRecaptcha()}});
+  el.addEventListener('click',e=>{const b=e.target.closest('[data-alt]');if(!b)return;if(b.dataset.alt==='g')googleLogin();else emailLogin()});
 };
 
 /* accounts made before: verify a phone once and link it, so the chats stay */
@@ -3655,9 +3663,9 @@ start=function(){
 /* change number: verify the new one */
 function changePhoneSheet(){
   const go=()=>{
-    openSheet('שינוי מספר טלפון','<div id="cphost"></div>',d=>{
-      phoneForm($('#cphost',d),{sub:'הקלידו את המספר החדש. נשלח אליו קוד ב־SMS. החשבון והצ׳אטים יישארו.',btn:'שליחת קוד',
-        onCred:async(cred,e164)=>{await fauth.currentUser.updatePhoneNumber(cred);resetRecaptcha();closeSheet(true);writeProfile({phone:prettyPhone(e164)});drawPages();toast('מספר הטלפון עודכן')}});
+    openSheet(hasPhoneAuth()?'שינוי מספר טלפון':'אימות מספר טלפון','<div id="cphost"></div>',d=>{
+      phoneForm($('#cphost',d),{sub:hasPhoneAuth()?'הקלידו את המספר החדש. נשלח אליו קוד ב־SMS. החשבון והצ׳אטים יישארו.':'אחרי האימות תוכלו להיכנס לחשבון הזה גם עם מספר הטלפון.',btn:'שליחת קוד',
+        onCred:async(cred,e164)=>{if(hasPhoneAuth())await fauth.currentUser.updatePhoneNumber(cred);else await fauth.currentUser.linkWithCredential(cred);resetRecaptcha();closeSheet(true);writeProfile({phone:prettyPhone(e164)});drawPages();toast('מספר הטלפון נשמר ואומת')}});
     },()=>resetRecaptcha());
   };
   const two=S().account.twoStep;
@@ -3665,7 +3673,10 @@ function changePhoneSheet(){
 }
 pgAccount=function(){
   const a=S().account,ph=(fauth&&fauth.currentUser&&fauth.currentUser.phoneNumber)||(FULL||prof(ME)).phone;
-  return{title:'חשבון',body:`${R('phone','מספר הטלפון של החשבון',ph?`<span dir="ltr">${esc(prettyPhone(ph))}</span>`:'לא מאומת','mePhone')}
+  const u=fauth&&fauth.currentUser,ways=[];if(hasPhoneAuth())ways.push('טלפון');if((u&&u.providerData||[]).some(p=>p&&p.providerId==='google.com'))ways.push('Google');if((u&&u.providerData||[]).some(p=>p&&p.providerId==='password'))ways.push('אימייל');
+  return{title:'חשבון',body:`${hasPhoneAuth()?R('phone','מספר הטלפון של החשבון',`<span dir="ltr">${esc(prettyPhone(u.phoneNumber||ph))}</span>`,'mePhone'):R('phone','אימות מספר טלפון','כדי שתוכלו להיכנס גם עם הטלפון','mePhone','','accent')}
+  <div class="srow"><span class="sic">${ic('key')}</span><span class="stx"><b>דרכי כניסה לחשבון</b><small>${ways.join(' · ')||'—'}${u&&u.email?` · <span dir="ltr">${esc(u.email)}</span>`:''}</small></span></div>
+  ${(u&&u.providerData||[]).some(p=>p&&p.providerId==='password')?R('key','שינוי סיסמה','נשלח אליך קישור לאימייל','pwReset'):''}
   ${TG('התראות אבטחה','הצגת התראה כשמישהו חדש מצטרף לצ׳אט','account.securityNotif','shield')}
   ${GO('key','אימות דו־שלבי',a.twoStep?'מופעל':'כבוי','twostep')}
   ${R('trash','מחיקת החשבון','','go','data-p="delacc"','danger')}`};
@@ -3948,7 +3959,6 @@ async function afterLogin(){
   applySettings();
   try{const p=await db.doc('profiles/'+ME).get();if(p.exists)P[ME]=p.data()}catch(e){}
   await loadFull();
-  if(!hasPhoneAuth()){gate('none');await phoneLinkGate()}
   for(const f of [subscribeAll,startPresence,listenIncoming,subscribeLog,registerSW]){try{f()}catch(e){console.error(f.name,e)}}
   gate('none');
   if(!P[ME]){drawNav();drawSide();$('#main').innerHTML=emptyMain();onboarding()}
