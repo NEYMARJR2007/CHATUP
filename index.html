@@ -723,6 +723,7 @@ body.incall #app{padding-top:calc(36px + env(safe-area-inset-top,0px))}
 .chwall .chpost{align-self:flex-start;margin-inline-start:12px;margin-inline-end:auto}
 .mever{display:flex;align-items:center;justify-content:center;gap:4px;margin:10px 0 0;color:var(--muted);font-size:13.5px}.mever .vtick{margin:0}
 .bkcard{display:flex;margin:4px 16px 12px;border-radius:18px;background:var(--panel2);border:1px solid var(--line)}.bkcard div{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 4px}.bkcard div+div{border-inline-start:1px solid var(--line)}.bkcard b{font-size:18px}.bkcard small{color:var(--muted);font-size:12.5px}
+.logo .vtick{vertical-align:2px;margin-inline-start:6px}
 .who-tag{font-size:11px;font-weight:800;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 6px}
 </style>
 </head>
@@ -1520,7 +1521,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 8.2</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 8.3</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1562,7 +1563,7 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 8.2 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 8.3 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -4378,8 +4379,8 @@ const isVerCh=id=>!!(VER.c&&VER.c[id]);
 const isAdminMe=()=>!!ME&&ADMIN===ME;
 const vtick=(on,size=15)=>on?`<span class="vtick" title="חשבון מאומת" aria-label="חשבון מאומת">${ic('vcheck',size)}</span>`:'';
 function subscribeConfig(){
-  db.doc('config/verified').onSnapshot(s=>{const d=s.exists?s.data():{};VER={u:d.u||{},c:d.c||{}};refresh();if(CUR)drawHead();if(stack.length)drawPages()},e=>console.warn('verified',e));
-  db.doc('config/admin').onSnapshot(s=>{ADMIN=s.exists?(s.data().uid||null):null;if(stack.length)drawPages()},e=>console.warn('admin',e));
+  db.doc('config/verified').onSnapshot(s=>{const was=isVer(ME);const d=s.exists?s.data():{};VER={u:d.u||{},c:d.c||{}};refresh();if(was!==isVer(ME)&&!Q)drawSide();if(CUR)drawHead();if(stack.length)drawPages()},e=>console.warn('verified',e));
+  db.doc('config/admin').onSnapshot(s=>{const was=isVer(ME);ADMIN=s.exists?(s.data().uid||null):null;if(was!==isVer(ME)&&!Q)drawSide();if(stack.length)drawPages()},e=>console.warn('admin',e));
 }
 function setVerified(kind,id,on){
   if(!isAdminMe())return;VER[kind]={...(VER[kind]||{}),[id]:on};
@@ -4646,6 +4647,9 @@ const __A16=A7;
 A7=function(){return{...__A16(),backupNow:()=>backupNow(false),exportBackup:()=>exportBackup(),importBackup:()=>importBackup()}};
 const __st16=start;
 start=function(){__st16();setTimeout(()=>{restoreSounds();const t=(ST.backup&&ST.backup.t)||0;if(Date.now()-t>DAY)backupNow(true).catch(()=>{})},6000)};
+/* blue tick next to the logo for verified accounts */
+const __vc16=viewChats;
+viewChats=function(){const h=__vc16();return isVer(ME)?h.replace('<div class="logo">Spicyy<b>Chat</b></div>',`<div class="logo">Spicyy<b>Chat</b>${vtick(true,22)}</div>`):h};
 
 /* ================= event wiring ================= */
 const A={
