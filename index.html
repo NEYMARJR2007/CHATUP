@@ -721,6 +721,8 @@ body.incall #app{padding-top:calc(36px + env(safe-area-inset-top,0px))}
 .chfol{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13.5px}.chfol span{display:flex;align-items:center;gap:6px}
 .cmbody{padding-bottom:30px}
 .chwall .chpost{align-self:flex-start;margin-inline-start:12px;margin-inline-end:auto}
+.mever{display:flex;align-items:center;justify-content:center;gap:4px;margin:10px 0 0;color:var(--muted);font-size:13.5px}.mever .vtick{margin:0}
+.bkcard{display:flex;margin:4px 16px 12px;border-radius:18px;background:var(--panel2);border:1px solid var(--line)}.bkcard div{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 4px}.bkcard div+div{border-inline-start:1px solid var(--line)}.bkcard b{font-size:18px}.bkcard small{color:var(--muted);font-size:12.5px}
 .who-tag{font-size:11px;font-weight:800;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 6px}
 </style>
 </head>
@@ -1518,7 +1520,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 8.1</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 8.2</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1560,7 +1562,7 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 8.1 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 8.2 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -1867,8 +1869,8 @@ function hydrateMedia(root=document){
 }
 
 /* ================= presence (online + typing) ================= */
-let presT=0,presC=0,presSig='',PRES={},myTyping=null,tyStop=0;const PRES_TTL=75000;
-function presWrite(){if(!ME||!db)return;const d={t:Date.now(),on:!document.hidden,typing:myTyping||null,inCall:!!CALL};qw('presence/'+ME,()=>db.doc('presence/'+ME).set(d))}
+let presT=0,presC=0,presSig='',PRES={},myTyping=null,tyStop=0,PRES_LEAVING=false;const PRES_TTL=150000;
+function presWrite(){if(!ME||!db)return;const d={t:Date.now(),on:!PRES_LEAVING,typing:myTyping||null,inCall:!!CALL};qw('presence/'+ME,()=>db.doc('presence/'+ME).set(d))}
 function startPresence(){
   const compute=force=>{
     const on=new Set(),ty={},now=Date.now();
@@ -1880,7 +1882,7 @@ function startPresence(){
   };
   db.collection('presence').onSnapshot(s=>{const n={};s.docs.forEach(d=>{n[d.id]=d.data()});PRES=n;compute(true)},dbErr);
   clearInterval(presC);presC=setInterval(()=>compute(false),10000);
-  presWrite();clearInterval(presT);presT=setInterval(()=>{if(!document.hidden)presWrite()},30000);
+  presWrite();clearInterval(presT);presT=setInterval(()=>presWrite(),30000);
 }
 function setTyping(cid){
   clearTimeout(tyStop);
@@ -3591,11 +3593,12 @@ function restPatch(path,fields){
   try{fetch(url,{...o,keepalive:true}).catch(plain)}catch(e){plain()}
 }
 function goOfflineNow(){
-  if(!READY||!ME)return;const now=Date.now();
+  if(!READY||!ME)return;const now=Date.now();PRES_LEAVING=true;
   restPatch('presence/'+ME,{on:false,t:now,typing:null});
   try{if(pv().lastSeenVis==='all')restPatch('profiles/'+ME,{lastSeen:now})}catch(e){}
 }
-document.addEventListener('visibilitychange',()=>{if(document.hidden)goOfflineNow();else refreshTok()});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTok()});
+document.addEventListener('resume',()=>{PRES_LEAVING=false;try{presWrite()}catch(e){}});
 window.addEventListener('pagehide',goOfflineNow);
 document.addEventListener('freeze',goOfflineNow);
 const __start9=start;
@@ -4370,7 +4373,7 @@ function newShort(){
 
 /* ---------------- 3. blue ticks (only the app admin can give them) ---------------- */
 let VER={u:{},c:{}},ADMIN=null;
-const isVer=uid=>!!(VER.u&&VER.u[uid]);
+const isVer=uid=>!!(VER.u&&VER.u[uid])||(!!ADMIN&&uid===ADMIN);
 const isVerCh=id=>!!(VER.c&&VER.c[id]);
 const isAdminMe=()=>!!ME&&ADMIN===ME;
 const vtick=(on,size=15)=>on?`<span class="vtick" title="חשבון מאומת" aria-label="חשבון מאומת">${ic('vcheck',size)}</span>`:'';
@@ -4513,6 +4516,136 @@ viewUpdates=function(){
 };
 const __st15=start;
 start=function(){__st15();try{subscribeConfig()}catch(e){console.warn(e)}};
+
+/* ================= v8.2: echo suppression in calls, own blue tick, backups ================= */
+IC.cloud='<path d="M17.5 19H7a5 5 0 1 1 .9-9.9A6 6 0 0 1 19 10.5a4.3 4.3 0 0 1-1.5 8.5z"/><path d="M12 12v6M9.5 14.5L12 12l2.5 2.5"/>';
+
+/* ---------- 1. echo: lower my microphone while the other side is talking ----------
+   When a phone plays the other person's voice on the loudspeaker, its microphone hears it and
+   sends it back, so they hear themselves again and again. While their voice is playing here and
+   I'm not talking louder than it, my microphone is turned down, which breaks the loop. */
+function prepDuckCtx(C){
+  if(!C||C._ac)return;
+  try{C._ac=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});C._ac.resume().catch(()=>{})}catch(e){C._ac=null}
+}
+function startDuck(C){
+  if(!C||C._duck||!C.pc||!C.local||!C._ac)return;
+  const ac=C._ac;if(ac.state!=='running'){ac.resume().catch(()=>{});return}
+  if(!C.remote.getAudioTracks().length)return;
+  try{
+    const sender=C.pc.getSenders().find(s=>s.track&&s.track.kind==='audio');if(!sender)return;
+    const mic=ac.createMediaStreamSource(C.local),gain=ac.createGain(),dest=ac.createMediaStreamDestination();
+    mic.connect(gain);gain.connect(dest);
+    const ma=ac.createAnalyser();ma.fftSize=1024;mic.connect(ma);
+    const ra=ac.createAnalyser();ra.fftSize=1024;ac.createMediaStreamSource(new MediaStream(C.remote.getAudioTracks())).connect(ra);
+    const out=dest.stream.getAudioTracks()[0];if(!out)return;
+    const orig=sender.track;sender.replaceTrack(out).catch(()=>{});
+    const buf=new Float32Array(1024),lvl=a=>{a.getFloatTimeDomainData(buf);let s=0;for(let i=0;i<buf.length;i+=2)s+=buf[i]*buf[i];return Math.sqrt(s/(buf.length/2))};
+    let hold=0,mine=0;
+    const iv=setInterval(()=>{
+      if(CALL!==C||ac.state==='closed'){clearInterval(iv);return}
+      const r=lvl(ra),m=lvl(ma),now=ac.currentTime;
+      if(m>Math.max(.025,r*1.6))mine=now+.25;                 /* I'm clearly talking */
+      if(r>.02&&now>mine)hold=now+.4;                          /* they're talking: duck for a moment after */
+      const duck=now<hold&&now>mine;
+      gain.gain.setTargetAtTime(duck?(C.speaker===false?.25:.06):1,now,duck?.012:.1);
+      C.duckOn=duck;
+    },25);
+    C._duck={iv,orig,out};
+  }catch(e){console.warn('duck',e)}
+}
+function stopDuck(C){if(!C)return;try{C._duck&&clearInterval(C._duck.iv)}catch(e){}try{C._ac&&C._ac.close()}catch(e){}C._duck=null;C._ac=null}
+const __sc16=startCall;
+startCall=async function(uid,video){const tmp={};if(!CALL)prepDuckCtx(tmp);const r=await __sc16(uid,video);if(CALL&&CALL.out&&!CALL._ac&&tmp._ac)CALL._ac=tmp._ac;else{try{tmp._ac&&tmp._ac.close()}catch(e){}}return r};
+const __ac16=answerCall;
+answerCall=async function(w){if(CALL)prepDuckCtx(CALL);return __ac16(w)};
+const __rcs16=renderCallStatus;
+renderCallStatus=function(){__rcs16();const C=CALL;if(C&&C.state==='live'&&!C._duck&&S().calls?.echo!==false)startDuck(C)};
+const __ec16=endCall;
+endCall=function(...a){const C=CALL;const r=__ec16(...a);stopDuck(C);return r};
+
+/* ---------- 2. blue tick: also on my own profile ---------- */
+const __vs16=viewSettings;
+viewSettings=function(){let h=__vs16();if(isVer(ME)){const n=esc(prof(ME).name||'');h=h.replace(`<span class="rn" style="font-size:19px">${n}</span>`,`<span class="rn" style="font-size:19px">${n}${vtick(true,18)}</span>`)}return h};
+const __pgp16=pgProfile;
+pgProfile=function(){const r=__pgp16();if(isVer(ME)){r.body=r.body.replace('<button class="vischip"',`<p class="mever">${vtick(true,18)} ${isAdminMe()?'מנהל/ת האפליקציה · חשבון מאומת':'חשבון מאומת'}</p><button class="vischip"`)}return r};
+PAGES.profile=()=>pgProfile();
+const __pqr16=pgQR;
+pgQR=function(){const r=__pqr16();if(isVer(ME)){const n=esc(prof(ME).name||'');r.body=r.body.replace(`<h3>${n}</h3>`,`<h3>${n}${vtick(true,18)}</h3>`)}return r};
+PAGES.qr=()=>pgQR();
+
+/* ---------- 3. backups ---------- */
+/* Messages, groups, contacts and settings already live on the server, so signing in on a new phone
+   brings everything back. What lived only on this phone (my own sound files) is uploaded too,
+   and a full copy can be downloaded to a file. */
+async function backupNow(silent){
+  const done=[];
+  try{
+    ST.backup=ST.backup||{};ST.backup.sounds=ST.backup.sounds||{};
+    for(const kind of ['msg','group','call']){
+      const c=await Sound.getCustom(kind);if(!c)continue;
+      const sig=c.name+'|'+(c.blob&&c.blob.size);if(ST.backup.sounds[kind]&&ST.backup.sounds[kind].sig===sig)continue;
+      if(c.blob.size>14*1048576)continue;
+      const id=await Media.put(c.blob);ST.backup.sounds[kind]={id,name:c.name,sig};done.push(kind);
+    }
+  }catch(e){console.warn('backup sounds',e)}
+  ST.backup.t=Date.now();ST.backup.device=(navigator.userAgentData&&navigator.userAgentData.platform)||(/android/i.test(navigator.userAgent)?'Android':/iphone|ipad/i.test(navigator.userAgent)?'iPhone':'מחשב');
+  const path=`data/users/${ME}/state`;await qw(path,()=>db.doc(path).set(clone(ST)));
+  if(FULL)persistProfile();
+  if(!silent)toast('הגיבוי הושלם ✓');
+  drawPages();return done;
+}
+async function restoreSounds(){
+  const b=ST.backup&&ST.backup.sounds;if(!b)return;
+  for(const kind of Object.keys(b)){
+    try{const have=await Sound.getCustom(kind);if(have)continue;const u=await Media.url(b[kind].id);const blob=await (await fetch(u)).blob();await Sound.saveCustom(kind,blob,b[kind].name);Sound.names[kind]=b[kind].name}catch(e){console.warn('restore sound',e)}
+  }
+}
+async function exportBackup(){
+  toast('מכין את קובץ הגיבוי…');
+  const chats={};
+  for(const c of Object.values(CH)){
+    try{const s=await db.collection(`chats/${c.id}/m`).get();const msgs=[];s.docs.forEach(d=>(d.data().msgs||[]).forEach(m=>msgs.push(m)));msgs.sort((a,b)=>(a.t||0)-(b.t||0));
+      chats[c.id]={name:chatMeta(c).name,type:c.type,members:c.members,messages:msgs.filter(m=>!m.deleted).map(m=>({from:m.from===ME?'אני':pname(m.from),t:m.t,time:new Date(m.t||0).toLocaleString('he-IL'),type:m.type,text:m.text||m.cap||undefined,file:m.name||undefined}))}}catch(e){}
+  }
+  const data={app:'SpicyyChat',version:1,created:new Date().toISOString(),me:{name:prof(ME).name,username:prof(ME).username},state:clone(ST),chats};
+  const blob=new Blob([JSON.stringify(data,null,1)],{type:'application/json'});
+  const d=new Date(),name=`SpicyyChat-backup-${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}.json`;
+  saveBlob(blob,name);toast('הגיבוי נשמר בתיקיית ההורדות');
+}
+function importBackup(){
+  pickFile('application/json,.json',async f=>{
+    try{const data=JSON.parse(await f.text());if(data.app!=='SpicyyChat'||!data.state)throw 0;
+      askConfirm('לשחזר מהגיבוי?','אנשי הקשר, הרשימות, ההודעות המסומנות בכוכב וההגדרות יחזרו כמו שהיו בגיבוי. ההודעות עצמן כבר שמורות בשרת.','שחזור',()=>{
+        const s=data.state;ST.contacts={...(s.contacts||{}),...ST.contacts};ST.prefs={...(s.prefs||{}),...ST.prefs};ST.starred={...(s.starred||{}),...ST.starred};ST.blocked={...(s.blocked||{}),...ST.blocked};
+        if(s.lists&&!(ST.lists||[]).length)ST.lists=s.lists;if(s.settings)ST.settings={...ST.settings,...s.settings,privacy:{...ST.settings.privacy,...(s.settings.privacy||{}),pin:ST.settings.privacy.pin,appLock:ST.settings.privacy.appLock}};
+        if(s.backup)ST.backup=s.backup;saveState();applySettings();restoreSounds();refresh();drawPages();toast('השחזור הושלם ✓')},false)}
+    catch(e){toast('הקובץ הזה הוא לא גיבוי של SpicyyChat')}
+  });
+}
+function pgBackup(){
+  const b=ST.backup||{};const nChats=Object.keys(CH).length,nContacts=Object.keys(ST.contacts||{}).length;
+  const ways=[];const u=fauth&&fauth.currentUser;if(u&&u.phoneNumber)ways.push(`מספר הטלפון <bdi dir="ltr">${esc(prettyPhone(u.phoneNumber))}</bdi>`);if(u&&(u.providerData||[]).some(p=>p&&p.providerId==='google.com'))ways.push('חשבון Google');if(u&&u.email&&(u.providerData||[]).some(p=>p&&p.providerId==='password'))ways.push(`האימייל <bdi dir="ltr">${esc(u.email)}</bdi>`);
+  return{title:'גיבוי צ׳אטים',body:`<div class="hero">${ic('cloud',56)}<p><b>הכול נשמר אוטומטית בענן של SpicyyChat</b><br>הצ׳אטים, התמונות, הקבוצות, הערוצים, אנשי הקשר וההגדרות.</p></div>
+  <div class="bkcard"><div><b>${nChats}</b><small>צ׳אטים</small></div><div><b>${nContacts}</b><small>אנשי קשר</small></div><div><b>${b.t?listTime(b.t):'—'}</b><small>גיבוי אחרון</small></div></div>
+  <div class="btns" style="padding:4px 16px"><button class="btn full" data-a="backupNow" style="display:flex;align-items:center;justify-content:center;gap:8px">${ic('cloud',18)} גיבוי עכשיו</button></div>
+  <div class="plabel">מעבר לטלפון חדש</div>
+  <ol class="steps"><li><span class="stn">1</span><span>מתקינים את SpicyyChat בטלפון החדש מהקישור הרגיל.</span></li><li><span class="stn">2</span><span>נכנסים עם ${ways.join(' או ')||'אותו חשבון'}.</span></li><li><span class="stn">3</span><span>הכול חוזר לבד: צ׳אטים, קבוצות, אנשי קשר, הגדרות וגם הצלילים שבחרת.</span></li></ol>
+  <div class="plabel">עותק בקובץ</div>
+  ${R('download','הורדת גיבוי לקובץ','כל ההודעות, אנשי הקשר וההגדרות בקובץ אחד בטלפון','exportBackup')}
+  ${R('refresh','שחזור מקובץ גיבוי','מחזיר אנשי קשר, רשימות, כוכבים והגדרות מקובץ','importBackup')}
+  <p class="ptext">${ic('lock',13)} נעילת האפליקציה וטביעת האצבע לא עוברות לטלפון חדש מטעמי אבטחה. מגדירים אותן מחדש.</p>`};
+}
+PAGES.backup=pgBackup;
+const __pcs16=pgChatsSet;
+pgChatsSet=function(){const r=__pcs16();r.body=GO('cloud','גיבוי צ׳אטים',(ST.backup&&ST.backup.t)?'גיבוי אחרון: '+listTime(ST.backup.t):'הכול נשמר בענן · מעבר לטלפון חדש','backup')+'<div class="gap"></div>'+r.body;return r};
+PAGES.chats=()=>pgChatsSet();
+const __vs16b=viewSettings;
+viewSettings=function(){let h=__vs16b();const i=h.indexOf('data-p="notif"');if(i>0){const s=h.lastIndexOf('<button',i);h=h.slice(0,s)+GO('cloud','גיבוי','הכול נשמר בענן · מעבר לטלפון חדש','backup')+h.slice(s)}return h};
+const __A16=A7;
+A7=function(){return{...__A16(),backupNow:()=>backupNow(false),exportBackup:()=>exportBackup(),importBackup:()=>importBackup()}};
+const __st16=start;
+start=function(){__st16();setTimeout(()=>{restoreSounds();const t=(ST.backup&&ST.backup.t)||0;if(Date.now()-t>DAY)backupNow(true).catch(()=>{})},6000)};
 
 /* ================= event wiring ================= */
 const A={
