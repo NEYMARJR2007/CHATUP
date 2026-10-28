@@ -724,6 +724,68 @@ body.incall #app{padding-top:calc(36px + env(safe-area-inset-top,0px))}
 .mever{display:flex;align-items:center;justify-content:center;gap:4px;margin:10px 0 0;color:var(--muted);font-size:13.5px}.mever .vtick{margin:0}
 .bkcard{display:flex;margin:4px 16px 12px;border-radius:18px;background:var(--panel2);border:1px solid var(--line)}.bkcard div{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 4px}.bkcard div+div{border-inline-start:1px solid var(--line)}.bkcard b{font-size:18px}.bkcard small{color:var(--muted);font-size:12.5px}
 .logo .vtick{vertical-align:2px;margin-inline-start:6px}
+/* ---- swipe to reply ---- */
+#msgs .msg{touch-action:pan-y}
+.msg.swiping{position:relative}
+.swrep{position:absolute;top:50%;inset-inline-start:-4px;transform:translateY(-50%) scale(.7);width:32px;height:32px;border-radius:50%;background:var(--panel2);color:var(--muted);display:grid;place-items:center;opacity:0;transition:transform .15s}
+.swrep.go{transform:translateY(-50%) scale(1);color:var(--accent)}
+/* ---- shorts tab ---- */
+body.shortsmode #bottom{background:#000;border-top-color:#1a1a1a}
+body.shortsmode #bottom .nb{color:#9a9a9a}body.shortsmode #bottom .nb.on{color:#fff}body.shortsmode #bottom .nb.on .pill{background:#2a2a2a;color:#fff}
+.stab{position:relative;flex:1;min-height:0;background:#000;color:#fff;overflow:hidden}
+.stop{position:absolute;z-index:6;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:calc(8px + env(safe-area-inset-top,0px)) 8px 8px;background:linear-gradient(180deg,rgba(0,0,0,.45),transparent);pointer-events:none}
+.stop>*{pointer-events:auto}.stop .ib{color:#fff;position:relative}
+.stabs{display:flex;gap:18px}.stabs button{color:rgba(255,255,255,.65);font-size:16.5px;font-weight:800;padding:6px 2px;position:relative;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.stabs button.on{color:#fff}.stabs button.on:after{content:"";position:absolute;bottom:0;left:30%;right:30%;height:3px;border-radius:3px;background:#fff}
+.sdot{position:absolute;top:8px;right:8px;width:9px;height:9px;border-radius:50%;background:#ff2d55}
+.sfeed{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}.sfeed::-webkit-scrollbar{display:none}
+.sitem{position:relative;height:100%;scroll-snap-align:start;scroll-snap-stop:always;background:#000;overflow:hidden}
+.sitem video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.spause{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.85);opacity:0;pointer-events:none;transition:opacity .15s;z-index:2}.sitem.paused .spause{opacity:1}
+.sprog{position:absolute;z-index:4;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.2)}.sprog i{display:block;height:100%;width:0;background:#fff}
+.sside{position:absolute;z-index:4;right:8px;bottom:18px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.savw{position:relative;margin-bottom:8px}.sav .av{border:2px solid #fff;border-radius:50%!important}
+.sfplus{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:22px;height:22px;border-radius:50%;background:#ff2d55;color:#fff;display:grid;place-items:center}
+.sbtn{display:flex;flex-direction:column;align-items:center;gap:2px;color:#fff;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}.sbtn small{font-size:12.5px;font-weight:700}
+.sbtn.on{color:#ff2d55}.sbtn.fav{color:#ffc107}.sbtn:active svg{transform:scale(1.25)}
+.sinfo{position:absolute;z-index:4;left:12px;right:74px;bottom:18px;text-shadow:0 1px 5px rgba(0,0,0,.7);text-align:start}
+.sname{color:#fff;font-weight:800;font-size:16px;display:inline-flex;align-items:center}.sdate{color:rgba(255,255,255,.75);font-size:13px;margin-inline-start:6px}
+.scap{margin:6px 0 0;font-size:14.5px;line-height:1.4;max-height:4.2em;overflow:hidden}.stag{color:#fff;font-weight:800;padding:0;font-size:inherit}
+.smusic{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;overflow:hidden;white-space:nowrap}.smusic span{overflow:hidden}.smusic b{display:inline-block;font-weight:600;animation:smarq 9s linear infinite}
+@keyframes smarq{0%{transform:translateX(0)}100%{transform:translateX(60%)}}
+.sburst{position:absolute;z-index:5;color:#ff2d55;pointer-events:none;animation:sburst .9s ease-out forwards;filter:drop-shadow(0 4px 12px rgba(0,0,0,.4))}
+@keyframes sburst{0%{transform:scale(.3) rotate(var(--rot));opacity:0}20%{transform:scale(1.2) rotate(var(--rot));opacity:1}40%{transform:scale(1) rotate(var(--rot))}100%{transform:scale(1.3) translateY(-80px) rotate(var(--rot));opacity:0}}
+.supload{position:absolute;z-index:6;bottom:16px;left:50%;transform:translateX(-50%);width:54px;height:36px;border-radius:12px;background:#fff;color:#000;display:grid;place-items:center;box-shadow:-4px 0 0 #25F4EE,4px 0 0 #FE2C55}
+.stab:has(.sitem) .supload{bottom:auto;top:calc(56px + env(safe-area-inset-top,0px));left:12px;transform:none;width:42px;height:30px}
+.ssound{position:absolute;z-index:7;top:calc(60px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;padding:7px 12px;border-radius:999px;font-size:13px;display:none;align-items:center;gap:6px;pointer-events:none}
+.needsound .ssound{display:flex}
+.sempty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:30px;color:#ddd}.sempty b{font-size:19px;color:#fff}.sempty p{margin:0;color:#aaa}.sempty svg{color:var(--accent)}
+.sview{position:fixed;inset:0;z-index:70;background:#000;color:#fff}.sview .sback{position:absolute;z-index:8;top:calc(8px + env(safe-area-inset-top,0px));right:8px;color:#fff}
+/* comments */
+.scomm{max-height:52vh;min-height:30vh;overflow-y:auto;padding:4px 14px}
+.scrow{display:flex;gap:10px;padding:8px 0}.scrow .rm b{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:4px}.scrow p{margin:2px 0;font-size:15px;white-space:pre-wrap;word-break:break-word}.scrow p .stag{color:var(--accent)}.scrow small{color:var(--muted);font-size:12px}
+.sauth{background:var(--accent-soft);color:var(--accent);font-size:11px;padding:1px 6px;border-radius:6px;margin-inline-start:4px}
+.scform{display:flex;align-items:center;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}.scform .inp{flex:1;border-radius:999px}
+/* compose */
+.scompose{position:fixed;inset:0;z-index:72;background:var(--panel);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.scbody{flex:1;overflow-y:auto;padding:12px 16px}.scbody video{display:block;width:140px;height:240px;object-fit:cover;border-radius:14px;background:#000;margin:0 auto 12px}
+.scbody textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:14px;padding:12px;font:inherit;background:var(--panel2);color:var(--ink);resize:none}
+.sctags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.sctags button{padding:5px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13px}
+.scfoot{padding:10px 16px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}.scfoot .btn{display:flex;align-items:center;justify-content:center;gap:8px}
+/* profile */
+.sprof{display:flex;flex-direction:column;align-items:center;text-align:center;padding:18px 16px 8px}.sprof .av{border-radius:50%!important}
+.sprof h3{margin:10px 0 0;font-size:19px;display:flex;align-items:center}.sun{margin:2px 0 0;color:var(--muted)}
+.sstats{display:flex;gap:26px;margin:14px 0}.sstats>*{display:flex;flex-direction:column;align-items:center}.sstats b{font-size:18px}.sstats small{color:var(--muted);font-size:13px}
+.sacts{display:flex;gap:8px}.sacts .btn{height:40px;padding:0 18px;display:flex;align-items:center;gap:6px}
+.sbio{margin:12px 0 0;max-width:40ch;white-space:pre-wrap}.sbio.muted{color:var(--muted)}.sbio .stag{color:var(--accent)}
+.sptabs{display:flex;border-bottom:1px solid var(--line);margin-top:10px}.sptabs button{flex:1;padding:12px 0;color:var(--muted);display:grid;place-items:center;border-bottom:2px solid transparent}.sptabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.sgi{position:relative;aspect-ratio:9/16;background:#222;overflow:hidden}.sgi img{width:100%;height:100%;object-fit:cover}.sgi span{position:absolute;bottom:4px;left:6px;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;gap:3px;text-shadow:0 1px 3px #000}
+.ssearch{padding:10px 12px}.ssearch .inp{border-radius:999px}
+.strend{display:flex;flex-wrap:wrap;gap:8px;padding:4px 12px 12px}.strend button{display:flex;flex-direction:column;align-items:flex-start;padding:8px 12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);font-weight:800}.strend small{color:var(--muted);font-weight:500;font-size:12px}
+.stagh{display:flex;align-items:center;gap:14px;padding:16px}.stagh>span{width:64px;height:64px;border-radius:16px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}.stagh b{font-size:20px;display:block}.stagh small{color:var(--muted)}
+.sactrow .rp{white-space:normal}.sathumb img{width:44px;height:58px;object-fit:cover;border-radius:6px}
+.sgrid{direction:rtl}
 .who-tag{font-size:11px;font-weight:800;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 6px}
 </style>
 </head>
@@ -1521,7 +1583,7 @@ function viewSettings(){
   ${GO('help','עזרה','שאלות נפוצות, תנאים, מידע על האפליקציה','help')}
   ${GO('userplus','הזמנת חברים','','invite')}
   ${R('logout','יציאה מהחשבון','','logout','','danger')}
-  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 8.3</p>
+  <p class="small" style="padding:24px 16px">SpicyyChat · גרסה 9.1</p>
   </div>`;
 }
 function writeProfile(patch){Object.assign(P[ME]=P[ME]||{},patch);const body=clone(P[ME]);qw('profiles/'+ME,()=>db.doc('profiles/'+ME).set(body));refresh()}
@@ -1563,7 +1625,7 @@ function pgAccess(){return{title:'נגישות',body:`${TG('ניגודיות מ�
 function pgHelp(){return{title:'עזרה',body:`${GO('help','שאלות נפוצות','','faq')}${GO('file','תנאים ופרטיות','','terms')}${GO('info','מידע על האפליקציה','','appinfo')}`}}
 function pgFaq(){const Q=[['איך מזמינים חברים?','שולחים להם את הקישור לאפליקציה (הגדרות ← הזמנת חברים). הם נרשמים, יוצרים פרופיל ומופיעים אצלך ברשימת האנשים.'],['איך מוצאים מישהו?','בחיפוש בלשונית צ׳אטים: לפי שם, @שם משתמש או מספר טלפון.'],['איך מתקשרים?','בצ׳אט עם החבר לוחצים על הטלפון (שיחה קולית) או על המצלמה (שיחת וידאו). אפשר גם מלשונית שיחות.'],['למה השיחה לא מתחברת?','ברשתות סלולריות מסוימות צריך שרת TURN. מוסיפים אותו בקובץ config.js לפי מדריך ההתקנה.'],['איך שולחים הודעה קולית?','כשתיבת ההודעה ריקה, כפתור השליחה הופך למיקרופון. לוחצים כדי להקליט ושולחים עם החץ.'],['איך מתקינים כאפליקציה?','הגדרות ← התקנה במסך הבית. באייפון: Safari ← שיתוף ← הוספה למסך הבית.'],['מה המשמעות של הווי?','וי אחד: נשלחה. שני וי: הגיעה. שני וי צהובים: נקראה.'],['למה לא קיבלתי התראה?','בדקו בהגדרות ← התראות ש"התראות כשהאפליקציה סגורה" מופעלות במכשיר הזה, ושהצ׳אט לא מושתק. באייפון ההתראות עובדות רק אחרי התקנה למסך הבית.']];return{title:'שאלות נפוצות',body:`<div class="faq">${Q.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>`}}
 function pgTerms(){return{title:'תנאים ופרטיות',body:`<div class="ptext" style="font-size:14.5px;color:var(--ink)"><p><b>שימוש.</b> אין לשלוח ב־SpicyyChat תוכן פוגעני, מטריד או לא חוקי.</p><p><b>מה נשמר.</b> הפרופיל, ההודעות, המדיה והסטטוסים נשמרים בשרת של האפליקציה. הודעות של צ׳אט נגישות רק לחברי הצ׳אט. השם ושם המשתמש גלויים לכל משתמשי SpicyyChat. מי רואה את התמונה, האודות, הטלפון, יום ההולדת, הקישורים והסטטוסים נקבע בהגדרות הפרטיות, והשרת חוסם גישה ממי שאין לו הרשאה.</p><p><b>שיחות.</b> הקול והווידאו עוברים ישירות בין המכשירים ואינם נשמרים.</p><p><b>מחיקה.</b> אפשר למחוק את החשבון מהגדרות ← חשבון.</p></div>`}}
-function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 8.3 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
+function pgAppInfo(){return{title:'מידע על האפליקציה',body:`<div class="hero"><div class="logo" style="font-size:48px;margin:0">Spicyy<b>Chat</b></div><p>גרסה 9.1 · הודעות ושיחות בזמן אמת</p><p class="small">© 2026 SpicyyChat</p></div>`}}
 function pgInvite(){const me=prof(ME);const link=location.href.split('#')[0];const txt=`בוא/י לדבר איתי ב־SpicyyChat! נרשמים כאן: ${link} · שם המשתמש שלי: @${me.username||''}`;return{title:'הזמנת חברים',body:`<div class="hero">${ic('userplus',52)}<p>שלחו לחברים את הקישור. אחרי שהם נרשמים ויוצרים פרופיל, הם יופיעו כאן ואפשר לשלוח להם הודעות ולהתקשר.</p>${navigator.share?`<div class="acts"><button class="btn" data-a="shareInvite">שיתוף ההזמנה</button></div>`:''}</div><div class="plabel">הודעת ההזמנה</div><div class="copybox" dir="rtl"><code dir="rtl">${esc(txt)}</code><button class="ib" data-a="copyT" data-t="${esc(txt)}" aria-label="העתקה">${ic('copy')}</button></div><div class="plabel">כבר ב־SpicyyChat · ${Object.keys(P).length}</div>${Object.keys(P).map(u=>u===ME?'':personRow(u)).join('')}`}}
 function pgPeople(){const L=Object.keys(P).filter(u=>u!==ME).sort((a,b)=>pname(a).localeCompare(pname(b),'he'));return{title:'אנשים ב־SpicyyChat',body:L.map(u=>personRow(u,'personInfo')).join('')||'<div class="empty"><b>אין עדיין אנשים נוספים</b></div>'}}
 function pgStarred(){const L=[];Object.keys(ST.starred).forEach(cid=>{const c=CH[cid];if(!c)return;(ST.starred[cid]||[]).forEach(mid=>{const m=(MS[cid]?msgsOf(cid):[]).find(x=>x.id===mid);L.push([c,mid,m])})});return{title:'הודעות מסומנות בכוכב',body:L.length?L.map(([c,mid,m])=>`<button class="row" data-a="openChat" data-id="${c.id}" data-mid="${mid}">${avChat(c,42)}<span class="rm"><span class="rn">${esc(chatMeta(c).name)}</span><span class="rp">${ic('starf')}<span>${m?esc(previewText(m)):'פתיחת ההודעה בצ׳אט'}</span></span></span></button>`).join(''):`<div class="empty">${ic('star',48)}<b>אין הודעות מסומנות</b>לחיצה ארוכה על הודעה ← "סימון בכוכב".</div>`}}
@@ -4148,7 +4210,7 @@ viewUpdates=function(){
   <div class="usec"><b>סטטוס</b>${mine.length?`<button class="lnk" data-a="statusCam">הוספה</button>`:''}</div>
   <div class="stories">${mine.length?storyCard(ME,mine):`<button class="story add" data-a="statusCam"><span class="sbg">${meAv(56)}</span><span class="plus">${ic('plus',20)}</span><span style="position:relative">הוספת סטטוס</span></button>`}${owners.map(u=>storyCard(u,liveStatus(u))).join('')}</div>
   ${!owners.length?'<p class="ptext" style="margin-top:-6px">סטטוסים של חברים יופיעו כאן ונעלמים אחרי 24 שעות.</p>':''}
-  ${shorts.length?`<div class="usec"><b>${ic('flame',18)} שורטים</b><button class="lnk" data-a="shortsOpen" data-i="0">צפייה</button></div><div class="shorts">${shorts.slice(0,12).map((s,i)=>`<button class="short" data-a="shortsOpen" data-i="${i}">${s.p.thumb?`<img src="${esc(s.p.thumb)}" alt="">`:''}<span class="splay">${ic('playf',16)}</span><span class="shcap">${chAv(s.ch,22)}<span>${esc(s.ch.name)}</span></span></button>`).join('')}</div>`:''}
+  ${shorts.length?`<div class="usec"><b>${ic('video',18)} סרטונים מערוצים</b><button class="lnk" data-a="shortsOpen" data-i="0">צפייה</button></div><div class="shorts">${shorts.slice(0,12).map((s,i)=>`<button class="short" data-a="shortsOpen" data-i="${i}">${s.p.thumb?`<img src="${esc(s.p.thumb)}" alt="">`:''}<span class="splay">${ic('playf',16)}</span><span class="shcap">${chAv(s.ch,22)}<span>${esc(s.ch.name)}</span></span></button>`).join('')}</div>`:''}
   <div class="usec"><b>ערוצים</b><button class="lnk" data-a="go" data-p="discover">גילוי</button></div>
   ${followed.length?followed.map(([id,c])=>chRow2(id,c)).join(''):'<p class="ptext">עקבו אחרי ערוצים כדי לקבל עדכונים, או צרו ערוץ משלכם.</p>'}
   ${others.length?`<div class="usub">ערוצים שכדאי להכיר</div><div class="chcards2">${others.slice(0,12).map(([id,ch])=>`<div class="chcard2"><button data-a="go" data-p="channel" data-arg="${id}" class="cc2in">${chAv(ch,64)}<b>${esc(ch.name)}</b><small>${chFollowers(ch)} עוקבים</small></button><button class="btn" data-a="follow" data-ch="${id}">מעקב</button></div>`).join('')}</div>`:''}
@@ -4199,7 +4261,7 @@ let SH_LIST=[];
 function openShorts(list,start=0){
   SH_LIST=list;if(!list.length)return;closeSheet(true);$('#viewer')?.remove();
   const el=document.createElement('div');el.className='viewer shortsv';el.id='viewer';
-  el.innerHTML=`<div class="shtop"><button class="ib" data-a="svClose" aria-label="סגירה">${ic('back')}</button><b>${ic('flame',18)} שורטים</b><button class="ib" id="shmute" aria-label="קול">${ic('volx',20)}</button></div><div class="shfeed">${list.map((s,i)=>{const n=Object.values(s.ch.reacts?.[s.p.id]||{}).filter(Boolean).length,mineR=(s.ch.reacts?.[s.p.id]||{})[ME];return `<section class="shitem" data-i="${i}"><video playsinline loop muted preload="none" data-src="${esc(s.p.vid)}" ${s.p.thumb?`poster="${esc(s.p.thumb)}"`:''}></video>
+  el.innerHTML=`<div class="shtop"><button class="ib" data-a="svClose" aria-label="סגירה">${ic('back')}</button><b>${ic('video',18)} סרטונים מערוצים</b><button class="ib" id="shmute" aria-label="קול">${ic('volx',20)}</button></div><div class="shfeed">${list.map((s,i)=>{const n=Object.values(s.ch.reacts?.[s.p.id]||{}).filter(Boolean).length,mineR=(s.ch.reacts?.[s.p.id]||{})[ME];return `<section class="shitem" data-i="${i}"><video playsinline loop muted preload="none" data-src="${esc(s.p.vid)}" ${s.p.thumb?`poster="${esc(s.p.thumb)}"`:''}></video>
     <div class="shside"><button data-a="shLike" data-i="${i}" class="${mineR?'on':''}">${mineR?'❤️':ic('heart',26)}<small>${n||''}</small></button><button data-a="chShare" data-ch="${s.id}" data-p="${s.p.id}">${ic('share',24)}<small>שיתוף</small></button></div>
     <div class="shinfo"><button data-a="go" data-p="channel" data-arg="${s.id}" class="shch">${chAv(s.ch,34)}<b>${esc(s.ch.name)}</b></button>${s.ch.owner!==ME&&!ST.follows[s.id]?`<button class="shfol" data-a="follow" data-ch="${s.id}">מעקב</button>`:''}${s.p.text?`<p>${esc(s.p.text)}</p>`:''}</div></section>`}).join('')}</div>`;
   $('#layers').appendChild(el);
@@ -4506,15 +4568,6 @@ A7=function(){return{...__A15(),
     else if(k==='desc')askText('תיאור הערוץ',ch.desc||'',v=>{ch.desc=v;qw('channels/'+id,()=>db.doc('channels/'+id).update({desc:v}));drawPages()},{max:300,multi:true,allowEmpty:true});
     else if(k==='del')askConfirm('למחוק את הערוץ?','כל העדכונים יימחקו לכל העוקבים.','מחיקה',()=>{qw('channels/'+id,()=>db.doc('channels/'+id).delete());delete CHN[id];closeAllPages();drawSide();toast('הערוץ נמחק')})},
 }};
-/* "new short" card in the Updates tab */
-const __vu15=viewUpdates;
-viewUpdates=function(){
-  let h=__vu15();
-  const card=`<button class="short newshort" data-a="newShort"><span class="nsic">${ic('camera',26)}</span><span class="shcap" style="justify-content:center">שורט חדש</span></button>`;
-  if(h.includes('<div class="shorts">'))h=h.replace('<div class="shorts">','<div class="shorts">'+card);
-  else h=h.replace('<div class="usec"><b>ערוצים</b>',`<div class="usec"><b>${ic('flame',18)} שורטים</b></div><div class="shorts">${card}</div><div class="usec"><b>ערוצים</b>`);
-  return h.replace(/(data-a="go" data-p="channel" data-arg="([^"]+)"[^>]*>[\s\S]*?<span class="rn">)([^<]*)(<\/span>)/g,(m,a,id,name,c)=>a+name+vtick(isVerCh(id),13)+c);
-};
 const __st15=start;
 start=function(){__st15();try{subscribeConfig()}catch(e){console.warn(e)}};
 
@@ -4650,6 +4703,386 @@ start=function(){__st16();setTimeout(()=>{restoreSounds();const t=(ST.backup&&ST
 /* blue tick next to the logo for verified accounts */
 const __vc16=viewChats;
 viewChats=function(){const h=__vc16();return isVer(ME)?h.replace('<div class="logo">Spicyy<b>Chat</b></div>',`<div class="logo">Spicyy<b>Chat</b>${vtick(true,22)}</div>`):h};
+
+/* ================= v9.0: swipe to reply + SHORTS tab (TikTok-style) ================= */
+IC.music='<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>';
+IC.grid='<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>';
+IC.heartf='<path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.2 0 3.7 1.2 5.2 3 1.5-1.8 3-3 5.2-3 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z" fill="currentColor" stroke="none"/>';
+IC.bookmarkf='<path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.5L5 21V4a1 1 0 0 1 1-1z" fill="currentColor" stroke="none"/>';
+IC.comment='<path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l1.9-5.3A8.4 8.4 0 1 1 21 11.5z"/>';
+IC.hash='<path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/>';
+
+/* ---------------- swipe a message to reply ---------------- */
+(function(){
+  let s=null;
+  document.addEventListener('pointerdown',e=>{
+    const m=e.target.closest('#msgs .msg[data-mid]');if(!m||e.button>0||e.pointerType==='mouse')return;
+    if(e.target.closest('a,button:not(.bub),input,audio,video'))return;
+    s={m,x:e.clientX,y:e.clientY,dx:0,on:false,id:e.pointerId};
+  },true);
+  document.addEventListener('pointermove',e=>{
+    if(!s||e.pointerId!==s.id)return;const dx=e.clientX-s.x,dy=e.clientY-s.y;
+    if(!s.on){if(Math.abs(dy)>12){s=null;return}if(dx>14&&Math.abs(dx)>Math.abs(dy)*1.6){s.on=true;s.m.classList.add('swiping')}else return}
+    s.dx=Math.max(0,Math.min(90,dx));const b=s.m.querySelector('.bub')||s.m;b.style.transform=`translateX(${s.dx}px)`;
+    let ic2=s.m.querySelector('.swrep');if(!ic2){ic2=document.createElement('span');ic2.className='swrep';ic2.innerHTML=ic('reply',18);s.m.prepend(ic2)}
+    ic2.style.opacity=Math.min(1,s.dx/60);ic2.classList.toggle('go',s.dx>=60);
+    if(s.dx>=60&&!s.vib){s.vib=1;try{navigator.vibrate&&navigator.vibrate(15)}catch(x){}}
+  },true);
+  const end=e=>{
+    if(!s||e.pointerId!==s.id)return;const st=s;s=null;if(!st.on)return;
+    const b=st.m.querySelector('.bub')||st.m;b.style.transition='transform .18s';b.style.transform='';setTimeout(()=>{b.style.transition='';st.m.classList.remove('swiping');st.m.querySelector('.swrep')?.remove()},200);
+    if(st.dx>=60){const mid=st.m.dataset.mid,c=CH[CUR];const msg=msgsOf(CUR).find(x=>x.id===mid);if(!c||!msg||msg.deleted||canSendIn(c)!=='ok')return;
+      replyTo=mid;editing=null;drawBar();$('#ctext')?.focus()}
+  };
+  document.addEventListener('pointerup',end,true);document.addEventListener('pointercancel',end,true);
+})();
+
+/* ---------------- SHORTS ---------------- */
+TABS.splice(1,0,['shorts','שורטים','flame']);
+let SHORTS={},SFOL={},SH_SUB=false,SH_TAB='foryou',SACT=[],SH_FEED=null;
+const sLikes=s=>Object.values(s.likes||{}).filter(Boolean).length;
+const sFavs=s=>Object.values(s.favs||{}).filter(Boolean).length;
+const sNum=n=>n>=1e6?(n/1e6).toFixed(1).replace(/\.0$/,'')+'M':n>=1e3?(n/1e3).toFixed(1).replace(/\.0$/,'')+'K':String(n||0);
+const sUser=u=>{const p=prof(u);return{name:u===ME?(p.name||'אני'):(pname(u).replace(/^~\s*/,'')),un:p.username||'',photo:p.photo,color:p.color||colorFor(u)}};
+const sSeen=()=>{try{return JSON.parse(localStorage.getItem('spicyy-sseen')||'{}')}catch(e){return{}}};
+function markSeen(id){try{const m=sSeen();m[id]=Date.now();const k=Object.keys(m);if(k.length>800)k.sort((a,b)=>m[a]-m[b]).slice(0,200).forEach(x=>delete m[x]);localStorage.setItem('spicyy-sseen',JSON.stringify(m))}catch(e){}}
+const sTags=t=>[...new Set((String(t||'').match(/#[\p{L}\p{N}_]+/gu)||[]).map(x=>x.slice(1).toLowerCase()))].slice(0,12);
+const capHTML=t=>esc(t||'').replace(/#([\p{L}\p{N}_]+)/gu,(m,tag)=>`<button class="stag" data-a="sTag" data-t="${esc(tag.toLowerCase())}">#${tag}</button>`);
+function subscribeShorts(){
+  if(SH_SUB)return;SH_SUB=true;
+  db.collection('shorts').orderBy('t','desc').limit(200).onSnapshot(s=>{const n={};s.docs.forEach(d=>n[d.id]={id:d.id,...d.data()});SHORTS=n;updateShortCounts();if(TAB==='shorts'&&!SH_FEED)drawSide()},e=>console.warn('shorts',e));
+  db.doc('sfollow/'+ME).onSnapshot(s=>{SFOL=(s.exists&&s.data().following)||{};$$('.sitem').forEach(el=>{const s2=SHORTS[el.dataset.id];if(s2){const f=el.querySelector('.sfplus');if(f)f.hidden=!!SFOL[s2.by]||s2.by===ME}})},()=>{});
+  db.collection(`sact/${ME}/a`).orderBy('t','desc').limit(60).onSnapshot(s=>{SACT=s.docs.map(d=>({id:d.id,...d.data()}));const b=$('#sactb');if(b)b.hidden=!sActUnread();drawNav()},()=>{});
+}
+const sActUnread=()=>SACT.filter(a=>a.t>(ST.sactSeen||0)&&a.by!==ME).length;
+function rankForYou(){
+  const seen=sSeen(),now=Date.now(),hide=ST.shide||{};
+  return Object.values(SHORTS).filter(s=>!hide[s.id]&&!isBlocked(s.by)&&s.url).map(s=>{const age=(now-(s.t||now))/3600e3;const sc=(sLikes(s)*4+(s.cc||0)*6+(s.views||0)*.4+sFavs(s)*5+10)/Math.pow(age+2,1.15)*(seen[s.id]?.25:1)*(SFOL[s.by]?1.4:1);return[s,sc]}).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+}
+const followingFeed=()=>Object.values(SHORTS).filter(s=>SFOL[s.by]&&!isBlocked(s.by)&&s.url).sort((a,b)=>b.t-a.t);
+function sItemHTML(s){
+  const u=sUser(s.by),liked=!!(s.likes||{})[ME],fav=!!(s.favs||{})[ME];
+  return `<section class="sitem" data-id="${s.id}"><video playsinline loop preload="none" data-src="${esc(s.url)}" ${s.thumb?`poster="${esc(s.thumb)}"`:''}></video><div class="spause">${ic('playf',64)}</div><div class="sprog"><i></i></div>
+  <div class="sside"><div class="savw"><button class="sav" data-a="sProfile" data-u="${s.by}">${av({name:u.name,photo:u.photo,color:u.color},48)}</button><button class="sfplus" data-a="sFollow" data-u="${s.by}" ${SFOL[s.by]||s.by===ME?'hidden':''} aria-label="מעקב">${ic('plus',14)}</button></div>
+    <button class="sbtn ${liked?'on':''}" data-a="sLike" data-id="${s.id}">${ic('heartf',34)}<small>${sNum(sLikes(s))}</small></button>
+    ${s.comments!==false?`<button class="sbtn" data-a="sComments" data-id="${s.id}">${ic('comment',32)}<small>${sNum(s.cc||0)}</small></button>`:''}
+    <button class="sbtn ${fav?'fav':''}" data-a="sFav" data-id="${s.id}">${ic('bookmarkf',30)}<small>${sNum(sFavs(s))}</small></button>
+    <button class="sbtn" data-a="sShare" data-id="${s.id}">${ic('share',30)}<small>שיתוף</small></button>
+    <button class="sbtn" data-a="sMore" data-id="${s.id}">${ic('more',28)}</button></div>
+  <div class="sinfo"><button class="sname" data-a="sProfile" data-u="${s.by}"><bdi dir="ltr">@${esc(u.un||u.name)}</bdi>${vtick(isVer(s.by),15)}</button><span class="sdate">· ${listTime(s.t)}</span>${s.cap?`<p class="scap">${capHTML(s.cap)}</p>`:''}<div class="smusic">${ic('music',14)}<span><b>צליל מקורי · ${esc(u.name)}</b></span></div></div></section>`;
+}
+function updateShortCounts(){
+  $$('.sitem').forEach(el=>{const s=SHORTS[el.dataset.id];if(!s)return;
+    const L=el.querySelector('[data-a="sLike"]');if(L){L.classList.toggle('on',!!(s.likes||{})[ME]);L.querySelector('small').textContent=sNum(sLikes(s))}
+    const C=el.querySelector('[data-a="sComments"] small');if(C)C.textContent=sNum(s.cc||0);
+    const Fv=el.querySelector('[data-a="sFav"]');if(Fv){Fv.classList.toggle('fav',!!(s.favs||{})[ME]);Fv.querySelector('small').textContent=sNum(sFavs(s))}});
+}
+/* a scrolling feed inside any container */
+function mountFeed(box,list,start=0){
+  const feed=document.createElement('div');feed.className='sfeed';feed.innerHTML=list.length?list.map(sItemHTML).join(''):'';box.appendChild(feed);
+  const st={feed,list,muted:false,cur:null,io:null};
+  const load=v=>{if(!v||v.dataset.h)return;const src=v.dataset.src;if(src.startsWith('media:')){v.dataset.media=src.slice(6);hydrateMedia(v.parentNode)}else{v.src=src;v.dataset.h=1}};
+  const activate=sec=>{
+    if(st.cur===sec)return;if(st.cur){const v0=st.cur.querySelector('video');try{v0.pause()}catch(e){}}
+    st.cur=sec;const v=sec.querySelector('video');load(v);const nx=sec.nextElementSibling;if(nx)load(nx.querySelector('video'));
+    v.muted=st.muted;sec.classList.remove('paused');v.currentTime=0;
+    v.play().catch(()=>{v.muted=true;st.muted=true;v.play().catch(()=>{});box.classList.add('needsound')});
+    const id=sec.dataset.id;clearTimeout(st.vt);st.vt=setTimeout(()=>{if(st.cur===sec)countView(id)},2000);markSeen(id);
+  };
+  st.io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.65)activate(e.target)}),{root:feed,threshold:[.65]});
+  $$('.sitem',feed).forEach(sec=>{st.io.observe(sec);
+    const v=sec.querySelector('video'),bar=sec.querySelector('.sprog i');
+    v.addEventListener('timeupdate',()=>{if(v.duration)bar.style.width=(v.currentTime/v.duration*100)+'%'});
+    let lastTap=0,tapT=0;
+    sec.addEventListener('click',e=>{if(e.target.closest('button'))return;const now=Date.now();
+      if(now-lastTap<300){clearTimeout(tapT);lastTap=0;heartBurst(sec,e.clientX,e.clientY);likeShort(sec.dataset.id,true);return}
+      lastTap=now;tapT=setTimeout(()=>{if(box.classList.contains('needsound')){box.classList.remove('needsound');st.muted=false;v.muted=false;return}if(v.paused){v.play().catch(()=>{});sec.classList.remove('paused')}else{v.pause();sec.classList.add('paused')}},280)});
+  });
+  const it=$(`.sitem:nth-child(${start+1})`,feed);if(it)feed.scrollTop=it.offsetTop;
+  st.destroy=()=>{try{st.io.disconnect()}catch(e){}$$('video',feed).forEach(v=>{try{v.pause();v.removeAttribute('src');v.load()}catch(e){}})};
+  return st;
+}
+function heartBurst(sec,x,y){const r=sec.getBoundingClientRect();const h=document.createElement('span');h.className='sburst';h.innerHTML=ic('heartf',96);h.style.left=(x-r.left-48)+'px';h.style.top=(y-r.top-48)+'px';h.style.setProperty('--rot',(Math.random()*30-15)+'deg');sec.appendChild(h);setTimeout(()=>h.remove(),900)}
+function countView(id){const s=SHORTS[id];if(!s||s.by===ME)return;qw('shorts/'+id+'/v',()=>db.doc('shorts/'+id).update({views:(s.views||0)+1}))}
+function sAct(to,type,extra={}){if(!to||to===ME)return;const id=type==='comment'?rid(14):`${type}_${extra.sid||''}_${ME}`;qw(`sact/${to}/a/${id}`,()=>db.doc(`sact/${to}/a/${id}`).set({type,by:ME,t:Date.now(),...extra}))}
+function likeShort(id,only){
+  const s=SHORTS[id];if(!s)return;const cur=!!(s.likes||{})[ME];const v=only?true:!cur;if(cur===v){updateShortCounts();return}
+  s.likes={...(s.likes||{}),[ME]:v};updateShortCounts();
+  qw('shorts/'+id,()=>db.doc('shorts/'+id).update({likes:{[ME]:v}}));if(v)sAct(s.by,'like',{sid:id});
+}
+function favShort(id){const s=SHORTS[id];if(!s)return;const v=!(s.favs||{})[ME];s.favs={...(s.favs||{}),[ME]:v};updateShortCounts();qw('shorts/'+id,()=>db.doc('shorts/'+id).update({favs:{[ME]:v}}));toast(v?'נשמר במועדפים 🔖':'הוסר מהמועדפים')}
+function setSFollow(u,on){if(u===ME)return;SFOL={...SFOL,[u]:on};qw('sfollow/'+ME,()=>db.doc('sfollow/'+ME).set({following:{[u]:on}},{merge:true}));if(on)sAct(u,'follow');$$(`.sfplus[data-u="${u}"]`).forEach(b=>b.hidden=on);if(stack.length)drawPages()}
+
+/* the Shorts tab */
+function viewShorts(){
+  return `<div class="stab" id="stab"><div class="stop"><button class="ib" data-a="sSearch" aria-label="חיפוש">${ic('search',24)}</button>
+    <div class="stabs"><button class="${SH_TAB==='following'?'on':''}" data-a="sTab" data-k="following">עוקבים</button><button class="${SH_TAB==='foryou'?'on':''}" data-a="sTab" data-k="foryou">בשבילך</button></div>
+    <button class="ib" data-a="sActivity" aria-label="פעילות">${ic('bell',24)}<i id="sactb" class="sdot" ${sActUnread()?'':'hidden'}></i></button></div>
+    <div class="ssound">${ic('volx',16)} הקישו להפעלת הקול</div>
+    <button class="supload" data-a="sUpload" aria-label="שורט חדש">${ic('plus',26)}</button></div>`;
+}
+function fillShortsTab(){
+  const box=$('#stab');if(!box)return;if(SH_FEED){SH_FEED.destroy();SH_FEED.feed.remove();SH_FEED=null}
+  const list=SH_TAB==='following'?followingFeed():rankForYou();
+  if(!list.length){const e=document.createElement('div');e.className='sempty';e.innerHTML=SH_TAB==='following'?`${ic('users',56)}<b>עוד לא עוקבים אחרי אף אחד</b><p>עקבו אחרי יוצרים כדי לראות כאן את הסרטונים שלהם.</p><button class="btn" data-a="sTab" data-k="foryou">לסרטונים בשבילך</button>`:`${ic('flame',56)}<b>עוד אין שורטים</b><p>היו הראשונים! צלמו סרטון קצר ושתפו את כולם.</p><button class="btn" data-a="sUpload">${ic('camera',18)} צילום שורט</button>`;box.appendChild(e);return}
+  SH_FEED=mountFeed(box,list.slice(0,60),0);
+}
+const __ds17=drawSide;
+drawSide=function(){
+  document.body.classList.toggle('shortsmode',TAB==='shorts');
+  if(TAB!=='shorts'){if(SH_FEED){SH_FEED.destroy();SH_FEED=null}return __ds17()}
+  subscribeShorts();$('#sideView').innerHTML=viewShorts();fillShortsTab();
+};
+const __dn17=drawNav;
+drawNav=function(){__dn17();const n=sActUnread();if(n)$$('.nb[data-t="shorts"]').forEach(b=>{if(!b.querySelector('.nbadge'))b.insertAdjacentHTML('beforeend','<span class="nbadge" style="min-width:10px;height:10px;padding:0"></span>')})};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&SH_FEED&&SH_FEED.cur){try{SH_FEED.cur.querySelector('video').pause()}catch(e){}}});
+
+/* full-screen player for a list (from a profile, hashtag or link) */
+let SVIEW=null;
+function openShortList(list,start){
+  closeShortList();const el=document.createElement('div');el.id='sview';el.className='sview';
+  el.innerHTML=`<button class="ib sback" data-a="sClose" aria-label="חזרה">${ic('back',26)}</button><div class="ssound">${ic('volx',16)} הקישו להפעלת הקול</div>`;$('#layers').appendChild(el);
+  if(SH_FEED&&SH_FEED.cur){try{SH_FEED.cur.querySelector('video').pause()}catch(e){}}
+  SVIEW=mountFeed(el,list,start);
+}
+function closeShortList(){if(SVIEW){SVIEW.destroy();SVIEW=null}$('#sview')?.remove();if(TAB==='shorts'&&SH_FEED&&SH_FEED.cur&&!stack.length){SH_FEED.cur.querySelector('video').play().catch(()=>{})}}
+const __nl17=navLayers;
+navLayers=function(){const L=__nl17();if($('#sview'))L.push('sview');return L};
+const __ctl17=closeTopLayer;
+closeTopLayer=function(k){if(k==='sview'){closeShortList();return}return __ctl17(k)};
+
+/* comments */
+function openComments(id){
+  const s=SHORTS[id];if(!s)return;let unsub=null;
+  openSheet(`${sNum(s.cc||0)} תגובות`,`<div class="scomm" id="scl"><p class="ptext">טוען…</p></div><form id="scf2" class="scform">${meAv(34)}<input class="inp" id="sci" placeholder="הוספת תגובה…" maxlength="300" autocomplete="off"><button class="sendbtn" aria-label="שליחה"><span class="flip" style="display:grid">${ic('send')}</span></button></form>`,d=>{
+    const list=$('#scl',d);
+    unsub=db.collection(`shorts/${id}/c`).orderBy('t','asc').limit(300).onSnapshot(q=>{
+      const L=q.docs.map(x=>({id:x.id,...x.data()}));
+      list.innerHTML=L.length?L.map(c=>{const u=sUser(c.by),canDel=c.by===ME||s.by===ME||isAdminMe();return `<div class="scrow">${av({name:u.name,photo:u.photo,color:u.color},36)}<div class="rm"><b><bdi dir="ltr">${esc(u.un?('@'+u.un):u.name)}</bdi>${vtick(isVer(c.by),13)}${c.by===s.by?'<span class="sauth">יוצר/ת</span>':''}</b><p>${capHTML(c.text)}</p><small>${listTime(c.t)}${canDel?` · <button class="lnk" data-a="sCDel" data-id="${id}" data-c="${c.id}">מחיקה</button>`:''}</small></div></div>`}).join(''):`<div class="empty"><b>עוד אין תגובות</b>היו הראשונים להגיב!</div>`;
+      list.scrollTop=list.scrollHeight});
+    $('#scf2',d).addEventListener('submit',e=>{e.preventDefault();const i=$('#sci',d),t=i.value.trim();if(!t)return;i.value='';
+      db.collection(`shorts/${id}/c`).add({by:ME,text:t,t:Date.now()}).catch(dbErr);
+      const nc=(SHORTS[id]?.cc||0)+1;if(SHORTS[id])SHORTS[id].cc=nc;qw('shorts/'+id+'/cc',()=>db.doc('shorts/'+id).update({cc:nc}));updateShortCounts();
+      sAct(s.by,'comment',{sid:id,text:t.slice(0,80)})});
+  },()=>{unsub&&unsub()});
+  const sh=$('#sheet');if(sh)sh.style.zIndex=75;
+}
+
+/* upload */
+function storageReady(){
+  if(window.firebase&&firebase.storage)return Promise.resolve(true);
+  return new Promise(res=>{const s=document.createElement('script');s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js';s.onload=()=>res(!!(firebase.storage));s.onerror=()=>res(false);document.head.appendChild(s)});
+}
+async function uploadToStorage(blob,path,onProg){
+  if(!(await storageReady()))throw new Error('nostorage');
+  const ref=firebase.storage().ref(path);
+  await new Promise((res,rej)=>{const t=ref.put(blob,{contentType:blob.type||'video/mp4',cacheControl:'public,max-age=31536000'});t.on('state_changed',x=>onProg&&onProg(x.bytesTransferred/x.totalBytes),rej,res)});
+  return ref.getDownloadURL();
+}
+function sUpload(){openCam(f=>{if(!String(f.type).startsWith('video/')){toast('בשורטים מעלים סרטונים. החזיקו את הכפתור כדי לצלם וידאו.');return}sCompose(f)},{title:'שורט חדש'})}
+function sCompose(file){
+  const u=URL.createObjectURL(file);
+  const el=document.createElement('div');el.id='scompose';el.className='scompose';
+  el.innerHTML=`<div class="phead"><button class="ib" data-sc="x" aria-label="ביטול">${ic('x')}</button><h2>שורט חדש</h2></div>
+  <div class="scbody"><video src="${u}" autoplay loop muted playsinline></video>
+  <textarea id="sccap" maxlength="300" placeholder="תארו את הסרטון… #האשטאגים עוזרים לאנשים למצוא אותו"></textarea>
+  <div class="sctags">${['#מצחיק','#ספורט','#כדורגל','#אתגר','#מוזיקה','#ריקוד','#טיפים','#חיות'].map(t=>`<button type="button" data-tag="${t}">${t}</button>`).join('')}</div>
+  <label class="srow"><span class="sic">${ic('comment')}</span><span class="stx"><b>לאפשר תגובות</b></span><input type="checkbox" class="sw" id="sccom" checked></label>
+  <p class="ptext">${ic('eye',13)} כל משתמשי SpicyyChat יוכלו לראות את הסרטון. עד דקה וחצי.</p></div>
+  <div class="scfoot"><button class="btn full" data-sc="post">${ic('send',18)} פרסום</button></div>`;
+  $('#layers').appendChild(el);
+  const close=()=>{URL.revokeObjectURL(u);el.remove()};
+  el.addEventListener('click',async e=>{const t=e.target.closest('[data-tag]');if(t){const ta=$('#sccap',el);ta.value=(ta.value.trim()+' '+t.dataset.tag).trim()+' ';ta.focus();return}
+    const b=e.target.closest('[data-sc]');if(!b)return;
+    if(b.dataset.sc==='x'){close();return}
+    const cap=$('#sccap',el).value.trim(),allowC=$('#sccom',el).checked;close();
+    const ps=progressSheet('מעלה שורט');
+    try{
+      const r=await prepVideo(file,{maxSec:90,maxBytes:40*1048576,onProgress:f=>ps.set(f*.4,'מכין את הסרטון… '+Math.round(f*100)+'%')});
+      const id='s'+Date.now().toString(36)+rid(5);let url,path=null;
+      try{path=`shorts/${ME}/${id}.${(r.blob.type||'').includes('webm')?'webm':'mp4'}`;url=await uploadToStorage(r.blob,path,f=>ps.set(.4+f*.55,'מעלה… '+Math.round(f*100)+'%'))}
+      catch(err){console.warn('storage',err);path=null;if(r.blob.size>14*1048576)throw new Error('big');ps.set(.6,'מעלה…');url=await storeBlob(r.blob);if(!url)throw new Error('upload')}
+      const d={by:ME,url,path,thumb:r.thumb,dur:r.dur,cap,tags:sTags(cap),t:Date.now(),likes:{},favs:{},views:0,cc:0,comments:allowC};
+      await db.doc('shorts/'+id).set(d);SHORTS[id]={id,...d};ps.close();toast('השורט פורסם 🎉');
+      if(TAB==='shorts'){SH_TAB='foryou';drawSide();const f=$('#stab .sfeed');if(f)f.scrollTop=0}else setTab('shorts');
+    }catch(err){ps.close();console.warn(err);videoErr(err)}
+  });
+}
+
+/* profile page */
+function pgSProfile(u){
+  const p=sUser(u),mine=u===ME;const tab=(window.SPT&&SPT[u])||'v';
+  const all=Object.values(SHORTS);
+  const vids=all.filter(s=>s.by===u).sort((a,b)=>b.t-a.t);
+  const liked=mine?all.filter(s=>(s.likes||{})[ME]).sort((a,b)=>b.t-a.t):[];
+  const favs=mine?all.filter(s=>(s.favs||{})[ME]).sort((a,b)=>b.t-a.t):[];
+  const likesTotal=vids.reduce((n,s)=>n+sLikes(s),0);
+  const list=tab==='l'?liked:tab==='f'?favs:vids;
+  if(!window.SPCNT)window.SPCNT={};const cnt=SPCNT[u];
+  if(!cnt||Date.now()-cnt.t>30000){SPCNT[u]={t:Date.now(),fol:cnt?.fol??'…',ing:cnt?.ing??'…'};
+    db.collection('sfollow').where('following.'+u,'==',true).get().then(q=>{SPCNT[u].fol=q.size;if(stack.length)drawPages()}).catch(()=>{});
+    db.doc('sfollow/'+u).get().then(q=>{SPCNT[u].ing=Object.values((q.exists&&q.data().following)||{}).filter(Boolean).length;if(stack.length)drawPages()}).catch(()=>{});}
+  const c=SPCNT[u];const bio=prof(u).sbio||'';
+  const grid=list.length?`<div class="sgrid">${list.map((s,i)=>`<button class="sgi" data-a="sOpenList" data-u="${u}" data-k="${tab}" data-i="${i}">${s.thumb?`<img src="${esc(s.thumb)}" alt="" loading="lazy">`:''}<span>${ic('playf',12)} ${sNum(s.views||0)}</span></button>`).join('')}</div>`
+    :`<div class="empty">${ic(tab==='l'?'heart':tab==='f'?'bookmark':'video',44)}<b>${tab==='l'?'עוד אין סרטונים שאהבת':tab==='f'?'עוד אין מועדפים':mine?'עוד לא העלית סרטונים':'עוד אין סרטונים'}</b>${mine&&tab==='v'?`<div class="btns"><button class="btn" data-a="sUpload">${ic('camera',18)} צילום שורט</button></div>`:''}</div>`;
+  return{full:true,head:`<div class="xwho"><span class="rm"><b><bdi dir="ltr">@${esc(p.un||p.name)}</bdi>${vtick(isVer(u),15)}</b><small>שורטים</small></span></div>`,actions:`<button class="ib" data-a="sShareProf" data-u="${u}" aria-label="שיתוף">${ic('share')}</button>`,
+    body:`<div class="sprof">${av({name:p.name,photo:p.photo,color:p.color},96)}<h3>${esc(p.name)}${vtick(isVer(u),18)}</h3><p class="sun"><bdi dir="ltr">@${esc(p.un)}</bdi></p>
+    <div class="sstats"><button data-a="sFolList" data-u="${u}" data-k="ing"><b>${c.ing}</b><small>נעקבים</small></button><button data-a="sFolList" data-u="${u}" data-k="fol"><b>${c.fol}</b><small>עוקבים</small></button><div><b>${sNum(likesTotal)}</b><small>לייקים</small></div></div>
+    <div class="sacts">${mine?`<button class="btn ghost" data-a="sEditBio">${ic('edit',16)} עריכת פרופיל</button><button class="btn ghost" data-a="sUpload">${ic('camera',16)} שורט חדש</button>`:`<button class="btn ${SFOL[u]?'ghost':''}" data-a="sFollowBtn" data-u="${u}">${SFOL[u]?'במעקב':'מעקב'}</button><button class="btn ghost" data-a="dm" data-uid="${u}">${ic('chat',16)} הודעה</button>`}</div>
+    ${bio?`<p class="sbio">${capHTML(bio)}</p>`:mine?'<p class="sbio muted">ספרו משהו על עצמכם…</p>':''}</div>
+    <div class="sptabs"><button class="${tab==='v'?'on':''}" data-a="sPTab" data-u="${u}" data-k="v">${ic('grid',22)}</button>${mine?`<button class="${tab==='l'?'on':''}" data-a="sPTab" data-u="${u}" data-k="l">${ic('heart',22)}</button><button class="${tab==='f'?'on':''}" data-a="sPTab" data-u="${u}" data-k="f">${ic('bookmark',22)}</button>`:''}</div>${grid}`};
+}
+function profList(u,k){const all=Object.values(SHORTS);return(k==='l'?all.filter(s=>(s.likes||{})[ME]):k==='f'?all.filter(s=>(s.favs||{})[ME]):all.filter(s=>s.by===u)).sort((a,b)=>b.t-a.t)}
+function pgSFol(arg){
+  const [u,k]=String(arg).split(':');if(!window.SFL)window.SFL={};const key=arg;
+  if(!SFL[key]){SFL[key]={loading:true,list:[]};
+    (k==='fol'?db.collection('sfollow').where('following.'+u,'==',true).get().then(q=>q.docs.map(d=>d.id)):db.doc('sfollow/'+u).get().then(q=>Object.keys((q.exists&&q.data().following)||{}).filter(x=>q.data().following[x])))
+      .then(L=>{SFL[key]={list:L};drawPages()}).catch(()=>{SFL[key]={list:[]};drawPages()})}
+  const d=SFL[key];setTimeout(()=>{if(SFL[key]&&!SFL[key].loading)delete SFL[key]},100);
+  return{title:k==='fol'?'עוקבים':'נעקבים',body:d.loading?'<p class="ptext">טוען…</p>':(d.list.filter(x=>P[x]).map(x=>{const p=sUser(x);return `<div class="row"><button style="display:contents" data-a="sProfile" data-u="${x}">${av({name:p.name,photo:p.photo,color:p.color},46)}<span class="rm"><span class="rn">${esc(p.name)}${vtick(isVer(x),13)}</span><span class="rp"><bdi dir="ltr">@${esc(p.un)}</bdi></span></span></button>${x!==ME?`<button class="flw ${SFOL[x]?'on':''}" data-a="sFollowBtn" data-u="${x}">${SFOL[x]?'במעקב':'מעקב'}</button>`:''}</div>`}).join('')||'<div class="empty"><b>אין עדיין</b></div>')};
+}
+/* search & hashtags */
+let SQ='';
+function pgSSearch(){
+  const q=SQ.trim().toLowerCase().replace(/^[@#]/,'');
+  const tags={};Object.values(SHORTS).forEach(s=>(s.tags||[]).forEach(t=>tags[t]=(tags[t]||0)+1+sLikes(s)*.2));
+  const topTags=Object.entries(tags).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+  let body=`<div class="ssearch"><input class="inp" id="ssq" placeholder="חיפוש אנשים, #האשטאגים וסרטונים" value="${esc(SQ)}" autocomplete="off"></div>`;
+  if(!q){body+=`<div class="plabel">${ic('flame',14)} טרנדים</div>`+(topTags.length?`<div class="strend">${topTags.slice(0,20).map(t=>`<button data-a="sTag" data-t="${esc(t)}">#${esc(t)}<small>${Object.values(SHORTS).filter(s=>(s.tags||[]).includes(t)).length} סרטונים</small></button>`).join('')}</div>`:'<p class="ptext">עוד אין האשטאגים.</p>')}
+  else{
+    const users=Object.keys(P).filter(u=>u!==ME&&((P[u].username||'').toLowerCase().includes(q)||(P[u].name||'').toLowerCase().includes(q))).slice(0,20);
+    const tg=topTags.filter(t=>t.includes(q)).slice(0,10);
+    const vids=Object.values(SHORTS).filter(s=>String(s.cap||'').toLowerCase().includes(q)).slice(0,30);
+    window.SSV=vids;
+    body+=(users.length?`<div class="plabel">אנשים</div>`+users.map(u=>{const p=sUser(u);return `<button class="row" data-a="sProfile" data-u="${u}">${av({name:p.name,photo:p.photo,color:p.color},44)}<span class="rm"><span class="rn">${esc(p.name)}${vtick(isVer(u),13)}</span><span class="rp"><bdi dir="ltr">@${esc(p.un)}</bdi></span></span></button>`}).join(''):'')
+      +(tg.length?`<div class="plabel">האשטאגים</div><div class="strend">${tg.map(t=>`<button data-a="sTag" data-t="${esc(t)}">#${esc(t)}</button>`).join('')}</div>`:'')
+      +(vids.length?`<div class="plabel">סרטונים</div><div class="sgrid">${vids.map((s,i)=>`<button class="sgi" data-a="sOpenSearch" data-i="${i}">${s.thumb?`<img src="${esc(s.thumb)}" alt="">`:''}<span>${ic('playf',12)} ${sNum(s.views||0)}</span></button>`).join('')}</div>`:'')
+      ||'<div class="empty"><b>לא נמצאו תוצאות</b></div>';
+  }
+  return{title:'חיפוש',body,after:el=>{const i=$('#ssq',el);if(!i)return;if(!SQ||document.activeElement!==i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}i.addEventListener('input',()=>{SQ=i.value;clearTimeout(window.SQT);window.SQT=setTimeout(()=>{drawPages();const j=$('#ssq');if(j){j.focus();j.setSelectionRange(j.value.length,j.value.length)}},250)})}};
+}
+function pgSTag(t){const L=Object.values(SHORTS).filter(s=>(s.tags||[]).includes(t)).sort((a,b)=>sLikes(b)-sLikes(a)||b.t-a.t);window.STL=L;
+  return{title:'#'+esc(t),body:`<div class="stagh"><span>${ic('hash',34)}</span><div><b>#${esc(t)}</b><small>${L.length} סרטונים</small></div></div>${L.length?`<div class="sgrid">${L.map((s,i)=>`<button class="sgi" data-a="sOpenTag" data-i="${i}">${s.thumb?`<img src="${esc(s.thumb)}" alt="">`:''}<span>${ic('playf',12)} ${sNum(s.views||0)}</span></button>`).join('')}</div>`:'<div class="empty"><b>אין סרטונים</b></div>'}`}}
+function pgSActivity(){
+  ST.sactSeen=Date.now();saveState();setTimeout(()=>{const b=$('#sactb');if(b)b.hidden=true;drawNav()},50);
+  const T={like:'אהב/ה את הסרטון שלך',comment:'הגיב/ה:',follow:'התחיל/ה לעקוב אחריך'};
+  return{title:'פעילות',body:SACT.filter(a=>P[a.by]).map(a=>{const p=sUser(a.by),s=SHORTS[a.sid];return `<div class="row sactrow"><button style="display:contents" data-a="sProfile" data-u="${a.by}">${av({name:p.name,photo:p.photo,color:p.color},46)}</button><span class="rm"><span class="rn">${esc(p.name)}${vtick(isVer(a.by),13)}</span><span class="rp">${T[a.type]||''} ${a.type==='comment'?esc(a.text||''):''} · ${listTime(a.t)}</span></span>${s&&s.thumb?`<button class="sathumb" data-a="sOpenOne" data-id="${s.id}"><img src="${esc(s.thumb)}" alt=""></button>`:a.type==='follow'&&!SFOL[a.by]?`<button class="flw" data-a="sFollowBtn" data-u="${a.by}">מעקב חזרה</button>`:''}</div>`}).join('')||`<div class="empty">${ic('bell',44)}<b>עוד אין פעילות</b>כשמישהו יעשה לייק, יגיב או יעקוב אחריך, זה יופיע כאן.</div>`};
+}
+const __gp17=goPage;
+goPage=function(p,arg){
+  if(p==='sprofile')return push(()=>pgSProfile(arg),'sp_'+arg,true);
+  if(p==='sfol')return push(()=>pgSFol(arg),'sf_'+arg,true);
+  if(p==='ssearch')return push(()=>pgSSearch(),'ss',true);
+  if(p==='stag')return push(()=>pgSTag(arg),'st_'+arg,true);
+  if(p==='sactivity')return push(()=>pgSActivity(),'sa',true);
+  return __gp17(p,arg);
+};
+/* links: #s<id> opens a short */
+const __chj17=checkHashJoin;
+checkHashJoin=function(){const h=(location.hash||'').slice(1);if(READY&&/^s[a-z0-9]{8,}$/i.test(h)){history.replaceState(null,'',location.pathname+location.search);subscribeShorts();
+  const open=()=>{const s=SHORTS[h];if(s)openShortList([s],0);else db.doc('shorts/'+h).get().then(x=>{if(x.exists){SHORTS[h]={id:h,...x.data()};openShortList([SHORTS[h]],0)}else toast('הסרטון לא נמצא')})};setTimeout(open,600);return}return __chj17()};
+const __A17=A7;
+A7=function(){return{...__A17(),
+  sTab:el=>{SH_TAB=el.dataset.k;$$('.stabs button').forEach(b=>b.classList.toggle('on',b.dataset.k===SH_TAB));$('#stab .sempty')?.remove();fillShortsTab()},
+  sUpload:()=>sUpload(),
+  sLike:el=>likeShort(el.dataset.id,false),
+  sFav:el=>favShort(el.dataset.id),
+  sComments:el=>openComments(el.dataset.id),
+  sCDel:el=>{const id=el.dataset.id;db.doc(`shorts/${id}/c/${el.dataset.c}`).delete().catch(dbErr);const s=SHORTS[id];if(s&&s.cc>0){const nc=s.cc-1;s.cc=nc;qw('shorts/'+id+'/cc',()=>db.doc('shorts/'+id).update({cc:nc}));updateShortCounts()}},
+  sShare:el=>{const s=SHORTS[el.dataset.id];const url=location.href.split('#')[0]+'#'+el.dataset.id;const text=`תראו את השורט הזה ב־SpicyyChat${s&&s.cap?': '+s.cap:''}`;if(navigator.share)navigator.share({title:'SpicyyChat',text,url}).catch(()=>{});else copy(url)},
+  sMore:el=>{const id=el.dataset.id,s=SHORTS[id];if(!s)return;const own=s.by===ME;sheetList('',wrapClose([
+    {label:(s.favs||{})[ME]?'הסרה מהמועדפים':'שמירה במועדפים',icon:'bookmark',fn:()=>favShort(id)},
+    {label:'שיתוף',icon:'share',fn:()=>A.sShare({dataset:{id}})},
+    ...(own?[]:[{label:'לא מעניין אותי',icon:'eyeoff' in IC?'eyeoff':'block',fn:()=>{ST.shide={...(ST.shide||{}),[id]:1};saveState();toast('נראה לך פחות סרטונים כאלה');$(`.sitem[data-id="${id}"]`)?.remove()}},
+      {label:'דיווח',icon:'flag',danger:true,fn:()=>sheetList('למה לדווח?',['תוכן פוגעני או אלים','הטרדה או בריונות','עירום או תוכן מיני','ספאם או הונאה','אחר'].map(r=>({label:r,fn:()=>{closeSheet(true);db.collection('reports').add({by:ME,kind:'short',sid:id,owner:s.by,reason:r,t:Date.now()}).catch(()=>{});toast('תודה, הדיווח נשלח')}})))}]),
+    ...(own||isAdminMe()?[{label:'מחיקת הסרטון',icon:'trash',danger:true,fn:()=>askConfirm('למחוק את הסרטון?','הוא יימחק לכולם.','מחיקה',async()=>{try{await db.doc('shorts/'+id).delete();if(s.path&&await storageReady())firebase.storage().ref(s.path).delete().catch(()=>{})}catch(e){dbErr(e)}delete SHORTS[id];$$(`.sitem[data-id="${id}"]`).forEach(x=>x.remove());toast('הסרטון נמחק');if(stack.length)drawPages()})}]:[])]));const sh=$('#sheet');if(sh)sh.style.zIndex=75},
+  sProfile:el=>{const u=el.dataset.u;if($('#sview'))closeShortList();goPage('sprofile',u)},
+  sFollow:el=>{setSFollow(el.dataset.u,true);toast('את/ה עוקב/ת ✓')},
+  sFollowBtn:el=>{const u=el.dataset.u;setSFollow(u,!SFOL[u])},
+  sPTab:el=>{window.SPT=window.SPT||{};SPT[el.dataset.u]=el.dataset.k;drawPages()},
+  sOpenList:el=>openShortList(profList(el.dataset.u,el.dataset.k),+el.dataset.i),
+  sOpenSearch:el=>openShortList(window.SSV||[],+el.dataset.i),
+  sOpenTag:el=>openShortList(window.STL||[],+el.dataset.i),
+  sOpenOne:el=>{const s=SHORTS[el.dataset.id];if(s)openShortList([s],0)},
+  sFolList:el=>goPage('sfol',el.dataset.u+':'+el.dataset.k),
+  sSearch:()=>{SQ='';goPage('ssearch')},
+  sTag:el=>{if($('#sview'))closeShortList();goPage('stag',el.dataset.t)},
+  sActivity:()=>goPage('sactivity'),
+  sClose:()=>closeShortList(),
+  sShareProf:el=>{const p=sUser(el.dataset.u);const url=location.href.split('#')[0];const text=`עקבו אחרי @${p.un} בשורטים של SpicyyChat`;if(navigator.share)navigator.share({title:'SpicyyChat',text,url}).catch(()=>{});else copy(text+' '+url)},
+  sEditBio:()=>askText('ביו',prof(ME).sbio||'',v=>{writeProfile({sbio:v});drawPages()},{multi:true,max:160,allowEmpty:true,ph:'כמה מילים עליך, אפשר עם #האשטאגים'}),
+}};
+/* channel ticks in the Updates tab */
+const __vu17=viewUpdates;
+viewUpdates=function(){return __vu17().replace(/(data-a="go" data-p="channel" data-arg="([^"]+)"[^>]*>[\s\S]*?<span class="rn">)([^<]*)(<\/span>)/g,(m,a,id,name,c)=>a+name+vtick(isVerCh(id),13)+c)};
+
+/* ================= the Android app (Google Play): native notifications, full-screen calls, speaker ================= */
+const APP=window.SpicyyAndroid||null;
+/* tell the other phone to stop ringing when I hang up before they answer (works for the app and the browser) */
+const __ec18=endCall;
+endCall=function(...a){const C=CALL;const r=__ec18(...a);try{if(C&&C.out&&!C.answered&&C.ready)pushPost('/callend',{call:C.id})}catch(e){}return r};
+if(APP){
+  document.documentElement.classList.add('inapp');
+  /* notifications: the app gets a Firebase token instead of a browser push subscription */
+  async function saveFcm(tok){
+    if(!tok||!ME||!FDB)return;
+    try{const id='a'+(await endpointId(tok));await FDB.doc('pushsubs/'+ME).set({fcm:{[id]:{token:tok,t:Date.now()}}},{merge:true});pushMeta(true)}catch(e){console.warn('fcm',e)}
+  }
+  window.spicyyOnToken=t=>saveFcm(t);
+  pushState=function(){return 'app'};
+  pushSubscribe=async function(){saveFcm(APP.token());return 'app'};
+  pushRow=function(){
+    const on=APP.notificationsOn(),fs=APP.canFullScreen();
+    return `<button class="srow" data-a="appNotif"><span class="sic">${ic('bell')}</span><span class="stx"><b>התראות של האפליקציה</b><small>${on?'מופעלות · הודעות ושיחות מגיעות גם כשהאפליקציה סגורה':'כבויות · לחצו כדי להפעיל'}</small></span>${on?'<span class="who-tag">פעיל</span>':''}</button>`+
+      (fs?'':`<button class="srow" data-a="appFull"><span class="sic">${ic('phone')}</span><span class="stx"><b>שיחות במסך מלא</b><small>כבוי · לחצו והפעילו כדי ששיחה נכנסת תופיע על כל המסך גם כשהטלפון נעול</small></span></button>`);
+  };
+  /* sounds chosen in the app are the ones Android plays */
+  let toneSig='';
+  const syncTones=()=>{try{const j=JSON.stringify(Sound.cfg());if(j!==toneSig){toneSig=j;APP.setTones(j)}}catch(e){}};
+  const __ss18=saveState;
+  saveState=function(){__ss18();syncTones()};
+  /* calls */
+  let APP_ANSWER=null;
+  window.spicyyIntent=h=>appHash(h);
+  window.spicyyCallEnd=id=>{if(CALL&&CALL.id===id&&!CALL.answered)endCall('missed',true)};
+  window.spicyyResume=()=>{try{presWrite()}catch(e){}};
+  function appHash(h){
+    h=String(h||'').replace(/^#/,'');let m;
+    if((m=/^open-(.+)$/.exec(h))){if(CH[m[1]])openChat(m[1]);else pendingOpen=m[1];return}
+    if((m=/^answer-(.+)$/.exec(h))){APP_ANSWER=m[1];if(CALL&&CALL.id===m[1]&&!CALL.answered)answerCall(true);return}
+    if(/^call-/.test(h))return; /* the call screen opens by itself */
+    if((m=/^decline-(.+)$/.exec(h))){const id=m[1];APP.cancelCall(id);if(CALL&&CALL.id===id)endCall('declined');else db.doc('calls/'+id).update({state:'declined'}).catch(()=>{});return}
+  }
+  const __inc18=incoming;
+  incoming=function(id,d){const r=__inc18(id,d);try{APP.cancelCall(id)}catch(e){}if(APP_ANSWER===id&&CALL&&CALL.id===id){APP_ANSWER=null;setTimeout(()=>{if(CALL&&CALL.id===id&&!CALL.answered)answerCall(true)},250)}return r};
+  const __rcs18=renderCallStatus;
+  renderCallStatus=function(){__rcs18();const C=CALL;if(C&&C.state==='live'&&!C._appLive){C._appLive=1;try{APP.callStarted(pname(C.peer))}catch(e){}applySpeaker(C,false)}};
+  const __ec18b=endCall;
+  endCall=function(...a){const r=__ec18b(...a);try{APP.callEnded()}catch(e){}return r};
+  /* speaker / earpiece really switches in the app */
+  /* voice calls start on the earpiece like WhatsApp, video calls on the speaker */
+  applySpeaker=async function(C,announce){if(!C)return;if(C.speaker===undefined){C.speaker=!!(C.video||C.camOn);try{renderCall()}catch(e){}}const ra=$('#ra');if(ra)ra.volume=1;try{APP.setSpeaker(C.speaker!==false)}catch(e){}if(announce)toast(C.speaker?'רמקול':'אוזנייה')};
+  const __st18=start;
+  start=function(){
+    __st18();
+    setTimeout(()=>{saveFcm(APP.token());syncTones();const h=(location.hash||'').slice(1);if(/^(answer|decline|open|call)-/.test(h)){history.replaceState(null,'',location.pathname+location.search);appHash(h)}},1200);
+  };
+  const __A18=A7;
+  A7=function(){return{...__A18(),appNotif:()=>APP.openNotifSettings(),appFull:()=>APP.openFullScreenSettings(),
+    install:()=>toast('את/ה כבר באפליקציה 🎉')}};
+}
+/* deleting the account also deletes my shorts, my follows and my activity (required by Google Play) */
+const __ua18=unshareAll;
+unshareAll=async function(...a){
+  try{
+    const mine=Object.entries(SHORTS).filter(([,s])=>s.by===ME);
+    const st=mine.some(([,s])=>s.path)&&await storageReady().catch(()=>false);
+    for(const [id,s] of mine){await db.doc('shorts/'+id).delete().catch(()=>{});if(st&&s.path)await firebase.storage().ref(s.path).delete().catch(()=>{})}
+    await db.doc('sfollow/'+ME).delete().catch(()=>{});
+    await FDB.doc('pushsubs/'+ME).delete().catch(()=>{});
+  }catch(e){console.warn('del shorts',e)}
+  return __ua18(...a);
+};
 
 /* ================= event wiring ================= */
 const A={
