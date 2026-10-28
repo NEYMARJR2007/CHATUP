@@ -1,0 +1,62 @@
+name: Build SpicyyChat Android app
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'android/**', '.github/workflows/android.yml' ]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack the app project
+        run: |
+          mkdir -p "$RUNNER_TEMP/app"
+          tar xzf android/app-src.tar.gz -C "$RUNNER_TEMP/app"
+          cd "$RUNNER_TEMP/app"
+          node tools/gen_tones.js "$GITHUB_WORKSPACE/index.html"
+          pip install --quiet pillow
+          python3 tools/icons.py "$GITHUB_WORKSPACE/icon-512.png"
+          if [ -f "$GITHUB_WORKSPACE/android/google-services.json" ]; then cp "$GITHUB_WORKSPACE/android/google-services.json" app/; else echo "No google-services.json yet: notifications in the app will not work until it is added."; fi
+          echo "APP=$RUNNER_TEMP/app" >> "$GITHUB_ENV"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Signing key
+        env:
+          KS: ${{ secrets.KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KS" ]; then
+            echo "$KS" | base64 -d > "$RUNNER_TEMP/upload.jks"
+            echo "KEYSTORE_PATH=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
+          else
+            echo "No signing key yet: the APK is signed with a test key."
+          fi
+      - name: Build APK and Google Play bundle
+        working-directory: ${{ env.APP }}
+        env:
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          VERSION_CODE: ${{ github.run_number }}
+        run: gradle assembleRelease bundleRelease --no-daemon --stacktrace
+      - name: Collect files
+        run: |
+          mkdir -p out
+          cp "$APP"/app/build/outputs/apk/release/*.apk out/SpicyyChat.apk
+          cp "$APP"/app/build/outputs/bundle/release/*.aab out/SpicyyChat-google-play.aab
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SpicyyChat-files
+          path: out/
+      - name: Publish download link (Releases)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete app -y --cleanup-tag || true
+          gh release create app out/SpicyyChat.apk --title "SpicyyChat for Android (build ${{ github.run_number }})" --notes "להורדה והתקנה בטלפון אנדרואיד: SpicyyChat.apk" --latest
