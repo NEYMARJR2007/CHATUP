@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "60685364216",
+    "project_id": "chatup-656fd",
+    "storage_bucket": "chatup-656fd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60685364216:android:9f3948868489e0f5f1c40d",
+        "android_client_info": {
+          "package_name": "com.spicyychat.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwfq6E1awZiqcyY7PF1_ZTc0BliYYxxnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
